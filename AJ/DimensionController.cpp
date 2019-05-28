@@ -45,7 +45,7 @@ namespace Behaviors
 
 	// Constructor
 	DimensionController::DimensionController() : Component("DimensionController"), dimensions(std::vector<Dimension>()),
-		cooldown(5.0f), currentCooldown(10.0f), gameTimer(0.0), cdCount(0), cdIndex(10), activeDimension(0)
+		cooldown(5.0f), currentCooldown(10.0f), gameTimer(0.0), cdCount(-1), cdIndex(10), activeDimension(0)
 	{
 		cdCounts = new float[11];
 		// Set the different cooldown times
@@ -73,16 +73,31 @@ namespace Behaviors
 	// Initialize this component (happens at object creation).
 	void DimensionController::Initialize()
 	{
+		currentCooldown = 10.0f;
 	}
 
 	// Fixed update function for this component.
 	// Params:
 	//   dt = The (fixed) change in time since the last step.
-	void DimensionController::Update(float dt)
+	void DimensionController::FixedUpdate(float dt)
 	{
 		gameTimer += dt;
 
-		currentCooldown = max(0.0f, currentCooldown - dt);
+		currentCooldown -= dt;
+
+		if (currentCooldown <= 0.0f)
+		{
+			// Increment cdCounts
+			++cdCount;
+			// Check if cdCounts >= 4 and cdIndex isn't 0
+			//if (++cdCount >= 4 && cdIndex != 0)
+				// Get the new cooldown time
+			SetCoolDownTime();
+
+			currentCooldown = cooldown;
+
+			SetActiveDimension((activeDimension + 1) % GetDimensionCount());
+		}
 	}
 
 	// Shutdown function for this component
@@ -133,11 +148,6 @@ namespace Behaviors
 			static_cast<Hazard*>(spike->GetComponent("Hazard"))->SetCollidable(true);
 			static_cast<Sprite*>(spike->GetComponent("Sprite"))->SetAlpha(1.0f);
 		}
-
-		++cdCount;
-
-		if (cdCount >= 4 && cdIndex != 0)
-			SetCoolDownTime();
 	}
 
 	// Returns the active dimension.
@@ -183,45 +193,35 @@ namespace Behaviors
 	// Sets the cooldown time
 	void DimensionController::SetCoolDownTime()
 	{
-		currentCooldown = cooldown;
-
-		// Check if cooldowm is greater than or equal to 3.5 and has iterated 5 times
-		if (cdCounts[static_cast<int>(cooldown * 2)] >= 3.5f && cdCount >= 5)
+		// Check for new Cooldown time
+		if (newCooldown())
 		{
-			// Reset counter
-			cdCount = 0;
-			// Increment Index
+			// Decrement cdindex
 			--cdIndex;
-		}
-		// Check if cooldowm is greater than or equal to 1.5 and has iterated 4 times
-		else if (cdCounts[static_cast<int>(cooldown * 2)] >= 1.5f && cdCount >= 4)
-		{
-			// Reset counter
+			// Reset cdCount to 0
 			cdCount = 0;
-			// Increment Index
-			--cdIndex;
-		}
-		// Check if cooldowm is greater than or equal to 1.0 and has iterated 10 times
-		else if (cdCounts[static_cast<int>(cooldown * 2)] >= 1.0f && cdCount >= 10)
-		{
-			// Reset counter
-			cdCount = 0;
-			// Increment Index
-			--cdIndex;
-		}
-		// Check if cooldowm is greater than or equal to 0.75 and has iterated 7 times
-		else if (cdCounts[static_cast<int>(cooldown * 2)] >= 0.75f && cdCount >= 7)
-		{
-			// Reset counter
-			cdCount = 0;
-			// Increment Index
-			--cdIndex;
 		}
 		// Otherwise use index 0
-		else
+		else if (gameTimer >= 146.25f)
 			cdIndex = 0;
 
 		cooldown = cdCounts[cdIndex];
+	}
+
+	// Returns if a newCooldown is needed
+	bool DimensionController::newCooldown()
+	{
+		// Return true if Cooldowm is greater than or equal to X and has iterated X times
+		if (cdIndex >= 7 && cdCount >= 5)
+			return true;
+		else if (cdIndex >= 3 && cdCount >= 4)
+			return true;
+		else if (cdIndex >= 2 && cdCount >= 10)
+			return true;
+		else if (cdIndex >= 1 && cdCount >= 7)
+			return true;
+		// Otherwise return false
+		return false;
 	}
 
 	// Constructor

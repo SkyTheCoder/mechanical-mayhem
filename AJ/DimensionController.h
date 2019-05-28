@@ -56,7 +56,7 @@ namespace Behaviors
 		// Update function for this component.
 		// Params:
 		//   dt = The (fixed) change in time since the last step.
-		void Update(float dt) override;
+		void FixedUpdate(float dt) override;
 
 		// Shutdown function for this component
 		void Shutdown() override;
@@ -97,6 +97,9 @@ namespace Behaviors
 
 		// Sets the cooldown time
 		void SetCoolDownTime();
+
+		// Returns if a newCooldown is needed
+		bool newCooldown();
 
 		struct Dimension
 		{
