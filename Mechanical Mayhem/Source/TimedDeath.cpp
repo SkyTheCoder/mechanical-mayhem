@@ -52,6 +52,22 @@ namespace Behaviors
 		return new TimedDeath(*this);
 	}
 
+	// Write object data to file
+	// Params:
+	//   parser = The parser that is writing this object to a file.
+	void TimedDeath::Serialize(Parser& parser) const
+	{
+		parser.WriteVariable("timeUntilDeath", timeUntilDeath);
+	}
+
+	// Read object data from a file
+	// Params:
+	//   parser = The parser that is reading this object's data from a file.
+	void TimedDeath::Deserialize(Parser& parser)
+	{
+		parser.ReadVariable("timeUntilDeath", timeUntilDeath);
+	}
+
 	// Update function for this component.
 	// Params:
 	//   dt = The (fixed) change in time since the last step.

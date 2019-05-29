@@ -23,6 +23,7 @@
 
 // Abilities
 #include "Jetpack.h"
+#include "Flamethrower.h"
 #include "ProximityMine.h"
 
 //------------------------------------------------------------------------------
@@ -40,8 +41,15 @@ namespace Abilities
 	// Constructor
 	// Params:
 	//   name = The name of this ability.
-	Ability::Ability(const std::string& name) : BetaObject(name), owner(nullptr)
+	//   holdAbility = Whether the player can hold down the use key to use the ability.
+	Ability::Ability(const std::string& name, bool holdAbility) : BetaObject(name), holdAbility(holdAbility), owner(nullptr)
 	{
+	}
+
+	// Returns whether the player can hold down the use key to use the ability.
+	bool Ability::IsHoldAbility() const
+	{
+		return holdAbility;
 	}
 
 	// Sets the owner of this ability.
@@ -69,6 +77,7 @@ namespace Abilities
 			ability = new Jetpack();
 			break;
 		case ABILITY_FLAMETHROWER:
+			ability = new Flamethrower();
 			break;
 		case ABILITY_PROXIMITYMINE:
 			ability = new ProximityMine();

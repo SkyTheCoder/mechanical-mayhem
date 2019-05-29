@@ -21,6 +21,8 @@
 #include "ColliderRectangle.h"
 #include <GameObject.h>
 #include <Intersection2D.h>
+#include <SoundManager.h>
+#include <Engine.h>
 #include <Input.h>
 #include <Vector2D.h>
 #include <Graphics.h>
@@ -83,6 +85,9 @@ namespace Behaviors
 			sprite->SetColor(Color(0.4f, 0.4f, 0.4f));
 			if (input.CheckTriggered(VK_LBUTTON))
 			{
+				// Play sound
+				Engine::GetInstance().GetModule<SoundManager>()->PlaySound("menu Apress.wav");
+
 				switch (map)
 				{
 				case Levels::Map::MainMenu:

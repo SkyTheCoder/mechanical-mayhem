@@ -104,6 +104,9 @@ public:
 	//	 volume = Current value for the FX volume.
 	float GetEffectsVolume() const;
 
+	// Gets the most-previously-used music channel
+	FMOD::Channel* GetMusicChannel() const;
+
 private:
 	//------------------------------------------------------------------------------
 	// Private Functions:

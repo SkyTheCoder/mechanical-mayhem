@@ -40,7 +40,7 @@ namespace Abilities
 	//------------------------------------------------------------------------------
 
 	// Constructor
-	ProximityMine::ProximityMine() : Ability("ProximityMine"), transform(nullptr), collider(nullptr), cooldown(0.0f), cooldownTimer(0.0f), maxProximityMines(4)
+	ProximityMine::ProximityMine() : Ability("ProximityMine", false), transform(nullptr), collider(nullptr), cooldown(0.0f), cooldownTimer(0.0f), maxProximityMines(4)
 	{
 	}
 

@@ -41,7 +41,7 @@ namespace Behaviors
 
 	// Constructor
 	Hazard::Hazard() : Component("Hazard"), 
-		alwaysCollidable(false), collidable(true), damage(100), destroyOnCollide(false), destroyOnCollideDelay(0.0f)
+		alwaysCollidable(false), collidable(true), damage(100), destroyOnCollide(false), destroyOnCollideDelay(0.0f), destroyedArchetype(nullptr)
 	{
 	}
 
@@ -49,6 +49,14 @@ namespace Behaviors
 	Component* Hazard::Clone() const
 	{
 		return new Hazard(*this);
+	}
+
+	// Initializes the component
+	void Hazard::Initialize()
+	{
+		// If we have an archetype to create when destroyed, save it now.
+		if (destroyedArchetypeName != "none")
+			destroyedArchetype = GetOwner()->GetSpace()->GetObjectManager().GetArchetypeByName(destroyedArchetypeName);
 	}
 
 	// Write object data to file
@@ -61,6 +69,7 @@ namespace Behaviors
 		parser.WriteVariable("damage", damage);
 		parser.WriteVariable("destroyOnCollide", destroyOnCollide);
 		parser.WriteVariable("destroyOnCollideDelay", destroyOnCollideDelay);
+		parser.WriteVariable("destroyedArchetype", destroyedArchetypeName);
 	}
 
 	// Read object data from a file
@@ -73,6 +82,7 @@ namespace Behaviors
 		parser.ReadVariable("damage", damage);
 		parser.ReadVariable("destroyOnCollide", destroyOnCollide);
 		parser.ReadVariable("destroyOnCollideDelay", destroyOnCollideDelay);
+		parser.ReadVariable("destroyedArchetype", destroyedArchetypeName);
 	}
 
 	// Receive an event and handle it (if applicable).
@@ -89,11 +99,17 @@ namespace Behaviors
 		{
 			if (IsCollidable())
 			{
-				GetOwner()->GetSpace()->GetObjectManager().DispatchEvent(new DamageEvent(damage, 0.0f, GetOwner()->GetID(), event.sender));
+				GameObjectManager& objectManager = GetOwner()->GetSpace()->GetObjectManager();
+
+				objectManager.DispatchEvent(new DamageEvent(damage, 0.0f, GetOwner()->GetID(), event.sender));
 
 				if (destroyOnCollide)
 				{
-					GetOwner()->GetSpace()->GetObjectManager().DispatchEvent(new Event(ET_Generic, "Destroy", destroyOnCollideDelay, GetOwner()->GetID(), GetOwner()->GetID()));
+					objectManager.DispatchEvent(new Event(ET_Generic, "Destroy", destroyOnCollideDelay, GetOwner()->GetID(), GetOwner()->GetID()));
+
+					// Spawn the archetype when destroyed.
+					if (destroyedArchetype != nullptr)
+						objectManager.AddObject(*new GameObject(*destroyedArchetype));
 				}
 			}
 		}

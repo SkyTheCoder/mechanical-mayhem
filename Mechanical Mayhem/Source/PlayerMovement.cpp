@@ -171,6 +171,18 @@ namespace Behaviors
 		return keyUp;
 	}
 
+	// Gets the keybind for left
+	unsigned PlayerMovement::GetLeftKeybind() const
+	{
+		return keyLeft;
+	}
+
+	// Gets the keybind for right
+	unsigned PlayerMovement::GetRightKeybind() const
+	{
+		return keyRight;
+	}
+
 	// Gets the keybind for using an ability.
 	unsigned PlayerMovement::GetUseKeybind() const
 	{

@@ -52,13 +52,17 @@ namespace Abilities
 		// Constructor
 		// Params:
 		//   name = The name of this ability.
-		Ability(const std::string& name);
+		//   holdAbility = Whether the player can hold down the use key to use the ability.
+		Ability(const std::string& name, bool holdAbility);
 
 		// Clone the current ability.
 		virtual Ability* Clone() const = 0;
 
 		// Callback for when the player attempts to use this ability.
 		virtual void OnUse() = 0;
+
+		// Returns whether the player can hold down the use key to use the ability.
+		bool IsHoldAbility() const;
 
 		// Sets the owner of this ability.
 		void SetOwner(GameObject* owner);
@@ -75,6 +79,9 @@ namespace Abilities
 		//------------------------------------------------------------------------------
 		// Protected Variables:
 		//------------------------------------------------------------------------------
+
+		// Whether the player can hold down the use key to use the ability.
+		bool holdAbility;
 
 		GameObject* owner;
 	};

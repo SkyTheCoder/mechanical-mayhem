@@ -1,0 +1,22 @@
+Explosion
+{
+  numComponents : 4
+  Transform
+  {
+    translation : { 0, 0 }
+    rotation : 0
+    scale : { 5, 5 }
+  }
+  Sprite
+  {
+    frameIndex : 0
+    color : { 1, 1, 1, 0.5 }
+  }
+  Animation
+  {
+  }
+  Behaviors::TimedDeath
+  {
+    timeUntilDeath : 0.5
+  }
+}

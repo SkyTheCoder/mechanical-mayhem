@@ -25,5 +25,6 @@ Mine
     damage : 50
     destroyOnCollide : 1
     destroyOnCollideDelay : 0.01
+    destroyedArchetype : Explosion
   }
 }

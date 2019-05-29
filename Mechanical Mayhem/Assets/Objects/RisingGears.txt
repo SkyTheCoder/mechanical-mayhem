@@ -5,7 +5,7 @@ RisingGears
   {
     translation : { 0, 0 }
     rotation : 0
-    scale : { 24, 3 }
+    scale : { 10, 10 }
   }
   Sprite
   {
@@ -16,7 +16,7 @@ RisingGears
   {
     group : 3
     mask : 8
-    extents : { 12, 1.5 }
+    extents : { 12, 2 }
   }
   Behaviors::RisingGears
   {

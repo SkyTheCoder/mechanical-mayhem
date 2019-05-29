@@ -1,0 +1,26 @@
+FlamethrowerPickup
+{
+  numComponents : 4
+  Transform
+  {
+    translation : { 0, 0 }
+    rotation : 0
+    scale : { 0.75, 0.75 }
+  }
+  Sprite
+  {
+    frameIndex : 0
+    color : { 1 , 1 , 1 , 1 }
+  }
+  ColliderRectangle
+  {
+    group : 0
+    mask : 0
+    extents : { 0.375, 0.375 }
+  }
+  Behaviors::AbilityPickup
+  {
+    cooldown : 300
+    abilityType : 2
+  }
+}

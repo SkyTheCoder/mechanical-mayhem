@@ -44,9 +44,22 @@ namespace Behaviors
 	//------------------------------------------------------------------------------
 
 	// Constructor
-	DimensionController::DimensionController() : Component("DimensionController"),
-		dimensions(std::vector<Dimension>()), cooldown(0.5f), currentCooldown(0.0f)
+	DimensionController::DimensionController() : Component("DimensionController"), dimensions(std::vector<Dimension>()),
+		cooldown(5.0f), currentCooldown(10.0f), gameTimer(0.0), cdCount(-1), cdIndex(10), activeDimension(0)
 	{
+		cdCounts = new float[11];
+		// Set the different cooldown times
+		cdCounts[0]  = 0.5f;
+		cdCounts[1]  = 0.75f;
+		cdCounts[2]  = 1.0f;
+		cdCounts[3]  = 1.5f;
+		cdCounts[4]  = 2.0f;
+		cdCounts[5]  = 2.5f;
+		cdCounts[6]  = 3.0f;
+		cdCounts[7]  = 3.5f;
+		cdCounts[8]  = 4.0f;
+		cdCounts[9]  = 4.5f;
+		cdCounts[10] = 5.0f;
 	}
 
 	// Clone a component and return a pointer to the cloned component.
@@ -60,14 +73,37 @@ namespace Behaviors
 	// Initialize this component (happens at object creation).
 	void DimensionController::Initialize()
 	{
+		currentCooldown = 10.0f;
 	}
 
 	// Fixed update function for this component.
 	// Params:
 	//   dt = The (fixed) change in time since the last step.
-	void DimensionController::Update(float dt)
+	void DimensionController::FixedUpdate(float dt)
 	{
-		currentCooldown = max(0.0f, currentCooldown - dt);
+		gameTimer += dt;
+
+		currentCooldown -= dt;
+
+		if (currentCooldown <= 0.0f)
+		{
+			// Increment cdCounts
+			++cdCount;
+			// Check if cdCounts >= 4 and cdIndex isn't 0
+			//if (++cdCount >= 4 && cdIndex != 0)
+				// Get the new cooldown time
+			SetCoolDownTime();
+
+			currentCooldown = cooldown;
+
+			SetActiveDimension((activeDimension + 1) % GetDimensionCount());
+		}
+	}
+
+	// Shutdown function for this component
+	void DimensionController::Shutdown()
+	{
+		delete[] cdCounts;
 	}
 
 	// Calculates how long until the dimension can be switched again.
@@ -109,12 +145,9 @@ namespace Behaviors
 		static_cast<Sprite*>(dimensions[activeDimension].tilemap->GetComponent("Sprite"))->SetAlpha(1.0f);
 		for (GameObject* spike : dimensions[activeDimension].spikes)
 		{
-			UNREFERENCED_PARAMETER(spike);
 			static_cast<Hazard*>(spike->GetComponent("Hazard"))->SetCollidable(true);
 			static_cast<Sprite*>(spike->GetComponent("Sprite"))->SetAlpha(1.0f);
 		}
-
-		currentCooldown = cooldown;
 	}
 
 	// Returns the active dimension.
@@ -156,6 +189,40 @@ namespace Behaviors
 	//------------------------------------------------------------------------------
 	// Private Structures:
 	//------------------------------------------------------------------------------
+
+	// Sets the cooldown time
+	void DimensionController::SetCoolDownTime()
+	{
+		// Check for new Cooldown time
+		if (newCooldown())
+		{
+			// Decrement cdindex
+			--cdIndex;
+			// Reset cdCount to 0
+			cdCount = 0;
+		}
+		// Otherwise use index 0
+		else if (gameTimer >= 146.25f)
+			cdIndex = 0;
+
+		cooldown = cdCounts[cdIndex];
+	}
+
+	// Returns if a newCooldown is needed
+	bool DimensionController::newCooldown()
+	{
+		// Return true if Cooldowm is greater than or equal to X and has iterated X times
+		if (cdIndex >= 7 && cdCount >= 5)
+			return true;
+		else if (cdIndex >= 3 && cdCount >= 4)
+			return true;
+		else if (cdIndex >= 2 && cdCount >= 10)
+			return true;
+		else if (cdIndex >= 1 && cdCount >= 7)
+			return true;
+		// Otherwise return false
+		return false;
+	}
 
 	// Constructor
 	// Params:

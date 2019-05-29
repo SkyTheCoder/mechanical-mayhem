@@ -1,0 +1,41 @@
+Fireball
+{
+  numComponents : 6
+  Transform
+  {
+    translation : { 0, 0 }
+    rotation : 0
+    scale : { 0.5, 0.5 }
+  }
+  Physics
+  {
+    acceleration : { 0, 0 }
+    velocity : { 0, 0 }
+    angularVelocity : 0
+    mass : 1
+  }
+  Sprite
+  {
+    frameIndex : 0
+    color : { 1, 0.5, 0.0, 0.8 }
+  }
+  ColliderCircle
+  {
+    group : 0
+    mask : 0
+    radius : 0.5
+  }
+  Behaviors::Hazard
+  {
+    alwaysCollidable : 1
+    collidable : 1
+    damage : 5
+    destroyOnCollide : 1
+    destroyOnCollideDelay : 0.01
+    destroyedArchetype : none
+  }
+  Behaviors::TimedDeath
+  {
+    timeUntilDeath : 0.5
+  }
+}

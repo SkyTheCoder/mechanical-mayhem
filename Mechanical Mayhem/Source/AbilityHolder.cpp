@@ -91,9 +91,19 @@ namespace Behaviors
 		{
 			ability->Update(dt);
 
-			if (Input::GetInstance().CheckTriggered(playerMovement->GetUseKeybind()))
+			if (ability->IsHoldAbility())
 			{
-				ability->OnUse();
+				if (Input::GetInstance().CheckHeld(playerMovement->GetUseKeybind()))
+				{
+					ability->OnUse();
+				}
+			}
+			else
+			{
+				if (Input::GetInstance().CheckTriggered(playerMovement->GetUseKeybind()))
+				{
+					ability->OnUse();
+				}
 			}
 
 			timer += dt;

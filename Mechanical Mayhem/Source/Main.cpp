@@ -88,7 +88,29 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 	engine.AddModule(new FullscreenManager());
 	engine.AddModule(space);
 	engine.AddModule(hudSpace);
-	engine.AddModule(new SoundManager());
+
+	// Set up sound effects/music
+	SoundManager* soundManager = new SoundManager();
+	engine.AddModule(soundManager);
+	soundManager->AddEffect("ambience.wav");
+	soundManager->AddEffect("deathslapfinal.wav");
+	soundManager->AddEffect("flamethrower_loop.wav");
+	soundManager->AddEffect("flamethrower_start.wav");
+	soundManager->AddEffect("gamestart.wav");
+	soundManager->AddEffect("hoverselect.wav");
+	soundManager->AddEffect("jump.wav");
+	soundManager->AddEffect("Landing final.wav");
+	soundManager->AddEffect("menu Apress.wav");
+	soundManager->AddEffect("SoundAlarm.wav");
+	soundManager->AddEffect("SoundDimensionShiftA.wav");
+	soundManager->AddEffect("SoundDimensionShiftB.wav");
+	soundManager->AddEffect("SoundFanf.wav");
+	soundManager->AddEffect("SoundHorn.wav");
+	soundManager->AddEffect("step.wav");
+	soundManager->AddEffect("wallattach.wav");
+	soundManager->AddEffect("walloff.wav");
+	soundManager->AddEffect("wallslide.wav");
+	soundManager->AddMusic("SoundMenuM.wav");
 
 	// Register components
 	GameObjectFactory& objectFactory = GameObjectFactory::GetInstance();
@@ -140,8 +162,14 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 		settingsParser.EndScope();
 	}
 
+	// TEMPORARY NON-FULLSCREEN (FOR DEBUG)
+	startupSettings.fullscreen = false;
+
 	// Game engine goes!
 	engine.Start(startupSettings);
+
+	// Shut down the sound manager
+	soundManager->Shutdown();
 
 	return 0;
 }

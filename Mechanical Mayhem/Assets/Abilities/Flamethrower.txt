@@ -1,0 +1,6 @@
+Flamethrower
+{
+  fireballArchetype : Fireball
+  speed : 5
+  cooldown : 0.1
+}

@@ -18,10 +18,12 @@
 
 // Systems
 #include "Archetypes.h"
-#include "Space.h"
+#include <Space.h>
+#include <Engine.h>
 #include <GameObjectFactory.h>
 #include <Input.h>
-#include "MeshHelper.h"
+#include <SoundManager.h>
+#include <MeshHelper.h>
 #include <Texture.h>
 #include <SpriteSource.h>
 #include <Mesh.h>
@@ -85,7 +87,8 @@ namespace Levels
 		AddMapButton("Channels", Vector2D(1.75, 0.5f), Levels::Map::Channels);
 		AddMapButton("Separation", Vector2D(-1.75f, -0.5f), Levels::Map::Separation);
 		AddMapButton("Descent", Vector2D(1.75f, -0.5f), Levels::Map::Descent);
-		AddMapButton("Blah", Vector2D(0.0f, -1.5f), Levels::Map::Blah);
+		AddMapButton("Blah", Vector2D(-1.75f, -1.5f), Levels::Map::Blah);
+		AddMapButton("Chase", Vector2D(1.75f, -1.5f), Levels::Map::Chase);
 		AddMapButton("Main Menu", Vector2D(0.0f, -2.5f), Levels::Map::MainMenu);
 
 		Camera& camera = Graphics::GetInstance().GetDefaultCamera();

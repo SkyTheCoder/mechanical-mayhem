@@ -76,8 +76,11 @@ namespace Behaviors
 		//   jumpLength = The number of frames of the jump animation.
 		//   idleStart  = The starting frame for the idle animation.
 		//   idleLength = The number of frames of the idle animation.
+		//   wallSlideStart = The number of frames of the wallSlide animation.
+		//   wallSlideLength = The number of frames of the wallSlide animation.
 		void SetFrames(unsigned walkStart, unsigned walkLength,
-			unsigned jumpStart, unsigned jumpLength, unsigned idleStart, unsigned idleLength);
+			unsigned jumpStart, unsigned jumpLength, unsigned fallStart, unsigned fallLength,
+			unsigned idleStart, unsigned idleLength, unsigned wallSlideStart, unsigned WallSlideLength);
 
 	private:
 		//------------------------------------------------------------------------------
@@ -102,6 +105,8 @@ namespace Behaviors
 			StateIdle,
 			StateWalk,
 			StateJump,
+			StateFall,
+			StateWallSlide,
 		};
 
 		//------------------------------------------------------------------------------
@@ -113,8 +118,12 @@ namespace Behaviors
 		unsigned walkLength;
 		unsigned jumpStart;
 		unsigned jumpLength;
+		unsigned fallStart;
+		unsigned fallLength;
 		unsigned idleStart;
 		unsigned idleLength;
+		unsigned wallSlideStart;
+		unsigned wallSlideLength;
 
 		// Animation state
 		State currentState;

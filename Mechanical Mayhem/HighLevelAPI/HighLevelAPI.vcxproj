@@ -129,7 +129,6 @@
     <ClInclude Include="include\Transform.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\MutableTilemap.cpp" />
     <ClCompile Include="src\Animation.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -172,6 +171,7 @@
     <ClCompile Include="src\MeshHelper.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\MutableTilemap.cpp" />
     <ClCompile Include="src\Parser.cpp" />
     <ClCompile Include="src\Physics.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>

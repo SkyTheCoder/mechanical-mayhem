@@ -234,7 +234,7 @@
     <ClCompile Include="src\ResourceManager.cpp">
       <Filter>GameObject\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="include\MutableTilemap.cpp">
+    <ClCompile Include="src\MutableTilemap.cpp">
       <Filter>Levels</Filter>
     </ClCompile>
   </ItemGroup>

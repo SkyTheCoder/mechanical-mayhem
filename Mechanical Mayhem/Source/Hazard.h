@@ -43,6 +43,9 @@ namespace Behaviors
 		// Return a new copy of the component.
 		Component* Clone() const;
 
+		// Initializes the component
+		void Initialize() override;
+
 		// Write object data to file
 		// Params:
 		//   parser = The parser that is writing this object to a file.
@@ -77,5 +80,7 @@ namespace Behaviors
 		int damage;
 		bool destroyOnCollide;
 		float destroyOnCollideDelay;
+		std::string destroyedArchetypeName;
+		GameObject* destroyedArchetype;
 	};
 }

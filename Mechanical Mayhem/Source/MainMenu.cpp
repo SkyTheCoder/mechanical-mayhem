@@ -24,6 +24,7 @@
 #include <ResourceManager.h>
 #include "Archetypes.h"
 #include <Space.h>
+#include <SoundManager.h>
 #include <Input.h>
 #include <Graphics.h>
 #include <Camera.h>
@@ -101,6 +102,11 @@ namespace Levels
 		Camera& camera = Graphics::GetInstance().GetDefaultCamera();
 		camera.SetTranslation(Vector2D());
 		camera.SetSize(10.0f);
+
+		// Main menu music
+		SoundManager* soundManager = Engine::GetInstance().GetModule<SoundManager>();
+		if (soundManager->GetMusicChannel() == nullptr)
+			soundManager->PlaySound("SoundMenuM.wav");
 	}
 
 	// Update Level 1.

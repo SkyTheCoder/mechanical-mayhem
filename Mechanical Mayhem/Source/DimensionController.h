@@ -56,7 +56,10 @@ namespace Behaviors
 		// Update function for this component.
 		// Params:
 		//   dt = The (fixed) change in time since the last step.
-		void Update(float dt) override;
+		void FixedUpdate(float dt) override;
+
+		// Shutdown function for this component
+		void Shutdown() override;
 
 		// Calculates how long until the dimension can be switched again.
 		// Returns:
@@ -92,6 +95,12 @@ namespace Behaviors
 		// Private Structures:
 		//------------------------------------------------------------------------------
 
+		// Sets the cooldown time
+		void SetCoolDownTime();
+
+		// Returns if a newCooldown is needed
+		bool newCooldown();
+
 		struct Dimension
 		{
 			// Constructor
@@ -110,6 +119,10 @@ namespace Behaviors
 		// Misc
 		float cooldown;
 		float currentCooldown;
+		int cdIndex;
+		int cdCount;
+		float* cdCounts;
+		double gameTimer;
 		unsigned activeDimension;
 		std::vector<Dimension> dimensions;
 	};

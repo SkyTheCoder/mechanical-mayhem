@@ -46,8 +46,6 @@ Space::~Space()
 //   dt = The change in time since the last call to this function.
 void Space::Update(float dt)
 {
-	objectManager.Update(dt * timeScale);
-
 	// If there is a next level, handle level changing logic.
 	if (nextLevel != nullptr)
 	{
@@ -59,6 +57,8 @@ void Space::Update(float dt)
 	{
 		currentLevel->Update(dt * timeScale);
 	}
+
+	objectManager.Update(dt * timeScale);
 }
 
 // Shuts down the object manager

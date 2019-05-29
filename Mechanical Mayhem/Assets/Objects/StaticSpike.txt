@@ -25,5 +25,6 @@ StaticSpike
     damage : 100
     destroyOnCollide : 0
     destroyOnCollideDelay : 0
+    destroyedArchetype : none
   }
 }

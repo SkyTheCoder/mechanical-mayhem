@@ -25,6 +25,7 @@
 class Texture;
 class Mesh;
 class SpriteSource;
+class SoundManager;
 
 //------------------------------------------------------------------------------
 // Public Structures:

@@ -39,7 +39,7 @@ namespace Abilities
 
 	// Default Constructor
 	Jetpack::Jetpack()
-		: Ability("Jetpack"),
+		: Ability("Jetpack", true),
 		playerMovement(nullptr), physics(nullptr),
 		active(false), jetpackForce(1), currentFuel(0), maxFuel(100),
 		fuelRefillRate(0.5f), fuelConsumptionRate(1.0f)

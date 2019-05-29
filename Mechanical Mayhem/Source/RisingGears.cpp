@@ -21,8 +21,10 @@
 #include <Transform.h>
 
 // Systems
+#include <Engine.h>
 #include <Event.h>
 #include <Parser.h>
+#include <SoundManager.h>
 #include <Space.h>
 
 //------------------------------------------------------------------------------
@@ -39,7 +41,8 @@ namespace Behaviors
 	RisingGears::RisingGears()
 		: Component("RisingGears"),
 		moveSpeed(0), startOffset(0), timer(0.0f),
-		physics(nullptr)
+		animationTimer(0.0f), animationSpeed(0.2f),
+		physics(nullptr), sprite(nullptr)
 	{
 	}
 
@@ -54,6 +57,7 @@ namespace Behaviors
 	{
 		// Get components
 		//physics = GetOwner()->GetComponent<Physics>();
+		sprite = GetOwner()->GetComponent<Sprite>();
 	}
 
 	// Updates components using a fixed timestep (usually just for physics).
@@ -61,18 +65,37 @@ namespace Behaviors
 	//	 dt = A fixed change in time, usually 1/60th of a second.
 	void RisingGears::FixedUpdate(float dt)
 	{
+		static bool start = false;
+
 		// Check if we should move
 		if (timer >= startOffset)
 		{
+			// Only play once
+			if (!start)
+			{
+				Engine::GetInstance().GetModule<SoundManager>()->PlaySound("SoundHorn.wav");
+				start = true;
+			}
+
 			// std::cout << "RisingGears start" << std::endl;
-			//physics->SetVelocity(Vector2D(0.0f, moveSpeed));
-			//timer = -1;
 			GetOwner()->GetComponent<Transform>()->SetTranslation(GetOwner()->GetComponent<Transform>()->GetTranslation() + Vector2D(0.0f, moveSpeed * dt));
 		}
 		else
 		{
 			// Increment timer
 			timer += dt;
+		}
+
+		// Rudimentary animation
+		animationTimer += dt;
+		if (animationTimer >= animationSpeed)
+		{
+			animationTimer = 0.0f;
+			
+			if (sprite->GetFrame())
+				sprite->SetFrame(0);
+			else
+				sprite->SetFrame(1);
 		}
 	}
 
@@ -107,7 +130,7 @@ namespace Behaviors
 			if (other.GetName() == "Player")
 			{
 				// Destroy player
-				other.Destroy();
+				GetOwner()->GetSpace()->GetObjectManager().DispatchEvent(new Event(ET_Death, "Destroy", 0.0f, other.GetID(), other.GetID()));
 			}
 		}
 	}

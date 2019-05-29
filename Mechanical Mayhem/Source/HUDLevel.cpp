@@ -53,6 +53,8 @@ namespace Levels
 		meshBackground(nullptr), textureBackground(nullptr), spriteSourceBackground(nullptr), 
 		HUD1(nullptr), HUD2(nullptr)
 	{
+		HUDCamera.SetTranslation(Vector2D());
+		HUDCamera.SetSize(10.0f);
 	}
 
 	// Load the resources associated with MainMenu.
@@ -115,10 +117,6 @@ namespace Levels
 		test->AddComponent(sprite);
 
 		objectManager.AddObject(*test);
-
-		Camera & camera = Graphics::GetInstance().GetDefaultCamera();
-		camera.SetTranslation(Vector2D());
-		camera.SetSize(10.0f);
 	}
 
 	// Update Level 1.
@@ -127,6 +125,7 @@ namespace Levels
 	void HUDLevel::Update(float dt)
 	{
 		UNREFERENCED_PARAMETER(dt);
+		HUDCamera.Use();
 	}
 
 	// Unload the resources associated with MainMenu.

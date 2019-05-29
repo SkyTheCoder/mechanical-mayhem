@@ -17,6 +17,7 @@
 
 #include "Vector2D.h"
 #include "Level.h"
+#include "Camera.h"
 
 //------------------------------------------------------------------------------
 // Forward References:
@@ -96,6 +97,8 @@ namespace Levels
 		Mesh* meshBackground;
 		Texture * textureBackground;
 		SpriteSource* spriteSourceBackground;
+
+		Camera HUDCamera;
 	};
 }
 

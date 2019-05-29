@@ -15,7 +15,7 @@
 
 #include "stdafx.h"
 
-#include "MutableTIlemap.h"
+#include "MutableTilemap.h"
 
 // Systems
 #include "Tilemap.h"
