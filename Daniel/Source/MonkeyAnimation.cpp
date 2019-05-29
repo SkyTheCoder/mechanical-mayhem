@@ -2,10 +2,11 @@
 //
 // File Name:	MonkeyAnimation.cpp
 // Author(s):	David Cohen (david.cohen)
-// Project:		BetaFramework
+//				Daniel Walther (daniel.walther)
+// Project:		Mechanical Mayhem
 // Course:		WANIC VGP2 2018-2019
 //
-// Copyright © 2018 DigiPen (USA) Corporation.
+// Copyright © 2019 DigiPen (USA) Corporation.
 //
 //------------------------------------------------------------------------------
 
@@ -19,6 +20,7 @@
 
 // Systems
 #include "GameObject.h"
+#include <Input.h>
 
 // Components
 #include "Animation.h"
@@ -99,16 +101,23 @@ namespace Behaviors
 	//   jumpStart  = The starting frame for the jump animation.
 	//   jumpLength = The number of frames of the jump animation.
 	//   idleStart  = The starting frame for the idle animation.
+	//   idleLength = The number of frames of the idle animation.
+	//   wallSlideStart = The number of frames of the wallSlide animation.
+	//   wallSlideLength = The number of frames of the wallSlide animation.
 	void MonkeyAnimation::SetFrames(unsigned walkStart_, unsigned walkLength_,
-		unsigned jumpStart_, unsigned jumpLength_, unsigned idleStart_, unsigned idleLength_)
+		unsigned jumpStart_, unsigned jumpLength_, unsigned fallStart_, unsigned fallLength_,
+		unsigned idleStart_, unsigned idleLength_, unsigned wallSlideStart_, unsigned wallSlideLength_)
 	{
-
 		walkStart = walkStart_;
 		walkLength = walkLength_;
 		jumpStart = jumpStart_;
 		jumpLength = jumpLength_;
+		fallStart = fallStart_;
+		fallLength = fallLength_;
 		idleStart = idleStart_;
 		idleLength = idleLength_;
+		wallSlideStart = wallSlideStart_;
+		wallSlideLength = wallSlideLength_;
 	}
 
 	//------------------------------------------------------------------------------
@@ -119,19 +128,33 @@ namespace Behaviors
 	void MonkeyAnimation::ChooseNextState()
 	{
 		Vector2D velocity = physics->GetVelocity();
-		// If we are jumping/falling, use the jumping state.
+
+		// If we are jumping/falling, use the jumping/falling state accordingly.
 		if (monkeyMovement->airTime > 0.1f)
 		{
-			nextState = State::StateJump;
+			if (velocity.y > 0.0f)
+			{
+				nextState = State::StateJump;
+			}
+			else
+			{
+				nextState = State::StateFall;
+			}
 		}
 		// If we are moving to the side, use the walking state.
 		else if (abs(velocity.x) > 0.75f)
 		{
 			nextState = State::StateWalk;
 		}
-		// If we are standing still, use the idle state.
 		else
 		{
+			// Check for wall-sliding
+			//if (input.CheckHeld(monkeyMovement->GetLeftKeybind()) || input.CheckHeld(monkeyMovement->GetRightKeybind()))
+			//{
+			//	nextState = State::StateWallSlide;
+			//}
+
+			// If we are standing still, use the idle state.
 			nextState = State::StateIdle;
 		}
 	}
@@ -156,6 +179,14 @@ namespace Behaviors
 			// If the state is changed to the jumping state, begin playing the jumping animation.
 			case State::StateJump:
 				animation->Play(jumpStart, jumpLength, 0.2f, true);
+				break;
+			// If the state is changed to the jumping state, begin playing the jumping animation.
+			case State::StateFall:
+				animation->Play(fallStart, fallLength, 0.2f, true);
+				break;
+			// If the state is changed to the wall-slide state, begin playing the wall-sliding animation.
+			case State::StateWallSlide:
+				animation->Play(wallSlideStart, wallSlideLength, 0.2f, true);
 				break;
 			}
 		}

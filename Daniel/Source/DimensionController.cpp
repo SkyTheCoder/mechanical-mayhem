@@ -18,9 +18,11 @@
 #include "DimensionController.h"
 
 // Systems
+#include <Engine.h>
 #include <GameObject.h>
 #include <Input.h>
 #include <Space.h>
+#include <SoundManager.h>
 #include <Interpolation.h>
 
 // Components
@@ -29,6 +31,9 @@
 #include <Sprite.h>
 #include <ColliderTilemap.h>
 #include "Hazard.h"
+
+// Misc.
+#include <Random.h>
 
 //------------------------------------------------------------------------------
 
@@ -115,6 +120,16 @@ namespace Behaviors
 		}
 
 		currentCooldown = cooldown;
+
+		// Play sound
+		if (RandomRange(0, 1))
+		{
+			Engine::GetInstance().GetModule<SoundManager>()->PlaySound("SoundDimensionShiftA.wav");
+		}
+		else
+		{
+			Engine::GetInstance().GetModule<SoundManager>()->PlaySound("SoundDimensionShiftB.wav");
+		}
 	}
 
 	// Returns the active dimension.

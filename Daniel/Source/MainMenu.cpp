@@ -24,6 +24,7 @@
 #include <ResourceManager.h>
 #include "Archetypes.h"
 #include <Space.h>
+#include <SoundManager.h>
 #include <Input.h>
 #include <Graphics.h>
 #include <Camera.h>
@@ -57,10 +58,6 @@ namespace Levels
 	void MainMenu::Load()
 	{
 		std::cout << "MainMenu::Load" << std::endl;
-
-		// Add sounds
-		soundManager = Engine::GetInstance().GetModule<SoundManager>();
-		soundManager->AddEffect("menu Apress.wav");
 
 		GameObjectFactory& objectFactory = GameObjectFactory::GetInstance();
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
@@ -105,6 +102,11 @@ namespace Levels
 		Camera& camera = Graphics::GetInstance().GetDefaultCamera();
 		camera.SetTranslation(Vector2D());
 		camera.SetSize(10.0f);
+
+		// Main menu music
+		SoundManager* soundManager = Engine::GetInstance().GetModule<SoundManager>();
+		if (soundManager->GetMusicChannel() == nullptr)
+			soundManager->PlaySound("SoundMenuM.wav");
 	}
 
 	// Update Level 1.

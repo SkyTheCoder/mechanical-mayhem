@@ -77,6 +77,12 @@ namespace Behaviors
 		// Gets the keybind for jumping up.
 		unsigned GetUpKeybind() const;
 
+		// Gets the keybind for left
+		unsigned GetLeftKeybind() const;
+
+		// Gets the keybind for right
+		unsigned GetRightKeybind() const;
+
 		// Gets the keybind for using an ability.
 		unsigned GetUseKeybind() const;
 

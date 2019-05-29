@@ -67,39 +67,18 @@ namespace Levels
 	// Creates an instance of Level 1.
 	Level1::Level1(Map map_) : Level("Level1"),
 		map(map_),
-		columnsMonkey(3), rowsMonkey(6),
-		columnsCat(4), rowsCat(3),
+		columnsMonkey(3), rowsMonkey(10),
+		columnsCat(3), rowsCat(10),
 		columnsSpikes(1), rowsSpikes(3),
+		columnsRisingGears(1), rowsRisingGears(2),
 		dataStaticMap(nullptr), dataRedMap(nullptr), dataBlueMap(nullptr),
-		columnsMap(2), rowsMap(2),
-		soundManager(nullptr)
+		columnsMap(2), rowsMap(2)
 	{
 	}
 
 	// Load the resources associated with Level 1.
 	void Level1::Load()
 	{
-		// Add sounds
-		soundManager = Engine::GetInstance().GetModule<SoundManager>();
-
-		soundManager->AddEffect("ambience.wav");
-		soundManager->AddEffect("deathslapfinal.wav");
-		soundManager->AddEffect("dimension shift 1.wav");
-		soundManager->AddEffect("flamethrower_loop.wav");
-		soundManager->AddEffect("flamethrower_start.wav");
-		soundManager->AddEffect("gamestart.wav");
-		soundManager->AddEffect("hoverselect.wav");
-		soundManager->AddEffect("jump.wav");
-		soundManager->AddEffect("Landing final.wav");
-		soundManager->AddEffect("SoundAlarm.wav");
-		soundManager->AddEffect("SoundFanf.wav");
-		soundManager->AddEffect("SoundHorn.wav");
-		soundManager->AddEffect("SoundMenuM.wav");
-		soundManager->AddEffect("step.wav");
-		soundManager->AddEffect("wallattach.wav");
-		soundManager->AddEffect("walloff.wav");
-		soundManager->AddEffect("wallslide.wav");
-
 		GameObjectFactory& objectFactory = GameObjectFactory::GetInstance();
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
 		ResourceManager& resourceManager = GetSpace()->GetResourceManager();
@@ -109,13 +88,16 @@ namespace Levels
 		resourceManager.GetMesh("Cat", Vector2D(1.0f / columnsCat, 1.0f / rowsCat), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("Spikes", Vector2D(1.0f / columnsSpikes, 1.0f / rowsSpikes), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("Map", Vector2D(1.0f / columnsMap, 1.0f / rowsMap), Vector2D(0.5f, 0.5f));
+		resourceManager.GetMesh("RisingGears", Vector2D(1.0f / columnsRisingGears, 1.0f / rowsRisingGears), Vector2D(0.5f, 0.5f));
 
-		resourceManager.GetSpriteSource("Monkey.png", columnsMonkey, rowsMonkey);
-		resourceManager.GetSpriteSource("Cat.png", columnsCat, rowsCat);
+		resourceManager.GetSpriteSource("AniA.png", columnsMonkey, rowsMonkey);
+		resourceManager.GetSpriteSource("AniB.png", columnsCat, rowsCat);
 		resourceManager.GetSpriteSource("Spikes.png", columnsSpikes, rowsSpikes);
-		resourceManager.GetSpriteSource("Collectible.png");
+		resourceManager.GetSpriteSource("proximityMineCollectible.png");
+		resourceManager.GetSpriteSource("jetpackCollectible.png");
+		resourceManager.GetSpriteSource("BackgroundImage.png");
 		resourceManager.GetSpriteSource("Tilemap.png", columnsMap, rowsMap);
-		resourceManager.GetSpriteSource("RisingGears.png");
+		resourceManager.GetSpriteSource("RisingGears.png", columnsRisingGears, rowsRisingGears);
 
 
 		resourceManager.GetMesh("FontAtlas", 12, 8);
@@ -159,20 +141,22 @@ namespace Levels
 			std::cout << "Error loading map!" << std::endl;
 		}
 
-		objectManager.AddArchetype(*objectFactory.CreateObject("Player", resourceManager.GetMesh("Monkey"), resourceManager.GetSpriteSource("Monkey.png")));
+		objectManager.AddArchetype(*objectFactory.CreateObject("Player", resourceManager.GetMesh("Monkey"), resourceManager.GetSpriteSource("AniA.png")));
+		objectManager.AddArchetype(*objectFactory.CreateObject("BackgroundImage", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("BackgroundImage.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Text"));
 		objectManager.AddArchetype(*objectFactory.CreateObject("GameController"));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Collectible", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Collectible.png")));
+		objectManager.AddArchetype(*objectFactory.CreateObject("JetpackPickup", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("jetpackCollectible.png")));
+		objectManager.AddArchetype(*objectFactory.CreateObject("ProximityMinePickup", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("proximityMineCollectible.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("JetpackPickup", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Collectible.png")));
-		objectManager.AddArchetype(*objectFactory.CreateObject("ProximityMinePickup", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Collectible.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Mine", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Circle.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("StaticSpike", resourceManager.GetMesh("Spikes"), resourceManager.GetSpriteSource("Spikes.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("RedSpike", resourceManager.GetMesh("Spikes"), resourceManager.GetSpriteSource("Spikes.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("BlueSpike", resourceManager.GetMesh("Spikes"), resourceManager.GetSpriteSource("Spikes.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Tilemap", resourceManager.GetMesh("Map"), resourceManager.GetSpriteSource("Tilemap.png")));
-		objectManager.AddArchetype(*objectFactory.CreateObject("RisingGears", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("RisingGears.png")));
+		objectManager.AddArchetype(*objectFactory.CreateObject("RisingGears", resourceManager.GetMesh("RisingGears"), resourceManager.GetSpriteSource("RisingGears.png")));
 
-		// Set the background color to black.
+		// Set the background color.
 		Graphics::GetInstance().SetBackgroundColor(Colors::Black);
 	}
 
@@ -182,6 +166,15 @@ namespace Levels
 		ResourceManager& resourceManager = GetSpace()->GetResourceManager();
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
 
+		// Stop menu music and play in-game music
+		SoundManager* soundManager = Engine::GetInstance().GetModule<SoundManager>();
+		soundManager->GetMusicChannel()->stop();
+		// soundManager->PlaySound("");
+
+		// Play startup sounds
+		//soundManager->PlaySound("gamestart.wav");
+		soundManager->PlaySound("SoundFanf.wav");
+
 		// Load HUD Level
 		Space* hudSpace = GetAltSpace();
 
@@ -189,10 +182,14 @@ namespace Levels
 		if (hudSpace != nullptr)
 			hudSpace->SetLevel<HUDLevel>();
 
+		// Create background sprite
+		GameObject* backgroundImage = new GameObject(*objectManager.GetArchetypeByName("BackgroundImage"));
+		objectManager.AddObject(*backgroundImage);
+
 		// Create the players and add them to the object manager.
 		GameObject* player = new GameObject(*objectManager.GetArchetypeByName("Player"));
 		//*reinterpret_cast<std::string*>(reinterpret_cast<uintptr_t>(player) + sizeof(void**)) = "Player1";
-		static_cast<Behaviors::MonkeyAnimation*>(player->GetComponent("MonkeyAnimation"))->SetFrames(0, 8, 9, 1, 15, 1);
+		player->GetComponent< Behaviors::MonkeyAnimation>()->SetFrames(0, 8, 9, 4, 15, 4, 27, 2, 21, 4);
 		Behaviors::PlayerMovement* playerMovement = static_cast<Behaviors::PlayerMovement*>(player->GetComponent("PlayerMovement"));
 		playerMovement->SetKeybinds(VK_UP, VK_LEFT, VK_RIGHT, VK_RCONTROL);
 		playerMovement->SetPlayerID(1);
@@ -204,8 +201,8 @@ namespace Levels
 		player2->GetComponent<Collider>()->SetMask(1 << 2);
 		Sprite* player2Sprite = static_cast<Sprite*>(player2->GetComponent("Sprite"));
 		player2Sprite->SetMesh(resourceManager.GetMesh("Cat"));
-		player2Sprite->SetSpriteSource(resourceManager.GetSpriteSource("Cat.png"));
-		static_cast<Behaviors::MonkeyAnimation*>(player2->GetComponent("MonkeyAnimation"))->SetFrames(0, 4, 8, 4, 4, 4);
+		player2Sprite->SetSpriteSource(resourceManager.GetSpriteSource("AniB.png"));
+		player2->GetComponent< Behaviors::MonkeyAnimation>()->SetFrames(0, 8, 9, 4, 15, 4, 27, 2, 21, 4);
 		Behaviors::PlayerMovement* player2Movement = static_cast<Behaviors::PlayerMovement*>(player2->GetComponent("PlayerMovement"));
 		player2Movement->SetKeybinds('W', 'A', 'D', VK_LCONTROL);
 		player2Movement->SetPlayerID(2);
@@ -468,6 +465,12 @@ namespace Levels
 				GameObject* risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
 				risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(11.5f, -48.0f));
 				objectManager.AddObject(*risingGears);
+				GameObject* risingGears2 = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
+				risingGears2->GetComponent<Transform>()->SetTranslation(Vector2D(5.5f, -48.0f));
+				objectManager.AddObject(*risingGears2);
+				GameObject* risingGears3 = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
+				risingGears3->GetComponent<Transform>()->SetTranslation(Vector2D(18.5f, -48.0f));
+				objectManager.AddObject(*risingGears3);
 
 				break;
 			}
@@ -556,7 +559,8 @@ namespace Levels
 		delete dataRedMap;
 		delete dataBlueMap;
 
-		soundManager->Shutdown();
+		// Play main menu music
+		Engine::GetInstance().GetModule<SoundManager>()->PlaySound("SoundMenuM.wav");
 	}
 
 	//------------------------------------------------------------------------------
@@ -629,7 +633,18 @@ namespace Levels
 
 		for (int i = 0; i < numChips * 2; i += 2)
 		{
-			GameObject* chips = new GameObject(*objectManager.GetArchetypeByName("ProximityMinePickup"));
+			GameObject* chips;
+
+			// Random ability
+			if (RandomRange(0, 1))
+			{
+				chips = new GameObject(*objectManager.GetArchetypeByName("ProximityMinePickup"));
+			}
+			else
+			{
+				chips = new GameObject(*objectManager.GetArchetypeByName("JetpackPickup"));
+			}
+
 			static_cast<Transform*>(chips->GetComponent("Transform"))->SetTranslation(Vector2D(chipsSpawns[i], -chipsSpawns[i + 1]));
 			objectManager.AddObject(*chips);
 		}

@@ -224,6 +224,12 @@ float SoundManager::GetEffectsVolume() const
 	return effectsVolume;
 }
 
+// Gets the most-previously-used music channel
+FMOD::Channel* SoundManager::GetMusicChannel() const
+{
+	return musicChannel;
+}
+
 //------------------------------------------------------------------------------
 // Private Functions:
 //------------------------------------------------------------------------------

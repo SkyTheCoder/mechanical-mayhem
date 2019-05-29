@@ -22,6 +22,7 @@
 //------------------------------------------------------------------------------
 
 class Physics;
+class Sprite;
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -77,8 +78,13 @@ namespace Behaviors
 		float startOffset;
 		float timer;
 
+		// Animation
+		float animationSpeed;
+		float animationTimer;
+
 		// Components
 		Physics* physics;
+		Sprite* sprite;
 	};
 }
 

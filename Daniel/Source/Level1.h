@@ -133,14 +133,16 @@ namespace Levels
 		unsigned columnsSpikes;
 		unsigned rowsSpikes;
 
+		// Rising Gears
+		unsigned columnsRisingGears;
+		unsigned rowsRisingGears;
+
 		// Tilemap
 		Tilemap* dataStaticMap;
 		Tilemap* dataRedMap;
 		Tilemap* dataBlueMap;
 		unsigned columnsMap;
 		unsigned rowsMap;
-
-		SoundManager* soundManager;
 	};
 }
 
