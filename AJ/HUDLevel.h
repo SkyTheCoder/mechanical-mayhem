@@ -17,6 +17,7 @@
 
 #include "Vector2D.h"
 #include "Level.h"
+#include "Camera.h"
 
 //------------------------------------------------------------------------------
 // Forward References:
@@ -37,6 +38,8 @@ struct HUD
 	HUD(GameObject* PlayerIcon, GameObject* HealthBar, GameObject* HealthText, GameObject* AbilityBar, GameObject* AbilityIcon) :
 		PlayerIcon(PlayerIcon), HealthBar(HealthBar),  HealthText(HealthText), AbilityBar(AbilityBar), AbilityIcon(AbilityIcon) {}
 
+	~HUD();
+
 	GameObject* PlayerIcon;
 	GameObject* HealthBar;
 	GameObject* HealthText;
@@ -56,7 +59,7 @@ namespace Levels
 		//------------------------------------------------------------------------------
 
 		// Creates an instance of MainMenu.
-		HUDLevel(Space* gameSpace = nullptr);
+		HUDLevel();
 
 		// Load the resources associated with MainMenu.
 		void Load() override;
@@ -71,11 +74,6 @@ namespace Levels
 
 		// Unload the resources associated with MainMenu.
 		void Unload() override;
-
-		// Sets the GameSpace to the given gameSpace
-		// Params:
-		//	 gameSpace = gameSpace to set GameSpace to.
-		void SetGameSpace(Space* gameSpace);
 
 	private:
 		//------------------------------------------------------------------------------
@@ -94,13 +92,13 @@ namespace Levels
 
 		// HUDs & Players
 		HUD* HUD1, * HUD2;
-		GameObject* Player1, * Player2;
-
-		Space* GameSpace;
+		GameObject* player1, * player2;
 
 		Mesh* meshBackground;
 		Texture * textureBackground;
 		SpriteSource* spriteSourceBackground;
+
+		Camera HUDCamera;
 	};
 }
 

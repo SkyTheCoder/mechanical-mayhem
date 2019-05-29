@@ -15,8 +15,11 @@
 
 #include "stdafx.h"
 
+#include <filesystem>
+
 // BetaFramework Engine
 #include <Engine.h>
+#include <StartupSettings.h>
 
 // Engine modules
 #include <Space.h>
@@ -29,11 +32,12 @@
 
 // Systems
 #include <GameObjectFactory.h>
+#include <Parser.h>
 
 // Components
 #include "Button.h"
 #include "CameraFollow.h"
-#include "ChipCollectible.h"
+#include "ShiftPickup.h"
 #include "ColorChange.h"
 #include "DimensionController.h"
 #include "Jetpack.h"
@@ -44,6 +48,9 @@
 #include "RisingGears.h"
 #include "ScreenWrap.h"
 #include "TimedDeath.h"
+#include "AbilityHolder.h"
+#include "AbilityPickup.h"
+#include "Health.h"
 
 //------------------------------------------------------------------------------
 
@@ -63,25 +70,25 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 	UNREFERENCED_PARAMETER(command_line);
 	UNREFERENCED_PARAMETER(show);
 	UNREFERENCED_PARAMETER(instance);
-
-	// Create HUD space
-	Space* HUDSpace = new Space("HUDSpace");
+	 
 	// Create a new space called "GameSpace"
 	Space* space = new Space("GameSpace");
 
-	// Set initial level to the second level - GameSpace.
-	space->SetLevel(new Levels::MainMenu(HUDSpace));
-	// Set initial level to the HUD level - HUDSpace.
-	HUDSpace->SetLevel(new Levels::HUDEmpty(space));
+	// Create a new space called "HUDSpace"
+	Space* hudSpace = new Space("HUDSpace");
+
+	// Set initial level to the main menu.
+	space->SetLevel<Levels::MainMenu>()->SetAltSpace(hudSpace);
+
+	hudSpace->SetLevel<Levels::HUDEmpty>()->SetAltSpace(space);
 
 	Engine& engine = Engine::GetInstance();
 
 	// Add additional modules to engine
-	engine.AddModule(new FullscreenManager(true));
+	engine.AddModule(new FullscreenManager());
 	engine.AddModule(space);
-	engine.AddModule(HUDSpace);
+	engine.AddModule(hudSpace);
 	engine.AddModule(new SoundManager());
-	//engine.AddModule(new FullscreenManager());
 
 	// Register components
 	GameObjectFactory& objectFactory = GameObjectFactory::GetInstance();
@@ -90,10 +97,9 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 		using namespace Behaviors;
 		objectFactory.RegisterComponent<Button>();
 		objectFactory.RegisterComponent<CameraFollow>();
-		objectFactory.RegisterComponent<ChipCollectible>();
+		objectFactory.RegisterComponent<ShiftPickup>();
 		objectFactory.RegisterComponent<ColorChange>();
 		objectFactory.RegisterComponent<DimensionController>();
-		objectFactory.RegisterComponent<Jetpack>();
 		objectFactory.RegisterComponent<Hazard>();
 		objectFactory.RegisterComponent<MonkeyAnimation>();
 		objectFactory.RegisterComponent<PlayerMovement>();
@@ -101,10 +107,41 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 		objectFactory.RegisterComponent<RisingGears>();
 		objectFactory.RegisterComponent<ScreenWrap>();
 		objectFactory.RegisterComponent<TimedDeath>();
+		objectFactory.RegisterComponent<AbilityHolder>();
+		objectFactory.RegisterComponent<AbilityPickup>();
+		objectFactory.RegisterComponent<Health>();
 	}
 
+	StartupSettings startupSettings;
+	startupSettings.windowWidth = 0;
+	startupSettings.windowHeight = 0;
+	startupSettings.fullscreen = true;
+	startupSettings.allowMaximize = true;
+	startupSettings.vSync = true;
+
+	if (std::filesystem::exists("settings.txt"))
+	{
+		Parser settingsParser("settings.txt", std::fstream::in);
+		settingsParser.ReadSkip("Settings");
+		settingsParser.ReadSkip('{');
+		settingsParser.ReadVariable("framerateCap", startupSettings.framerateCap);
+		settingsParser.ReadVariable("fullscreen", startupSettings.fullscreen);
+		settingsParser.ReadVariable("vSync", startupSettings.vSync);
+		settingsParser.ReadSkip('}');
+	}
+	else
+	{
+		Parser settingsParser("settings.txt", std::fstream::out);
+		settingsParser.WriteValue("Settings");
+		settingsParser.BeginScope();
+		settingsParser.WriteVariable("framerateCap", startupSettings.framerateCap);
+		settingsParser.WriteVariable("fullscreen", startupSettings.fullscreen);
+		settingsParser.WriteVariable("vSync", startupSettings.vSync);
+		settingsParser.EndScope();
+	}
+	startupSettings.fullscreen = false;
 	// Game engine goes!
-	engine.Start(1920, 1080, 200);
+	engine.Start(startupSettings);
 
 	return 0;
 }

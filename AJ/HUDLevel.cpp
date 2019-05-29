@@ -31,19 +31,30 @@
 #include "SpriteText.h"
 #include <Transform.h>
 #include "Sprite.h"
+#include "PlayerMovement.h"
 
 //------------------------------------------------------------------------------
 // Public Functions:
 //------------------------------------------------------------------------------
 
+HUD::~HUD()
+{
+	delete PlayerIcon;
+	delete HealthBar;
+	delete HealthText;
+	delete AbilityBar;
+	delete AbilityIcon;
+}
+
 namespace Levels
 {
 	// Creates an instance of HUDLevel.
-	HUDLevel::HUDLevel(Space* gameSpace) : Level("HUDLevel", gameSpace), Player1(nullptr), Player2(nullptr),
+	HUDLevel::HUDLevel() : Level("HUDLevel"), player1(nullptr), player2(nullptr),
 		meshBackground(nullptr), textureBackground(nullptr), spriteSourceBackground(nullptr), 
-		GameSpace(nullptr), HUD1(nullptr), HUD2(nullptr)
+		HUD1(nullptr), HUD2(nullptr)
 	{
-		SetGameSpace(gameSpace);
+		HUDCamera.SetTranslation(Vector2D());
+		HUDCamera.SetSize(10.0f);
 	}
 
 	// Load the resources associated with MainMenu.
@@ -58,10 +69,27 @@ namespace Levels
 		spriteSourceBackground = new SpriteSource(1, 1, textureBackground);
 
 		// Set Player pointers
-		if (GameSpace != nullptr)
+		if (GetAltSpace() != nullptr)
 		{
-			Player1 = GameSpace->GetObjectManager().GetObjectByName("Player1");
-			Player2 = GameSpace->GetObjectManager().GetObjectByName("Player2");
+			std::vector<GameObject*> players;
+			players.reserve(2);
+			GetAltSpace()->GetObjectManager().GetAllObjectsByName("player", players);
+
+			for (auto it = players.begin(); it != players.end(); ++it)
+			{
+				Behaviors::PlayerMovement* playerMovement = (*it)->GetComponent<Behaviors::PlayerMovement>();
+				if (playerMovement != nullptr)
+				{
+					switch (playerMovement->GetPlayerID())
+					{
+					case 1:
+						player1 = *it;
+						break;
+					case 2:
+						player2 = *it;
+					}
+				}
+			}
 		}
 
 		// Create Player HUDs
@@ -89,10 +117,6 @@ namespace Levels
 		test->AddComponent(sprite);
 
 		objectManager.AddObject(*test);
-
-		Camera & camera = Graphics::GetInstance().GetDefaultCamera();
-		camera.SetTranslation(Vector2D());
-		camera.SetSize(10.0f);
 	}
 
 	// Update Level 1.
@@ -101,6 +125,7 @@ namespace Levels
 	void HUDLevel::Update(float dt)
 	{
 		UNREFERENCED_PARAMETER(dt);
+		HUDCamera.Use();
 	}
 
 	// Unload the resources associated with MainMenu.
@@ -114,14 +139,6 @@ namespace Levels
 		delete meshBackground;
 		delete textureBackground;
 		delete spriteSourceBackground;
-	}
-
-	// Sets the GameSpace to the given gameSpace
-	// Params:
-	//	 gameSpace = gameSpace to set GameSpace to.
-	void HUDLevel::SetGameSpace(Space* gameSpace)
-	{
-		GameSpace = gameSpace;
 	}
 
 	//------------------------------------------------------------------------------
