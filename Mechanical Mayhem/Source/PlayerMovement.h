@@ -30,6 +30,11 @@ class Physics;
 struct MapCollision;
 class SoundManager;
 
+namespace FMOD
+{
+	class Channel;
+}
+
 //------------------------------------------------------------------------------
 // Public Structures:
 //------------------------------------------------------------------------------
@@ -144,6 +149,7 @@ namespace Behaviors
 
 		// Sound manager
 		SoundManager* soundManager;
+		FMOD::Channel* slideSound;
 
 		// Misc
 		int playerID;
