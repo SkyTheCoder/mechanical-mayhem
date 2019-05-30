@@ -154,6 +154,8 @@ namespace Levels
 		// Flames
 		unsigned columnsFlame;
 		unsigned rowsFlame;
+		unsigned columnsJetpackFlame;
+		unsigned rowsJetpackFlame;
 
 		// Rising Gears
 		unsigned columnsRisingGears;

@@ -22,11 +22,13 @@
 // Forward Declarations:
 //------------------------------------------------------------------------------
 
+class Transform;
 class Physics;
 
 namespace Behaviors
 {
 	class PlayerMovement;
+	class MonkeyAnimation;
 }
 
 namespace FMOD
@@ -104,8 +106,10 @@ namespace Abilities
 		//------------------------------------------------------------------------------
 
 		// Other components
-		Behaviors::PlayerMovement* playerMovement;
+		Transform* transform;
 		Physics* physics;
+		Behaviors::PlayerMovement* playerMovement;
+		Behaviors::MonkeyAnimation* monkeyAnimation;
 
 		std::string flameEffectName;
 		GameObject* flameEffect;

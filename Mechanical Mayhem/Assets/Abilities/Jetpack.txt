@@ -1,5 +1,6 @@
 Jetpack
 {
+  flameEffect : JetpackFlame
   jetpackForce : 10
   currentFuel : 3
   maxFuel : 3

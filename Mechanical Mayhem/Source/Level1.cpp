@@ -77,7 +77,7 @@ namespace Levels
 		columnsCat(3), rowsCat(10),
 		columnsSpikes(1), rowsSpikes(3),
 		columnsExplosion(3), rowsExplosion(3),
-		columnsFlame(2), rowsFlame(2),
+		columnsFlame(2), rowsFlame(2), columnsJetpackFlame(2), rowsJetpackFlame(2),
 		columnsRisingGears(1), rowsRisingGears(2),
 		dataStaticMap(nullptr), dataRedMap(nullptr), dataBlueMap(nullptr),
 		columnsMap(2), rowsMap(2)
@@ -98,6 +98,7 @@ namespace Levels
 		resourceManager.GetMesh("Map", Vector2D(1.0f / columnsMap, 1.0f / rowsMap), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("Explosion", Vector2D(1.0f / columnsExplosion, 1.0f / rowsExplosion), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("Flame", Vector2D(1.0f / columnsFlame, 1.0f / rowsFlame), Vector2D(0.5f, 0.5f));
+		resourceManager.GetMesh("JetpackFlame", Vector2D(1.0f / columnsJetpackFlame, 1.0f / rowsJetpackFlame), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("RisingGears", Vector2D(1.0f / columnsRisingGears, 1.0f / rowsRisingGears), Vector2D(0.5f, 0.5f));
 
 		resourceManager.GetSpriteSource("AniA.png", columnsMonkey, rowsMonkey);
@@ -113,6 +114,10 @@ namespace Levels
 		resourceManager.GetSpriteSource("Spikes.png", columnsSpikes, rowsSpikes);
 		resourceManager.GetSpriteSource("AniMineExplode.png", columnsExplosion, rowsExplosion);
 		resourceManager.GetSpriteSource("AniFlame.png", columnsFlame, rowsFlame);
+		resourceManager.GetSpriteSource("AniJetpackFallFireA.png", columnsJetpackFlame, rowsJetpackFlame);
+		resourceManager.GetSpriteSource("AniJetpackFallFireB.png", columnsJetpackFlame, rowsJetpackFlame);
+		resourceManager.GetSpriteSource("AniJetpackJumpFireA.png", columnsJetpackFlame, rowsJetpackFlame);
+		resourceManager.GetSpriteSource("AniJetpackJumpFireB.png", columnsJetpackFlame, rowsJetpackFlame);
 		resourceManager.GetSpriteSource("jetpackCollectible.png");
 		resourceManager.GetSpriteSource("flamethrowerCollectible.png");
 		resourceManager.GetSpriteSource("proximityMineCollectible.png");
@@ -180,6 +185,7 @@ namespace Levels
 		objectManager.AddArchetype(*objectFactory.CreateObject("Mine", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Circle.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Explosion", resourceManager.GetMesh("Explosion"), resourceManager.GetSpriteSource("AniMineExplode.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("FlameEffect", resourceManager.GetMesh("Flame"), resourceManager.GetSpriteSource("AniFlame.png")));
+		objectManager.AddArchetype(*objectFactory.CreateObject("JetpackFlame", resourceManager.GetMesh("JetpackFlame"), resourceManager.GetSpriteSource("AniFlame.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("StaticSpike", resourceManager.GetMesh("Spikes"), resourceManager.GetSpriteSource("Spikes.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("RedSpike", resourceManager.GetMesh("Spikes"), resourceManager.GetSpriteSource("Spikes.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("BlueSpike", resourceManager.GetMesh("Spikes"), resourceManager.GetSpriteSource("Spikes.png")));

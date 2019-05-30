@@ -222,7 +222,7 @@ namespace Behaviors
 	// Determines whether the player is grounded
 	bool PlayerMovement::IsOnGround() const
 	{
-		return airTime <= 1e-6f;
+		return airTime <= 3.5f / 60.0f;//1e-6f;
 	}
 
 	//------------------------------------------------------------------------------
