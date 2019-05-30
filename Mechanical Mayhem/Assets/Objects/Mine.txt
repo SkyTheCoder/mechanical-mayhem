@@ -1,6 +1,6 @@
 Mine
 {
-  numComponents : 5
+  numComponents : 7
   Transform
   {
     translation : { 0, 0 }
@@ -10,7 +10,7 @@ Mine
   Sprite
   {
     frameIndex : 0
-    color : { 1, 1, 1, 0.3 }
+    color : { 1, 1, 1, 1 }
   }
   ColliderCircle
   {
@@ -30,5 +30,15 @@ Mine
   Behaviors::TimedDeath
   {
     timeUntilDeath : 5
+  }
+  Animation
+  {
+  }
+  Behaviors::SimpleAnimator
+  {
+    animationStart : 0
+    animationLength : 4
+    animationSpeed : 0.1
+    looping : 1
   }
 }

@@ -23,7 +23,7 @@ Explosion
   {
     animationStart : 0
     animationLength : 9
-    animationSpeed : 0.05
+    animationSpeed : 0.035
     looping : 0
   }
 }

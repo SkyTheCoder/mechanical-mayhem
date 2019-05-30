@@ -168,6 +168,8 @@ namespace Behaviors
 		float movementLerpGround;
 		float movementLerpAir;
 
+		float stepTimer;
+
 		friend class MonkeyAnimation;
 	};
 }

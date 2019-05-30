@@ -79,6 +79,7 @@ namespace Levels
 		columnsExplosion(3), rowsExplosion(3),
 		columnsFlame(2), rowsFlame(2),
 		columnsRisingGears(1), rowsRisingGears(2),
+		columnsMine(2), rowsMine(2),
 		dataStaticMap(nullptr), dataRedMap(nullptr), dataBlueMap(nullptr),
 		columnsMap(2), rowsMap(2)
 	{
@@ -98,6 +99,7 @@ namespace Levels
 		resourceManager.GetMesh("Map", Vector2D(1.0f / columnsMap, 1.0f / rowsMap), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("Explosion", Vector2D(1.0f / columnsExplosion, 1.0f / rowsExplosion), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("Flame", Vector2D(1.0f / columnsFlame, 1.0f / rowsFlame), Vector2D(0.5f, 0.5f));
+		resourceManager.GetMesh("Mine", Vector2D(1.0f / columnsMine, 1.0f / rowsMine), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("RisingGears", Vector2D(1.0f / columnsRisingGears, 1.0f / rowsRisingGears), Vector2D(0.5f, 0.5f));
 
 		resourceManager.GetSpriteSource("AniA.png", columnsMonkey, rowsMonkey);
@@ -112,6 +114,7 @@ namespace Levels
 		resourceManager.GetSpriteSource("Spikes.png", columnsSpikes, rowsSpikes);
 		resourceManager.GetSpriteSource("Spikes.png", columnsSpikes, rowsSpikes);
 		resourceManager.GetSpriteSource("AniMineExplode.png", columnsExplosion, rowsExplosion);
+		resourceManager.GetSpriteSource("AniMine.png", columnsMine, rowsMine);
 		resourceManager.GetSpriteSource("AniFlame.png", columnsFlame, rowsFlame);
 		resourceManager.GetSpriteSource("jetpackCollectible.png");
 		resourceManager.GetSpriteSource("flamethrowerCollectible.png");
@@ -177,7 +180,7 @@ namespace Levels
 		objectManager.AddArchetype(*objectFactory.CreateObject("ProximityMinePickup", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("proximityMineCollectible.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("JetpackPickup", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Collectible.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Flame", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Circle.png")));
-		objectManager.AddArchetype(*objectFactory.CreateObject("Mine", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Circle.png")));
+		objectManager.AddArchetype(*objectFactory.CreateObject("Mine", resourceManager.GetMesh("Mine"), resourceManager.GetSpriteSource("AniMine.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Explosion", resourceManager.GetMesh("Explosion"), resourceManager.GetSpriteSource("AniMineExplode.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("FlameEffect", resourceManager.GetMesh("Flame"), resourceManager.GetSpriteSource("AniFlame.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("StaticSpike", resourceManager.GetMesh("Spikes"), resourceManager.GetSpriteSource("Spikes.png")));
@@ -201,7 +204,7 @@ namespace Levels
 		// Stop menu music and play in-game music
 		soundManager = Engine::GetInstance().GetModule<SoundManager>();
 		soundManager->GetMusicChannel()->stop();
-		// soundManager->PlaySound("");
+		playWinSound = true;
 
 		// Play background music
 		soundManager->PlaySound("SoundPlay.wav");
@@ -638,10 +641,12 @@ namespace Levels
 			Behaviors::PlayerMovement* lastPlayerMovement = static_cast<Behaviors::PlayerMovement*>(lastPlayer->GetComponent("PlayerMovement"));
 
 			// Play win sound once
-			static bool playWinSound = true;
 			if (playWinSound)
 			{
 				playWinSound = false;
+				
+				// Stop background music and play fanfare
+				soundManager->GetMusicChannel()->stop();
 				soundManager->PlaySound("SoundFanf.wav")->setVolume(5.0f);
 			}
 

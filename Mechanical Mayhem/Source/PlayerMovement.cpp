@@ -57,7 +57,8 @@ namespace Behaviors
 		transform(nullptr), physics(nullptr), soundManager(nullptr),
 		playerID(0), switchCharges(0),
 		onGround(false), onLeftWall(false), onRightWall(false), animOnGround(0.0f), animOnLeftWall(0.0f), animOnRightWall(0.0f),
-		hasJumped(false), airTime(0.0f), leftTime(0.0f), rightTime(0.0f), movementLerpGround(1.0f), movementLerpAir(0.98f)
+		hasJumped(false), airTime(0.0f), leftTime(0.0f), rightTime(0.0f), movementLerpGround(1.0f), movementLerpAir(0.98f),
+		stepTimer(0.0f)
 	{
 	}
 
@@ -142,8 +143,11 @@ namespace Behaviors
 				if (airTime > 0.1f)
 				{
 					FMOD::Channel* landing = soundManager->PlaySound("Landing final.wav");
-					landing->setVolume(15.0f);
+					landing->setVolume(10.0f);
 					landing->setPitch(RandomRange(1.0f, 2.0f));
+
+					// Delay step sound by a bit
+					// stepTimer = -0.5f;
 				}
 
 				onGround = true;
@@ -385,7 +389,6 @@ namespace Behaviors
 		// Handle step audio
 		if (airTime < 0.1f && (input.CheckHeld(keyRight) || input.CheckHeld(keyLeft)) && !isSliding)
 		{
-			static float stepTimer = 0.0f;
 			stepTimer += dt;
 			if (stepTimer > 0.25f)
 			{
