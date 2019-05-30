@@ -18,8 +18,6 @@
 
 // Systems
 #include <Space.h>
-#include <Engine.h>
-#include <SoundManager.h>
 #include <Parser.h> // Read/WriteVariable
 //#include <Event.h>
 
@@ -45,7 +43,6 @@ namespace Behaviors
 	//   maxHealth = The max health for the object.
 	//   destroyOnDeath = hether the object should be destroyed when it dies.
 	Health::Health(int maxHealth, bool destroyOnDeath) : Component("Health"),
-		soundManager(nullptr),
 		health(maxHealth), maxHealth(maxHealth), destroyOnDeath(destroyOnDeath)
 	{
 	}
@@ -59,7 +56,6 @@ namespace Behaviors
 	// Initialize data for this object.
 	void Health::Initialize()
 	{
-		soundManager = Engine::GetInstance().GetModule<SoundManager>();
 	}
 
 	// Update function for this component.
@@ -71,6 +67,18 @@ namespace Behaviors
 
 		if (health <= 0)
 			GetOwner()->GetSpace()->GetObjectManager().DispatchEvent(new Event(ET_Death, "Death", 0.0f, GetOwner()->GetID()));
+	}
+
+	// Returns the current health (0.0 - 1.0)
+	int Health::GetHealth()
+	{
+		return health / maxHealth;
+	}
+
+	// Returns the current health
+	int Health::GetMaxHealth()
+	{
+		return maxHealth;
 	}
 
 	// Write object data to file
@@ -116,9 +124,6 @@ namespace Behaviors
 
 		if (event.type == ET_Death && event.sender == GetOwner()->GetID() && destroyOnDeath)
 		{
-			// Death sound
-			soundManager->PlaySound("deathslapfinal.wav");
-
 			GetOwner()->Destroy();
 		}
 	}

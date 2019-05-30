@@ -115,6 +115,9 @@
     <ClCompile Include="Source\ChromaticAberration.cpp">
       <Filter>Game\Effects</Filter>
     </ClCompile>
+    <ClCompile Include="Source\HUD.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -209,6 +212,9 @@
     </ClInclude>
     <ClInclude Include="Source\ChromaticAberration.h">
       <Filter>Game\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HUD.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -74,6 +74,11 @@ public:
 	//   text = New string to display.
 	void SetText(const char* text);
 
+	// Sets the string to display.
+	// Params:
+	//   text = New string to display.
+	void SetText(const std::string& text);
+
 	// Get the current string being desplayed.
 	const std::string& GetText() const;
 

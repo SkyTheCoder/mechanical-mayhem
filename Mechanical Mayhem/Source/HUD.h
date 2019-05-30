@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	Health.h
+// File Name:	HUD.h
 // Author(s):	A.J. Bussman
-// Project:		BetaFramework
+// Project:		Mechanical Mayhem
 // Course:		WANIC VGP2 2018-2019
 //
 // Copyright © 2018 DigiPen (USA) Corporation.
@@ -15,12 +15,15 @@
 // Include Files:
 //------------------------------------------------------------------------------
 
-#include "Component.h" // base class
-#include <Color.h>
+#include <BetaObject.h>
+
+#include <Vector2D.h>
 
 //------------------------------------------------------------------------------
+// Forward References:
+//------------------------------------------------------------------------------
 
-class Sprite;
+class GameObject;
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -28,7 +31,7 @@ class Sprite;
 
 namespace Behaviors
 {
-	class Health : public Component
+	class HUD : public BetaObject
 	{
 	public:
 		//------------------------------------------------------------------------------
@@ -36,55 +39,43 @@ namespace Behaviors
 		//------------------------------------------------------------------------------
 
 		// Constructor
-		// Params:
-		//   maxHealth = The max health for the object.
-		//   destroyOnDeath = hether the object should be destroyed when it dies.
-		Health(int maxHealth = 100, bool destroyOnDeath = true);
+		HUD(GameObject* player, Vector2D translation);
 
 		// Return a new copy of the component.
-		Component* Clone() const;
+		HUD* Clone() const;
 
 		// Initialize data for this object.
-		void Initialize();
+		void Initialize() override;
 
 		// Update function for this component.
 		// Params:
-		//   dt = The change in time since the last step.
+		//   dt = The (fixed) change in time since the last step.
 		void Update(float dt) override;
 
-		// Returns the current health
-		int GetHealth();
-		
-		// Returns the current health
-		int GetMaxHealth();
+		// Removes any objects that will be recreated in Initialize.
+		void Shutdown() override;
 
-		// Write object data to file
-		// Params:
-		//   parser = The parser that is writing this object to a file.
-		void Serialize(Parser& parser) const override;
+		// Sets the current player pointer.
+		void SetPlayer(GameObject* player);
 
-		// Read object data from a file
-		// Params:
-		//   parser = The parser that is reading this object's data from a file.
-		void Deserialize(Parser& parser) override;
-
-		// Receive an event and handle it (if applicable).
-		// Params:
-		//   event = The event that has been received.
-		void HandleEvent(const Event& event);
+		~HUD();
 
 	private:
 		//------------------------------------------------------------------------------
 		// Private Variables:
 		//------------------------------------------------------------------------------
 
-		// Health left
-		int health;
+		GameObject* player;
 
-		// Max health
-		int maxHealth;
+		Vector2D translation;
 
-		// Whether the object should be destroyed when it dies
-		bool destroyOnDeath;
+		// Health variables
+		std::vector<GameObject*> healthBar;
+		GameObject* healthText;
+		float prevHealth;
+
+		// Ability variables
+		std::vector<GameObject*> abilityBar;
+		float prevMana;
 	};
 }
