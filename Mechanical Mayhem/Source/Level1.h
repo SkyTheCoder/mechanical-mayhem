@@ -128,6 +128,7 @@ namespace Levels
 
 		// Components
 		SoundManager* soundManager;
+		bool playWinSound;
 
 		Map map;
 
@@ -150,6 +151,10 @@ namespace Levels
 		// Explosions
 		unsigned columnsExplosion;
 		unsigned rowsExplosion;
+
+		// Primed mine
+		unsigned columnsMine;
+		unsigned rowsMine;
 		
 		// Flames
 		unsigned columnsFlame;
