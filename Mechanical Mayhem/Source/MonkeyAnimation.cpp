@@ -19,14 +19,17 @@
 #include "MonkeyAnimation.h"
 
 // Systems
-#include "GameObject.h"
+#include <GameObject.h>
+#include <Space.h>
 #include <Input.h>
 
 // Components
-#include "Animation.h"
-#include "Physics.h"
-#include "Transform.h"
+#include <Animation.h>
+#include <Physics.h>
+#include <Transform.h>
+#include <SpriteSource.h>
 #include "PlayerMovement.h"
+#include "AbilityHolder.h"
 
 //------------------------------------------------------------------------------
 
@@ -49,7 +52,13 @@ namespace Behaviors
 	//   idleStart  = The starting frame for the idle animation.
 	//   idleLength = The number of frames of the idle animation.
 	MonkeyAnimation::MonkeyAnimation(unsigned walkStart, unsigned walkLength,
-		unsigned jumpStart, unsigned jumpLength, unsigned idleStart, unsigned idleLength) : Component("MonkeyAnimation"), walkStart(walkStart), walkLength(walkLength), jumpStart(jumpStart), jumpLength(jumpLength), idleStart(idleStart), idleLength(idleLength), currentState(StateIdle), nextState(StateIdle)
+		unsigned jumpStart, unsigned jumpLength, unsigned idleStart, unsigned idleLength)
+		: Component("MonkeyAnimation"),
+		walkStart(walkStart), walkLength(walkLength), jumpStart(jumpStart), jumpLength(jumpLength),
+		idleStart(idleStart), idleLength(idleLength), currentState(StateIdle), nextState(StateIdle),
+		anims{ nullptr },
+		animation(nullptr), physics(nullptr), transform(nullptr), sprite(nullptr), monkeyMovement(nullptr), abilityHolder(nullptr),
+		originalScale()
 	{
 	}
 
@@ -65,10 +74,14 @@ namespace Behaviors
 	void MonkeyAnimation::Initialize()
 	{
 		// Store the required components for ease of access.
-		animation = static_cast<Animation*>(GetOwner()->GetComponent("Animation"));
-		physics = static_cast<Physics*>(GetOwner()->GetComponent("Physics"));
-		transform = static_cast<Transform*>(GetOwner()->GetComponent("Transform"));
-		monkeyMovement = static_cast<PlayerMovement*>(GetOwner()->GetComponent("PlayerMovement"));
+		animation = GetOwner()->GetComponent<Animation>();
+		physics = GetOwner()->GetComponent<Physics>();
+		transform = GetOwner()->GetComponent<Transform>();
+		sprite = GetOwner()->GetComponent<Sprite>();
+		monkeyMovement = GetOwner()->GetComponent<PlayerMovement>();
+		abilityHolder = GetOwner()->GetComponent<AbilityHolder>();
+
+		sprite->SetSpriteSource(anims[abilityHolder->GetAbilityType()]);
 
 		// Play the idle animation.
 		animation->Play(idleStart, 1, 0.0f, true);
@@ -84,6 +97,9 @@ namespace Behaviors
 	{
 		UNREFERENCED_PARAMETER(dt);
 
+		// Update the sprite source to use the current ability.
+		sprite->SetSpriteSource(anims[abilityHolder->GetAbilityType()]);
+
 		// Choose the next state.
 		ChooseNextState();
 
@@ -92,6 +108,9 @@ namespace Behaviors
 
 		// Flip the sprite if necessary.
 		FlipSprite();
+
+		// Let the movement behavior reset its animation variables.
+		monkeyMovement->AnimFinished(dt);
 	}
 
 	// Sets the frames for the animation.
@@ -120,6 +139,17 @@ namespace Behaviors
 		wallSlideLength = wallSlideLength_;
 	}
 
+	// Tells this animation component to use the sprite source with the specified variant.
+	void MonkeyAnimation::GetSpriteSources(std::string variant)
+	{
+		ResourceManager& resourceManager = GetOwner()->GetSpace()->GetResourceManager();
+
+		anims[Abilities::ABILITY_NONE] = resourceManager.GetSpriteSource("Ani" + variant + ".png");
+		anims[Abilities::ABILITY_JETPACK] = resourceManager.GetSpriteSource("AniJetpack" + variant + ".png");
+		anims[Abilities::ABILITY_FLAMETHROWER] = resourceManager.GetSpriteSource("AniFlame" + variant + ".png");
+		anims[Abilities::ABILITY_PROXIMITYMINE] = resourceManager.GetSpriteSource("AniMine" + variant + ".png");
+	}
+
 	//------------------------------------------------------------------------------
 	// Private Functions:
 	//------------------------------------------------------------------------------
@@ -127,8 +157,13 @@ namespace Behaviors
 	// Choose the correct state based on velocity.
 	void MonkeyAnimation::ChooseNextState()
 	{
+		Input& input = Input::GetInstance();
+
 		Vector2D velocity = physics->GetVelocity();
 
+		// Check for wall-sliding.
+		bool wallSliding = monkeyMovement->animOnLeftWall > 0.0f && input.CheckHeld(monkeyMovement->GetLeftKeybind()) || monkeyMovement->animOnRightWall > 0.0f && input.CheckHeld(monkeyMovement->GetRightKeybind());
+		
 		// If we are jumping/falling, use the jumping/falling state accordingly.
 		if (monkeyMovement->airTime > 0.1f)
 		{
@@ -142,20 +177,18 @@ namespace Behaviors
 			}
 		}
 		// If we are moving to the side, use the walking state.
-		else if (abs(velocity.x) > 0.75f)
+		else if (!wallSliding && abs(velocity.x) > 0.75f)
 		{
 			nextState = State::StateWalk;
 		}
-		else
+		else if (!wallSliding || monkeyMovement->animOnGround > 0.0f && wallSliding)
 		{
-			// Check for wall-sliding
-			//if (input.CheckHeld(monkeyMovement->GetLeftKeybind()) || input.CheckHeld(monkeyMovement->GetRightKeybind()))
-			//{
-			//	nextState = State::StateWallSlide;
-			//}
-
 			// If we are standing still, use the idle state.
 			nextState = State::StateIdle;
+		}
+		else
+		{
+			nextState = State::StateWallSlide;
 		}
 	}
 
@@ -174,7 +207,7 @@ namespace Behaviors
 				break;
 			// If the state is changed to the walking state, begin playing the walking animation.
 			case State::StateWalk:
-				animation->Play(walkStart, walkLength, 0.08f, true);
+				animation->Play(walkStart, walkLength, 0.06f, true); // 0.08f
 				break;
 			// If the state is changed to the jumping state, begin playing the jumping animation.
 			case State::StateJump:
@@ -195,20 +228,24 @@ namespace Behaviors
 	// Flip the sprite based on velocity and current state.
 	void MonkeyAnimation::FlipSprite() const
 	{
-		// Check if we are walking or jumping.
+		// Check if we are moving.
 		if (currentState != State::StateIdle)
 		{
 			Vector2D velocity = physics->GetVelocity();
+
+			if (currentState != State::StateWallSlide && abs(velocity.x) <= 0.1f)
+				return;
+
+			float xScalar = 1.0f;
+
 			// If we are moving left, flip the sprite on the X axis.
 			if (velocity.x < 0.0f)
-			{
-				transform->SetScale(Vector2D(-originalScale.x, originalScale.y));
-			}
-			// If we are moving right, restore the original scale.
-			else if (velocity.x > 0.0f)
-			{
-				transform->SetScale(originalScale);
-			}
+				xScalar *= -1.0f;
+
+			if (currentState == State::StateWallSlide)
+				xScalar *= -1.0f;
+
+			transform->SetScale(Vector2D(xScalar * originalScale.x, originalScale.y));
 		}
 	}
 }

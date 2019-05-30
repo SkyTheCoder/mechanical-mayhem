@@ -1,6 +1,6 @@
 Explosion
 {
-  numComponents : 4
+  numComponents : 5
   Transform
   {
     translation : { 0, 0 }
@@ -10,13 +10,20 @@ Explosion
   Sprite
   {
     frameIndex : 0
-    color : { 1, 1, 1, 0.5 }
+    color : { 1, 1, 1, 1.0 }
   }
   Animation
   {
   }
   Behaviors::TimedDeath
   {
-    timeUntilDeath : 0.5
+    timeUntilDeath : 0.45	
+  }
+  Behaviors::SimpleAnimator
+  {
+    animationStart : 0
+    animationLength : 9
+    animationSpeed : 0.05
+    looping : 0
   }
 }

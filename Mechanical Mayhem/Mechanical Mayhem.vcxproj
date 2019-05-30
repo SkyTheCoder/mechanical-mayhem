@@ -138,6 +138,7 @@ xcopy fmod\lib\fmodstudio64.dll "$(OutDir)" /Y</Command>
     <ClCompile Include="Source\RisingGears.cpp" />
     <ClCompile Include="Source\ScreenWrap.cpp" />
     <ClCompile Include="Source\ShiftPickup.cpp" />
+    <ClCompile Include="Source\SimpleAnimator.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -172,6 +173,7 @@ xcopy fmod\lib\fmodstudio64.dll "$(OutDir)" /Y</Command>
     <ClInclude Include="Source\RisingGears.h" />
     <ClInclude Include="Source\ScreenWrap.h" />
     <ClInclude Include="Source\ShiftPickup.h" />
+    <ClInclude Include="Source\SimpleAnimator.h" />
     <ClInclude Include="Source\stdafx.h" />
     <ClInclude Include="Source\TimedDeath.h" />
   </ItemGroup>

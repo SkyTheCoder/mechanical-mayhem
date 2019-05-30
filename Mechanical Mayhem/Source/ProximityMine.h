@@ -61,6 +61,9 @@ namespace Abilities
 		// Callback for when the player attempts to use this ability.
 		void OnUse() override;
 
+		// Returns the % of mana/fuel/uses/whatever left on this ability.
+		float GetMana() override;
+
 		// Write object data to file
 		// Params:
 		//   parser = The parser that is writing this object to a file.
@@ -79,6 +82,9 @@ namespace Abilities
 		// Components
 		Transform* transform;
 		Collider* collider;
+
+		std::string mineArchetypeName;
+		GameObject* mineArchetype;
 		
 		// Cooldown between placing mines.
 		float cooldown;

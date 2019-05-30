@@ -102,7 +102,7 @@ namespace Levels
 	{
 		std::cout << "HUDLevel::Initialize" << std::endl;
 
-		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
+		/*GameObjectManager& objectManager = GetSpace()->GetObjectManager();
 
 		// Test
 
@@ -116,7 +116,7 @@ namespace Levels
 		sprite->SetSpriteSource(spriteSourceBackground);
 		test->AddComponent(sprite);
 
-		objectManager.AddObject(*test);
+		objectManager.AddObject(*test);*/
 	}
 
 	// Update Level 1.

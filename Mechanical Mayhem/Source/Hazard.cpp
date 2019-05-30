@@ -109,7 +109,11 @@ namespace Behaviors
 
 					// Spawn the archetype when destroyed.
 					if (destroyedArchetype != nullptr)
-						objectManager.AddObject(*new GameObject(*destroyedArchetype));
+					{
+						GameObject* destroyedObject = new GameObject(*destroyedArchetype);
+						destroyedObject->GetComponent<Transform>()->SetTranslation(GetOwner()->GetComponent<Transform>()->GetTranslation());
+						objectManager.AddObject(*destroyedObject);
+					}
 				}
 			}
 		}

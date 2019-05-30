@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	DimensionController.h
-// Author(s):	David Cohen (david.cohen)
+// Author(s):	David Cohen (david.cohen), A.J. Bussman
 // Project:		Yesterday's Mayonnaise
 // Course:		WANIC VGP2 2018-2019
 //
@@ -58,9 +58,6 @@ namespace Behaviors
 		//   dt = The (fixed) change in time since the last step.
 		void FixedUpdate(float dt) override;
 
-		// Shutdown function for this component
-		void Shutdown() override;
-
 		// Calculates how long until the dimension can be switched again.
 		// Returns:
 		//   How much longer until the dimension can be switched.
@@ -95,12 +92,6 @@ namespace Behaviors
 		// Private Structures:
 		//------------------------------------------------------------------------------
 
-		// Sets the cooldown time
-		void SetCoolDownTime();
-
-		// Returns if a newCooldown is needed
-		bool newCooldown();
-
 		struct Dimension
 		{
 			// Constructor
@@ -113,6 +104,16 @@ namespace Behaviors
 		};
 
 		//------------------------------------------------------------------------------
+		// Private Functions:
+		//------------------------------------------------------------------------------
+
+		// Sets the cooldown time
+		void SetCoolDownTime();
+
+		// Returns if a NeedsNewCooldown is needed
+		bool NeedsNewCooldown();
+
+		//------------------------------------------------------------------------------
 		// Private Variables:
 		//------------------------------------------------------------------------------
 
@@ -121,7 +122,7 @@ namespace Behaviors
 		float currentCooldown;
 		int cdIndex;
 		int cdCount;
-		float* cdCounts;
+		float cdCounts[11];
 		double gameTimer;
 		unsigned activeDimension;
 		std::vector<Dimension> dimensions;

@@ -1,0 +1,25 @@
+FlameEffect
+{
+  numComponents : 4
+  Transform
+  {
+    translation : { 0, 0 }
+    rotation : 0
+    scale : { 0.5, 0.5 }
+  }
+  Sprite
+  {
+    frameIndex : 0
+    color : { 1, 0.5, 0, 0.5 }
+  }
+  Animation
+  {
+  }
+  Behaviors::SimpleAnimator
+  {
+    animationStart : 0
+    animationLength : 4
+    animationSpeed : 0.1
+    looping : 1
+  }
+}

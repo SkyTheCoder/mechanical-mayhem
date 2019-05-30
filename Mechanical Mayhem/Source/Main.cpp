@@ -51,6 +51,7 @@
 #include "AbilityHolder.h"
 #include "AbilityPickup.h"
 #include "Health.h"
+#include "SimpleAnimator.h"
 
 //------------------------------------------------------------------------------
 
@@ -132,6 +133,7 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 		objectFactory.RegisterComponent<AbilityHolder>();
 		objectFactory.RegisterComponent<AbilityPickup>();
 		objectFactory.RegisterComponent<Health>();
+		objectFactory.RegisterComponent<SimpleAnimator>();
 	}
 
 	StartupSettings startupSettings;

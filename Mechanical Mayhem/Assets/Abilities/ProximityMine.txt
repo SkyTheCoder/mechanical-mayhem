@@ -1,5 +1,6 @@
 ProximityMine
 {
-  cooldown : 3
+  mineArchetype : Mine
+  cooldown : 2
   maxProximityMines : 3
 }

@@ -53,7 +53,7 @@ namespace Behaviors
 		gravity(0.0f, -16.0f), slidingGravity(0.0f, -9.0f), terminalVelocity(9.0f), slidingTerminalVelocity(1.5f), gracePeriod(0.15f),
 		transform(nullptr), physics(nullptr), soundManager(nullptr),
 		playerID(0), switchCharges(0),
-		onGround(false), onLeftWall(false), onRightWall(false),
+		onGround(false), onLeftWall(false), onRightWall(false), animOnGround(0.0f), animOnLeftWall(0.0f), animOnRightWall(0.0f),
 		hasJumped(false), airTime(0.0f), leftTime(0.0f), rightTime(0.0f), movementLerpGround(1.0f), movementLerpAir(0.98f)
 	{
 	}
@@ -136,6 +136,7 @@ namespace Behaviors
 			if (mapCollisionEvent.collision.bottom)
 			{
 				onGround = true;
+				animOnGround = 3.5f / 60.0f;
 			}
 
 			// Save whether the monkey is touching a wall, used for wall jumping.
@@ -143,11 +144,13 @@ namespace Behaviors
 			if (mapCollisionEvent.collision.left)
 			{
 				onLeftWall = true;
+				animOnLeftWall = 3.5f / 60.0f;
 			}
 
 			if (mapCollisionEvent.collision.right)
 			{
 				onRightWall = true;
+				animOnRightWall = 3.5f / 60.0f;
 			}
 		}
 	}
@@ -343,6 +346,16 @@ namespace Behaviors
 		onGround = false;
 		onLeftWall = false;
 		onRightWall = false;
+	}
+
+
+
+	// Called when the animation component is finished accessing variables.
+	void PlayerMovement::AnimFinished(float dt)
+	{
+		animOnGround -= dt;
+		animOnLeftWall -= dt;
+		animOnRightWall -= dt;
 	}
 }
 

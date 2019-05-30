@@ -115,6 +115,12 @@ namespace Behaviors
 		}
 	}
 
+	// Returns the current ability type.
+	Abilities::Abilities AbilityHolder::GetAbilityType() const
+	{
+		return abilityType;
+	}
+
 	// Sets the current ability.
 	// Params:
 	//   abilityType = The current ability.

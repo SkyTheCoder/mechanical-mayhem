@@ -51,6 +51,7 @@ namespace Levels
 		Descent,
 		Blah,
 		Chase,
+		Merge,
 		MAX_MAP
 	};
 
@@ -114,13 +115,15 @@ namespace Levels
 		// Params:
 		//   chipsSpawns = An array of floats, each pair being a coordinate.
 		//   numChis = How many chips are in the array.
-		void AddChips(const float* chipsSpawns, int numChips);
+		void AddAbilities(const float* chipsSpawns, int numChips);
 
 		//------------------------------------------------------------------------------
 		// Private Variables:
 		//------------------------------------------------------------------------------
 
 		Map map;
+
+		GameObject* backgroundImage;
 
 		// Monkey
 		unsigned columnsMonkey;
@@ -133,6 +136,14 @@ namespace Levels
 		// Spikes
 		unsigned columnsSpikes;
 		unsigned rowsSpikes;
+
+		// Explosions
+		unsigned columnsExplosion;
+		unsigned rowsExplosion;
+		
+		// Flames
+		unsigned columnsFlame;
+		unsigned rowsFlame;
 
 		// Rising Gears
 		unsigned columnsRisingGears;

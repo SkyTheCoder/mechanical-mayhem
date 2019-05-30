@@ -112,6 +112,12 @@ void Sprite::Draw(const CS230::Matrix2D& matrix)
 		return;
 	}
 
+	// Exit if the sprite is invisible.
+	if (color.a <= 0.0f)
+	{
+		return;
+	}
+
 	// If there is a sprite source, get its UV and set the current texture. Otherwise, clear the current texture.
 	if (spriteSource != nullptr)
 	{

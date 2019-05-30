@@ -457,8 +457,8 @@ void GameObjectManager::CheckCollisionsQuadtree()
 
 		// Get all nearby objects to perform collision checks on.
 		nearbyObjects.clear();
-		quadtree->RetrieveNearbyObjects(*it1, nearbyObjects);
 		nearbyObjects.insert(nearbyObjects.end(), tilemaps.begin(), tilemaps.end());
+		quadtree->RetrieveNearbyObjects(*it1, nearbyObjects);
 
 		for (auto it2 = nearbyObjects.begin(); it2 != nearbyObjects.end(); ++it2)
 		{

@@ -59,8 +59,14 @@ namespace Abilities
 		//   dt = The change in time since the last update.
 		void Update(float dt) override;
 
+		// Removes any objects that will be recreated in Initialize.
+		void Shutdown() override;
+
 		// Callback for when the player attempts to use this ability.
 		void OnUse() override;
+
+		// Returns the % of mana/fuel/uses/whatever left on this ability.
+		float GetMana() override;
 
 		// Write object data to file
 		// Params:
@@ -83,13 +89,22 @@ namespace Abilities
 		Collider* collider;
 		Behaviors::PlayerMovement* playerController;
 
-		std::string fireballArchetypeName;
-		GameObject* fireballArchetype;
+		std::string flameArchetypeName;
+		GameObject* flameArchetype;
+
+		std::string flameEffectName;
+		GameObject* flameEffect;
 
 		// Cooldown between shooting flames.
 		float speed;
 		float cooldown;
 		float cooldownTimer;
+
+		// Fuel
+		float currentFuel;			// Current amount of fuel (f)
+		float maxFuel;				// Maximum fuel capacity (f)
+		float fuelRefillRate;		// Rate at which the fuel refills on the ground (f/s)
+		float fuelConsumptionRate;	// Rate at which the fuel is consumed (f/s)
 	};
 }
 

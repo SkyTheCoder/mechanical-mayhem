@@ -106,6 +106,9 @@
     <ClCompile Include="Source\Flamethrower.cpp">
       <Filter>Game\Abilities</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SimpleAnimator.cpp">
+      <Filter>Game\Behaviors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -194,6 +197,9 @@
     </ClInclude>
     <ClInclude Include="Source\Flamethrower.h">
       <Filter>Game\Abilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SimpleAnimator.h">
+      <Filter>Game\Behaviors</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

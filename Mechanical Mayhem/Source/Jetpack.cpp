@@ -69,14 +69,7 @@ namespace Abilities
 	void Jetpack::Update(float dt)
 	{
 		// Check if user is even using the jetpack
-		if (Input::GetInstance().CheckHeld(playerMovement->GetUpKeybind()))
-		{
-			active = true;
-		}
-		else
-		{
-			active = false;
-		}
+		active = Input::GetInstance().CheckHeld(playerMovement->GetUpKeybind());
 
 		// Manage fuel amounts
 		FuelManagement(dt);
@@ -97,6 +90,12 @@ namespace Abilities
 	// Callback for when the player attempts to use this ability.
 	void Jetpack::OnUse()
 	{
+	}
+
+	// Returns the % of mana/fuel/uses/whatever left on this ability.
+	float Jetpack::GetMana()
+	{
+		return std::clamp(currentFuel / maxFuel, 0.0f, 1.0f);
 	}
 
 	// Sets whether the jetpack is active

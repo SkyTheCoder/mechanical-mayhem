@@ -46,6 +46,7 @@
 #include "MonkeyAnimation.h"
 #include <SpriteTilemap.h>
 #include <ColliderTilemap.h>
+#include "AbilityHolder.h"
 
 // Levels
 #include "LevelSelect.h"
@@ -67,9 +68,12 @@ namespace Levels
 	// Creates an instance of Level 1.
 	Level1::Level1(Map map_) : Level("Level1"),
 		map(map_),
+		backgroundImage(nullptr),
 		columnsMonkey(3), rowsMonkey(10),
 		columnsCat(3), rowsCat(10),
 		columnsSpikes(1), rowsSpikes(3),
+		columnsExplosion(3), rowsExplosion(3),
+		columnsFlame(2), rowsFlame(2),
 		columnsRisingGears(1), rowsRisingGears(2),
 		dataStaticMap(nullptr), dataRedMap(nullptr), dataBlueMap(nullptr),
 		columnsMap(2), rowsMap(2)
@@ -88,18 +92,29 @@ namespace Levels
 		resourceManager.GetMesh("Cat", Vector2D(1.0f / columnsCat, 1.0f / rowsCat), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("Spikes", Vector2D(1.0f / columnsSpikes, 1.0f / rowsSpikes), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("Map", Vector2D(1.0f / columnsMap, 1.0f / rowsMap), Vector2D(0.5f, 0.5f));
+		resourceManager.GetMesh("Explosion", Vector2D(1.0f / columnsExplosion, 1.0f / rowsExplosion), Vector2D(0.5f, 0.5f));
+		resourceManager.GetMesh("Flame", Vector2D(1.0f / columnsFlame, 1.0f / rowsFlame), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("RisingGears", Vector2D(1.0f / columnsRisingGears, 1.0f / rowsRisingGears), Vector2D(0.5f, 0.5f));
 
 		resourceManager.GetSpriteSource("AniA.png", columnsMonkey, rowsMonkey);
+		resourceManager.GetSpriteSource("AniJetpackA.png", columnsMonkey, rowsMonkey);
+		resourceManager.GetSpriteSource("AniFlameA.png", columnsMonkey, rowsMonkey);
+		resourceManager.GetSpriteSource("AniMineA.png", columnsMonkey, rowsMonkey);
 		resourceManager.GetSpriteSource("AniB.png", columnsCat, rowsCat);
+		resourceManager.GetSpriteSource("AniJetpackB.png", columnsCat, rowsCat);
+		resourceManager.GetSpriteSource("AniFlameB.png", columnsCat, rowsCat);
+		resourceManager.GetSpriteSource("AniMineB.png", columnsCat, rowsCat);
 		resourceManager.GetSpriteSource("Spikes.png", columnsSpikes, rowsSpikes);
+		resourceManager.GetSpriteSource("Spikes.png", columnsSpikes, rowsSpikes);
+		resourceManager.GetSpriteSource("Spikes.png", columnsSpikes, rowsSpikes);
+		resourceManager.GetSpriteSource("AniMineExplode.png", columnsExplosion, rowsExplosion);
+		resourceManager.GetSpriteSource("AniFlame.png", columnsFlame, rowsFlame);
 		resourceManager.GetSpriteSource("jetpackCollectible.png");
 		resourceManager.GetSpriteSource("flamethrowerCollectible.png");
 		resourceManager.GetSpriteSource("proximityMineCollectible.png");
 		resourceManager.GetSpriteSource("BackgroundImage.png");
 		resourceManager.GetSpriteSource("Tilemap.png", columnsMap, rowsMap);
 		resourceManager.GetSpriteSource("RisingGears.png", columnsRisingGears, rowsRisingGears);
-
 
 		resourceManager.GetMesh("FontAtlas", 12, 8);
 		resourceManager.GetSpriteSource("Code New Roman@2x.png", 12, 8);
@@ -134,6 +149,9 @@ namespace Levels
 		case Map::Chase:
 			mapName = "Chase";
 			break;
+		case Map::Merge:
+			mapName = "Merge";
+			break;
 		}
 		
 		dataStaticMap = Tilemap::CreateTilemapFromFile("Assets/Levels/" + mapName + "Static.txt");
@@ -154,8 +172,10 @@ namespace Levels
 		objectManager.AddArchetype(*objectFactory.CreateObject("FlamethrowerPickup", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("flamethrowerCollectible.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("ProximityMinePickup", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("proximityMineCollectible.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("JetpackPickup", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Collectible.png")));
-		objectManager.AddArchetype(*objectFactory.CreateObject("Fireball", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Circle.png")));
+		objectManager.AddArchetype(*objectFactory.CreateObject("Flame", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Circle.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Mine", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Circle.png")));
+		objectManager.AddArchetype(*objectFactory.CreateObject("Explosion", resourceManager.GetMesh("Explosion"), resourceManager.GetSpriteSource("AniMineExplode.png")));
+		objectManager.AddArchetype(*objectFactory.CreateObject("FlameEffect", resourceManager.GetMesh("Flame"), resourceManager.GetSpriteSource("AniFlame.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("StaticSpike", resourceManager.GetMesh("Spikes"), resourceManager.GetSpriteSource("Spikes.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("RedSpike", resourceManager.GetMesh("Spikes"), resourceManager.GetSpriteSource("Spikes.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("BlueSpike", resourceManager.GetMesh("Spikes"), resourceManager.GetSpriteSource("Spikes.png")));
@@ -169,7 +189,6 @@ namespace Levels
 	// Initialize the memory associated with Level 1.
 	void Level1::Initialize()
 	{
-		ResourceManager& resourceManager = GetSpace()->GetResourceManager();
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
 
 		// Stop menu music and play in-game music
@@ -189,30 +208,29 @@ namespace Levels
 			hudSpace->SetLevel<HUDLevel>();
 
 		// Create background sprite
-		GameObject* backgroundImage = new GameObject(*objectManager.GetArchetypeByName("BackgroundImage"));
+		backgroundImage = new GameObject(*objectManager.GetArchetypeByName("BackgroundImage"));
 		objectManager.AddObject(*backgroundImage);
 
 		// Create the players and add them to the object manager.
 		GameObject* player = new GameObject(*objectManager.GetArchetypeByName("Player"));
 		//*reinterpret_cast<std::string*>(reinterpret_cast<uintptr_t>(player) + sizeof(void**)) = "Player1";
-		player->GetComponent< Behaviors::MonkeyAnimation>()->SetFrames(0, 8, 9, 4, 15, 4, 27, 2, 21, 4);
+		player->GetComponent<Behaviors::MonkeyAnimation>()->SetFrames(0, 8, 9, 4, 15, 4, 27, 2, 21, 4);
 		Behaviors::PlayerMovement* playerMovement = static_cast<Behaviors::PlayerMovement*>(player->GetComponent("PlayerMovement"));
 		playerMovement->SetKeybinds(VK_UP, VK_LEFT, VK_RIGHT, VK_RCONTROL);
 		playerMovement->SetPlayerID(1);
 		objectManager.AddObject(*player);
+		player->GetComponent<Behaviors::MonkeyAnimation>()->GetSpriteSources("A");
 
 		GameObject* player2 = new GameObject(*objectManager.GetArchetypeByName("Player"));
 		//*reinterpret_cast<std::string*>(reinterpret_cast<uintptr_t>(player2) + sizeof(void**)) = "Player2";
 		player2->GetComponent<Collider>()->SetGroup(2);
 		player2->GetComponent<Collider>()->SetMask(1 << 2);
-		Sprite* player2Sprite = static_cast<Sprite*>(player2->GetComponent("Sprite"));
-		player2Sprite->SetMesh(resourceManager.GetMesh("Cat"));
-		player2Sprite->SetSpriteSource(resourceManager.GetSpriteSource("AniB.png"));
-		player2->GetComponent< Behaviors::MonkeyAnimation>()->SetFrames(0, 8, 9, 4, 15, 4, 27, 2, 21, 4);
+		player2->GetComponent<Behaviors::MonkeyAnimation>()->SetFrames(0, 8, 9, 4, 15, 4, 27, 2, 21, 4);
 		Behaviors::PlayerMovement* player2Movement = static_cast<Behaviors::PlayerMovement*>(player2->GetComponent("PlayerMovement"));
 		player2Movement->SetKeybinds('W', 'A', 'D', VK_LCONTROL);
 		player2Movement->SetPlayerID(2);
 		objectManager.AddObject(*player2);
+		player2->GetComponent<Behaviors::MonkeyAnimation>()->GetSpriteSources("B");
 
 		// Create the Game Controller, which handles the camera and dimensions.
 		GameObject* gameController = new GameObject(*objectManager.GetArchetypeByName("GameController"));
@@ -243,6 +261,8 @@ namespace Levels
 			objectManager.AddObject(*tilemapBlue);
 			unsigned blueDimension = dimensionController.AddDimension(tilemapBlue);
 
+			float gearHeight = -100.0f;
+
 			// Map data (spikes, collectibles, etc.)
 			// Map data automatically generated by Processing.
 			// Each pair of floats in an array is a coordinate for a tile, in tilemap space.
@@ -272,7 +292,7 @@ namespace Levels
 				AddStaticSpikes(staticSpikes, 42);
 				AddRedSpikes(redSpikes, 4, redDimension);
 				AddBlueSpikes(blueSpikes, 4, blueDimension);
-				AddChips(chipsSpawns, 6);
+				AddAbilities(chipsSpawns, 6);
 
 				static_cast<Sprite*>(player2->GetComponent("Sprite"))->SetAlpha(0.0f);
 				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(1.0f, -28.0f));
@@ -311,7 +331,7 @@ namespace Levels
 				AddStaticSpikes(staticSpikes, 84);
 				AddRedSpikes(redSpikes, 47, redDimension);
 				AddBlueSpikes(blueSpikes, 36, blueDimension);
-				AddChips(chipsSpawns, 8);
+				AddAbilities(chipsSpawns, 8);
 
 				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(6.0f, -15.0f));
 				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(42.0f, -15.0f));
@@ -344,7 +364,7 @@ namespace Levels
 				AddStaticSpikes(staticSpikes, 30);
 				AddRedSpikes(redSpikes, 33, redDimension);
 				AddBlueSpikes(blueSpikes, 33, blueDimension);
-				AddChips(chipsSpawns, 8);
+				AddAbilities(chipsSpawns, 8);
 
 				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(9.0f, -3.0f));
 				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(22.0f, -2.0f));
@@ -376,7 +396,7 @@ namespace Levels
 				AddStaticSpikes(staticSpikes, 34);
 				AddRedSpikes(redSpikes, 21, redDimension);
 				AddBlueSpikes(blueSpikes, 21, blueDimension);
-				AddChips(chipsSpawns, 4);
+				AddAbilities(chipsSpawns, 4);
 
 				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(6.0f, -26.0f));
 				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(23.0f, -27.0f));
@@ -405,7 +425,7 @@ namespace Levels
 				AddStaticSpikes(staticSpikes, 32);
 				AddRedSpikes(redSpikes, 8, redDimension);
 				AddBlueSpikes(blueSpikes, 16, blueDimension);
-				AddChips(chipsSpawns, 4);
+				AddAbilities(chipsSpawns, 4);
 
 				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(3.0f, -2.0f));
 				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(28.0f, -2.0f));
@@ -424,7 +444,7 @@ namespace Levels
 				};
 
 				AddStaticSpikes(staticSpikes, 22);
-				AddChips(chipsSpawns, 8);
+				AddAbilities(chipsSpawns, 8);
 
 				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(5.0f, -4.0f));
 				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(15.0f, -4.0f));
@@ -462,21 +482,12 @@ namespace Levels
 				AddStaticSpikes(staticSpikes, 130);
 				AddRedSpikes(redSpikes, 22, redDimension);
 				AddBlueSpikes(blueSpikes, 22, blueDimension);
-				AddChips(chipsSpawns, 10);
+				AddAbilities(chipsSpawns, 10);
 
 				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(7.0f, -38.0f));
 				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(16.0f, -38.0f));
 
-				// Create rising gears and add to objectManager
-				GameObject* risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-				risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(11.5f, -48.0f));
-				objectManager.AddObject(*risingGears);
-				GameObject* risingGears2 = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-				risingGears2->GetComponent<Transform>()->SetTranslation(Vector2D(5.5f, -48.0f));
-				objectManager.AddObject(*risingGears2);
-				GameObject* risingGears3 = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-				risingGears3->GetComponent<Transform>()->SetTranslation(Vector2D(18.5f, -48.0f));
-				objectManager.AddObject(*risingGears3);
+				gearHeight = -48.0f;
 
 				break;
 			}
@@ -484,43 +495,75 @@ namespace Levels
 			{
 				float staticSpikes[62] = {
 					0.0f, 15.0f, 1.0f, 15.0f, 2.0f, 15.0f, 3.0f, 15.0f, 0.0f, 16.0f, 1.0f, 16.0f, 2.0f, 16.0f, 14.0f, 16.0f, 15.0f, 16.0f, 16.0f, 16.0f, 17.0f, 16.0f, 18.0f, 16.0f, 19.0f, 16.0f, 0.0f, 17.0f, 1.0f, 17.0f, 0.0f, 18.0f,
-					0.0f, 19.0f, 0.0f, 20.0f, 1.0f, 28.0f, 2.0f, 28.0f, 3.0f, 28.0f, 4.0f, 28.0f, 0.0f, 36.0f, 0.0f, 37.0f, 0.0f, 38.0f, 0.0f, 39.0f, 0.0f, 40.0f, 0.0f, 43.0f, 0.0f, 44.0f, 0.0f, 45.0f, 0.0f, 46.0f
+					0.0f, 19.0f, 0.0f, 20.0f, 1.0f, 29.0f, 2.0f, 29.0f, 3.0f, 29.0f, 4.0f, 29.0f, 0.0f, 36.0f, 0.0f, 37.0f, 0.0f, 38.0f, 0.0f, 39.0f, 0.0f, 40.0f, 0.0f, 43.0f, 0.0f, 44.0f, 0.0f, 45.0f, 0.0f, 46.0f
 				};
-
 				float redSpikes[14] = {
 					18.0f, 2.0f, 19.0f, 3.0f, 13.0f, 10.0f, 14.0f, 11.0f, 6.0f, 21.0f, 7.0f, 21.0f, 8.0f, 21.0f
 				};
-
 				float blueSpikes[12] = {
 					20.0f, 10.0f, 19.0f, 11.0f, 12.0f, 27.0f, 13.0f, 27.0f, 14.0f, 27.0f, 15.0f, 27.0f
 				};
-
-				float chipsSpawns[10] = {
+				float abilities[10] = {
 					2.0f, 12.0f, 11.0f, 21.0f, 3.0f, 27.0f, 13.0f, 35.0f, 7.0f, 38.0f
 				};
 
 				AddStaticSpikes(staticSpikes, 31);
 				AddRedSpikes(redSpikes, 7, redDimension);
 				AddBlueSpikes(blueSpikes, 6, blueDimension);
-				AddChips(chipsSpawns, 5);
+				AddAbilities(abilities, 5);
+
+				AddStaticSpikes(staticSpikes, 31);
+				AddRedSpikes(redSpikes, 7, redDimension);
+				AddBlueSpikes(blueSpikes, 6, blueDimension);
+				AddAbilities(abilities, 5);
 
 				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(9.0f, -45.0f));
 				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(9.0f, -45.0f));
 
-				// Create rising gears and add to objectManager
-				GameObject* risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-				risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(11.5f, -60.0f));
-				objectManager.AddObject(*risingGears);
-				GameObject* risingGears2 = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-				risingGears2->GetComponent<Transform>()->SetTranslation(Vector2D(5.5f, -60.0f));
-				objectManager.AddObject(*risingGears2);
-				GameObject* risingGears3 = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-				risingGears3->GetComponent<Transform>()->SetTranslation(Vector2D(18.5f, -60.0f));
-				objectManager.AddObject(*risingGears3);
+				gearHeight = -60.0f;
+
+				break;
+			}
+			case Map::Merge:
+			{
+				float staticSpikes[48] = {
+					1.0f, 8.0f, 2.0f, 8.0f, 21.0f, 8.0f, 22.0f, 8.0f, 11.0f, 12.0f, 12.0f, 12.0f, 1.0f, 46.0f, 2.0f, 46.0f, 3.0f, 46.0f, 4.0f, 46.0f, 5.0f, 46.0f, 6.0f, 46.0f, 7.0f, 46.0f, 8.0f, 46.0f, 9.0f, 46.0f, 14.0f, 46.0f,
+					15.0f, 46.0f, 16.0f, 46.0f, 17.0f, 46.0f, 18.0f, 46.0f, 19.0f, 46.0f, 20.0f, 46.0f, 21.0f, 46.0f, 22.0f, 46.0f
+				};
+				float redSpikes[8] = {
+					9.0f, 14.0f, 14.0f, 14.0f, 9.0f, 15.0f, 14.0f, 15.0f
+				};
+				float blueSpikes[16] = {
+					6.0f, 3.0f, 17.0f, 3.0f, 8.0f, 23.0f, 9.0f, 23.0f, 10.0f, 23.0f, 13.0f, 23.0f, 14.0f, 23.0f, 15.0f, 23.0f
+				};
+				float abilities[12] = {
+					5.0f, 6.0f, 18.0f, 6.0f, 2.0f, 27.0f, 21.0f, 27.0f, 2.0f, 39.0f, 21.0f, 39.0f
+				};
+
+				AddStaticSpikes(staticSpikes, 24);
+				AddRedSpikes(redSpikes, 4, redDimension);
+				AddBlueSpikes(blueSpikes, 8, blueDimension);
+				AddAbilities(abilities, 6);
+
+				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(14.0f, -41.0f));
+				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(9.0f, -41.0f));
+
+				gearHeight = -50.0f;
 
 				break;
 			}
 			}
+
+			// Create rising gears and add to objectManager
+			GameObject* risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
+			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(11.5f, gearHeight));
+			objectManager.AddObject(*risingGears);
+			GameObject* risingGears2 = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
+			risingGears2->GetComponent<Transform>()->SetTranslation(Vector2D(5.5f, gearHeight));
+			objectManager.AddObject(*risingGears2);
+			GameObject* risingGears3 = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
+			risingGears3->GetComponent<Transform>()->SetTranslation(Vector2D(18.5f, gearHeight));
+			objectManager.AddObject(*risingGears3);
 
 			dimensionController.SetActiveDimension(redDimension);
 		}
@@ -538,9 +581,41 @@ namespace Levels
 	{
 		UNREFERENCED_PARAMETER(dt);
 
+		backgroundImage->GetComponent<Transform>()->SetTranslation(Graphics::GetInstance().GetDefaultCamera().GetTranslation());
+
 		Input& input = Input::GetInstance();
 
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
+
+		if (input.CheckTriggered('I'))
+		{
+			std::vector<GameObject*> players;
+			players.reserve(2);
+			objectManager.GetAllObjectsByName("Player", players);
+
+			for (auto it = players.begin(); it != players.end(); ++it)
+				(*it)->GetComponent<Behaviors::AbilityHolder>()->SetAbility(Abilities::ABILITY_JETPACK);
+		}
+
+		if (input.CheckTriggered('O'))
+		{
+			std::vector<GameObject*> players;
+			players.reserve(2);
+			objectManager.GetAllObjectsByName("Player", players);
+
+			for (auto it = players.begin(); it != players.end(); ++it)
+				(*it)->GetComponent<Behaviors::AbilityHolder>()->SetAbility(Abilities::ABILITY_FLAMETHROWER);
+		}
+
+		if (input.CheckTriggered('P'))
+		{
+			std::vector<GameObject*> players;
+			players.reserve(2);
+			objectManager.GetAllObjectsByName("Player", players);
+
+			for (auto it = players.begin(); it != players.end(); ++it)
+				(*it)->GetComponent<Behaviors::AbilityHolder>()->SetAbility(Abilities::ABILITY_PROXIMITYMINE);
+		}
 
 		// End game if a player dies
 		unsigned playerCount = objectManager.GetObjectCount("Player");
@@ -673,7 +748,7 @@ namespace Levels
 	// Params:
 	//   chipsSpawns = An array of floats, each pair being a coordinate.
 	//   numChis = How many chips are in the array.
-	void Level1::AddChips(const float* chipsSpawns, int numChips)
+	void Level1::AddAbilities(const float* chipsSpawns, int numChips)
 	{
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
 
@@ -694,6 +769,8 @@ namespace Levels
 			case 3:
 				ability = new GameObject(*objectManager.GetArchetypeByName("ProximityMinePickup"));
 				break;
+			default:
+				return; // Won't even reach here, but without it Visual Studio complains about ability potentially being a nullptr.
 			}
 
 			static_cast<Transform*>(ability->GetComponent("Transform"))->SetTranslation(Vector2D(chipsSpawns[i], -chipsSpawns[i + 1]));

@@ -1,6 +1,6 @@
 RisingGears
 {
-  numComponents : 4
+  numComponents : 6
   Transform
   {
     translation : { 0, 0 }
@@ -22,5 +22,15 @@ RisingGears
   {
     moveSpeed : 1
     startOffset : 3
+  }
+  Animation
+  {
+  }
+  Behaviors::SimpleAnimator
+  {
+    animationStart : 0
+    animationLength : 2
+    animationSpeed : 0.2
+    looping : 1
   }
 }

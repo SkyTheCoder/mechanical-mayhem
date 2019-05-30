@@ -113,6 +113,9 @@ namespace Behaviors
 		// Moves vertically based on input
 		void MoveVertical(float dt);
 
+		// Called when the animation component is finished accessing variables.
+		void AnimFinished(float dt);
+
 		//------------------------------------------------------------------------------
 		// Private Variables:
 		//------------------------------------------------------------------------------
@@ -149,6 +152,9 @@ namespace Behaviors
 		bool onGround;
 		bool onLeftWall;
 		bool onRightWall;
+		float animOnGround;
+		float animOnLeftWall;
+		float animOnRightWall;
 		bool hasJumped;
 		float airTime;
 		float leftTime;

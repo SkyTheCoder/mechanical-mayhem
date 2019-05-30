@@ -40,7 +40,8 @@ namespace Abilities
 	//------------------------------------------------------------------------------
 
 	// Constructor
-	ProximityMine::ProximityMine() : Ability("ProximityMine", false), transform(nullptr), collider(nullptr), cooldown(0.0f), cooldownTimer(0.0f), maxProximityMines(4)
+	ProximityMine::ProximityMine() : Ability("ProximityMine", false), transform(nullptr), collider(nullptr), mineArchetype(nullptr),
+		cooldown(0.0f), cooldownTimer(0.0f), maxProximityMines(4)
 	{
 	}
 
@@ -49,6 +50,7 @@ namespace Abilities
 	{
 		transform = GetOwner()->GetComponent<Transform>();
 		collider = GetOwner()->GetComponent<Collider>();
+		mineArchetype = GetOwner()->GetSpace()->GetObjectManager().GetArchetypeByName(mineArchetypeName);
 	}
 
 	// Clone the current ability.
@@ -109,7 +111,7 @@ namespace Abilities
 		GameObjectManager& objectManager = GetOwner()->GetSpace()->GetObjectManager();
 
 		// Create and place the new mine.
-		GameObject* mine = new GameObject(*objectManager.GetArchetypeByName("Mine"));
+		GameObject* mine = new GameObject(*mineArchetype);
 		mine->GetComponent<Transform>()->SetTranslation(transform->GetTranslation());
 		Collider* mineCollider = mine->GetComponent<Collider>();
 		mineCollider->SetGroup(collider->GetGroup());
@@ -118,11 +120,18 @@ namespace Abilities
 		proximityMines.push_back(mine->GetID());
 	}
 
+	// Returns the % of mana/fuel/uses/whatever left on this ability.
+	float ProximityMine::GetMana()
+	{
+		return std::clamp(static_cast<float>(maxProximityMines - proximityMines.size()) / maxProximityMines, 0.0f, 1.0f);
+	}
+
 	// Write object data to file
 	// Params:
 	//   parser = The parser that is writing this object to a file.
 	void ProximityMine::Serialize(Parser& parser) const
 	{
+		parser.WriteVariable("mineArchetype", mineArchetypeName);
 		parser.WriteVariable("cooldown", cooldown);
 		parser.WriteVariable("maxProximityMines", maxProximityMines);
 	}
@@ -132,6 +141,7 @@ namespace Abilities
 	//   parser = The parser that is reading this object's data from a file.
 	void ProximityMine::Deserialize(Parser& parser)
 	{
+		parser.ReadVariable("mineArchetype", mineArchetypeName);
 		parser.ReadVariable("cooldown", cooldown);
 		parser.ReadVariable("maxProximityMines", maxProximityMines);
 	}

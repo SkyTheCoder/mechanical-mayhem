@@ -1,6 +1,6 @@
 Mine
 {
-  numComponents : 4
+  numComponents : 5
   Transform
   {
     translation : { 0, 0 }
@@ -22,9 +22,13 @@ Mine
   {
     alwaysCollidable : 1
     collidable : 1
-    damage : 50
+    damage : 20
     destroyOnCollide : 1
     destroyOnCollideDelay : 0.01
     destroyedArchetype : Explosion
+  }
+  Behaviors::TimedDeath
+  {
+    timeUntilDeath : 5
   }
 }

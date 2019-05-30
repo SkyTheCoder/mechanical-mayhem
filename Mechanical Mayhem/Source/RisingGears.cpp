@@ -41,7 +41,6 @@ namespace Behaviors
 	RisingGears::RisingGears()
 		: Component("RisingGears"),
 		moveSpeed(0), startOffset(0), timer(0.0f),
-		animationTimer(0.0f), animationSpeed(0.2f),
 		physics(nullptr), sprite(nullptr)
 	{
 	}
@@ -84,18 +83,6 @@ namespace Behaviors
 		{
 			// Increment timer
 			timer += dt;
-		}
-
-		// Rudimentary animation
-		animationTimer += dt;
-		if (animationTimer >= animationSpeed)
-		{
-			animationTimer = 0.0f;
-			
-			if (sprite->GetFrame())
-				sprite->SetFrame(0);
-			else
-				sprite->SetFrame(1);
 		}
 	}
 

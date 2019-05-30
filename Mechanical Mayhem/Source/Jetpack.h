@@ -59,6 +59,9 @@ namespace Abilities
 		// Callback for when the player attempts to use this ability.
 		void OnUse() override;
 
+		// Returns the % of mana/fuel/uses/whatever left on this ability.
+		float GetMana() override;
+
 		// Sets whether the jetpack is active
 		void SetActive(bool active_);
 

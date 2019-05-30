@@ -1,6 +1,11 @@
 Flamethrower
 {
-  fireballArchetype : Fireball
-  speed : 5
-  cooldown : 0.1
+  flameArchetype : Flame
+  flameEffect : FlameEffect
+  speed : 10
+  cooldown : 0.075
+  currentFuel : 1
+  maxFuel : 1
+  fuelRefillRate : 0.5
+  fuelConsumptionRate : 1
 }

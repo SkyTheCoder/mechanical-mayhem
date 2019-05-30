@@ -19,15 +19,19 @@
 
 #include <Vector2D.h> // Vector2D
 
+#include "Ability.h"
+
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // Forward Declarations:
 //------------------------------------------------------------------------------
 
-typedef class Animation Animation;
-typedef class Physics Physics;
-typedef class Transform Transform;
+class Animation;
+class Physics;
+class Transform;
+class Sprite;
+class SpriteSource;
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -35,7 +39,8 @@ typedef class Transform Transform;
 
 namespace Behaviors
 {
-	typedef class PlayerMovement PlayerMovement;
+	class PlayerMovement;
+	class AbilityHolder;
 
 	class MonkeyAnimation : public Component
 	{
@@ -81,6 +86,9 @@ namespace Behaviors
 		void SetFrames(unsigned walkStart, unsigned walkLength,
 			unsigned jumpStart, unsigned jumpLength, unsigned fallStart, unsigned fallLength,
 			unsigned idleStart, unsigned idleLength, unsigned wallSlideStart, unsigned WallSlideLength);
+
+		// Tells this animation component to use the sprite source with the specified variant.
+		void GetSpriteSources(std::string variant);
 
 	private:
 		//------------------------------------------------------------------------------
@@ -129,11 +137,16 @@ namespace Behaviors
 		State currentState;
 		State nextState;
 
+		// Sprite sources
+		SpriteSource* anims[Abilities::ABILITY_MAX];
+
 		// Components
 		Animation* animation;
 		Physics* physics;
 		Transform* transform;
+		Sprite* sprite;
 		PlayerMovement* monkeyMovement;
+		AbilityHolder* abilityHolder;
 
 		// Flip
 		Vector2D originalScale;

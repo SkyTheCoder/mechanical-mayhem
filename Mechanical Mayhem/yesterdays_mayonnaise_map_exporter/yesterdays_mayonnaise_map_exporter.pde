@@ -7,7 +7,6 @@ color redSpikeColor = color(255, 136, 0, 255);
 color blueColor = color(0, 12, 255, 255);
 color blueSpikeColor = color(0, 225, 255, 255);
 color chipColor = color(255, 233, 0, 255);
-color powerupColor = color(0, 255, 0, 255);
 
 void setup()
 {
@@ -19,8 +18,7 @@ void setup()
   FloatList staticSpikes = new FloatList();
   FloatList redSpikes = new FloatList();
   FloatList blueSpikes = new FloatList();
-  FloatList chips = new FloatList();
-  FloatList powerups = new FloatList();
+  FloatList abilities = new FloatList();
   for (int y = 0; y < image.height; y++)
   {
     for (int x = 0; x < image.width; x++)
@@ -60,13 +58,8 @@ void setup()
       }
       else if (c == chipColor)
       {
-        chips.push(x);
-        chips.push(y);
-      }
-      else if (c == powerupColor)
-      {
-        powerups.push(x);
-        powerups.push(y);
+        abilities.push(x);
+        abilities.push(y);
       }
       
       staticData += staticValue + " ";
@@ -90,12 +83,7 @@ void setup()
       if (i != staticSpikes.size() - 1)
         cpp += ", ";
     }
-    cpp += "\r\n};\r\n\r\n";
-    cpp += "for (int i = 0; i < " + staticSpikes.size() + "; i += 2)\r\n{\r\n";
-    cpp += "\tGameObject* spike = new GameObject(*objectManager.GetArchetypeByName(\"StaticSpike\"));\r\n";
-    cpp += "\tstatic_cast<Transform*>(spike->GetComponent(\"Transform\"))->SetTranslation(Vector2D(staticSpikes[i] * 100.0f, staticSpikes[i + 1] * -100.0f));\r\n";
-    cpp += "\tobjectManager.AddObject(*spike);\r\n";
-    cpp += "}\r\n\r\n";
+    cpp += "\r\n};\r\n";
   }
   
   if (redSpikes.size() > 0)
@@ -109,13 +97,7 @@ void setup()
       if (i != redSpikes.size() - 1)
         cpp += ", ";
     }
-    cpp += "\r\n};\r\n\r\n";
-    cpp += "for (int i = 0; i < " + redSpikes.size() + "; i += 2)\r\n{\r\n";
-    cpp += "\tGameObject* spike = new GameObject(*objectManager.GetArchetypeByName(\"RedSpike\"));\r\n";
-    cpp += "\tstatic_cast<Transform*>(spike->GetComponent(\"Transform\"))->SetTranslation(Vector2D(redSpikes[i] * 100.0f, redSpikes[i + 1] * -100.0f));\r\n";
-    cpp += "\tdimensionController.AddSpikeToDimension(redDimension, spike);\r\n";
-    cpp += "\tobjectManager.AddObject(*spike);\r\n";
-    cpp += "}\r\n\r\n";
+    cpp += "\r\n};\r\n";
   }
   
   if (blueSpikes.size() > 0)
@@ -129,51 +111,43 @@ void setup()
       if (i != blueSpikes.size() - 1)
         cpp += ", ";
     }
-    cpp += "\r\n};\r\n\r\n";
-    cpp += "for (int i = 0; i < " + blueSpikes.size() + "; i += 2)\r\n{\r\n";
-    cpp += "\tGameObject* spike = new GameObject(*objectManager.GetArchetypeByName(\"BlueSpike\"));\r\n";
-    cpp += "\tstatic_cast<Transform*>(spike->GetComponent(\"Transform\"))->SetTranslation(Vector2D(blueSpikes[i] * 100.0f, blueSpikes[i + 1] * -100.0f));\r\n";
-    cpp += "\tdimensionController.AddSpikeToDimension(blueDimension, spike);\r\n";
-    cpp += "\tobjectManager.AddObject(*spike);\r\n";
-    cpp += "}\r\n\r\n";
+    cpp += "\r\n};\r\n";
   }
   
-  if (chips.size() > 0)
+  if (abilities.size() > 0)
   {
-    cpp += "float chipsSpawns[" + chips.size() + "] = {";
-    for (int i = 0; i < chips.size(); i++)
+    cpp += "float abilities[" + abilities.size() + "] = {";
+    for (int i = 0; i < abilities.size(); i++)
     {
       if (i % 32 == 0)
         cpp += "\r\n\t";
-      cpp += chips.get(i) + "f";
-      if (i != chips.size() - 1)
+      cpp += abilities.get(i) + "f";
+      if (i != abilities.size() - 1)
         cpp += ", ";
     }
-    cpp += "\r\n};\r\n\r\n";
-    cpp += "for (int i = 0; i < " + chips.size() + "; i += 2)\r\n{\r\n";
-    cpp += "\tGameObject* chips = new GameObject(*objectManager.GetArchetypeByName(\"Collectible\"));\r\n";
-    cpp += "\tstatic_cast<Transform*>(chips->GetComponent(\"Transform\"))->SetTranslation(Vector2D(chipsSpawns[i] * 100.0f, chipsSpawns[i + 1] * -100.0f));\r\n";
-    cpp += "\tobjectManager.AddObject(*chips);\r\n";
-    cpp += "}\r\n\r\n";
+    cpp += "\r\n};\r\n";
   }
   
-  if (powerups.size() > 0)
+  cpp += "\r\n";
+  
+  if (staticSpikes.size() > 0)
   {
-    cpp += "float powerups[" + powerups.size() + "] = {";
-    for (int i = 0; i < powerups.size(); i++)
-    {
-      if (i % 32 == 0)
-        cpp += "\r\n\t";
-      cpp += powerups.get(i) + "f";
-      if (i != powerups.size() - 1)
-        cpp += ", ";
-    }
-    cpp += "\r\n};\r\n\r\n";
-    cpp += "for (int i = 0; i < " + powerups.size() + "; i += 2)\r\n{\r\n";
-    cpp += "\tGameObject* powerup = new GameObject(*objectManager.GetArchetypeByName(\"Powerup\"));\r\n";
-    cpp += "\tstatic_cast<Transform*>(powerup->GetComponent(\"Transform\"))->SetTranslation(Vector2D(powerups[i] * 100.0f, powerups[i + 1] * -100.0f));\r\n";
-    cpp += "\tobjectManager.AddObject(*powerup);\r\n";
-    cpp += "}\r\n\r\n";
+    cpp += "AddStaticSpikes(staticSpikes, " + (staticSpikes.size() / 2) + ");\r\n";
+  }
+  
+  if (redSpikes.size() > 0)
+  {
+    cpp += "AddRedSpikes(redSpikes, " + (redSpikes.size() / 2) + ", redDimension);\r\n";
+  }
+  
+  if (blueSpikes.size() > 0)
+  {
+    cpp += "AddBlueSpikes(blueSpikes, " + (blueSpikes.size() / 2) + ", blueDimension);\r\n";
+  }
+  
+  if (abilities.size() > 0)
+  {
+    cpp += "AddAbilities(abilities, " + (abilities.size() / 2) + ");\r\n";
   }
   
   PrintWriter staticOutput = createWriter(mapName + "Static.txt");
@@ -204,6 +178,8 @@ void setup()
   cppOutput.print(cpp);
   cppOutput.flush();
   cppOutput.close();
+  
+  println("Done!");
 }
 
 void draw()

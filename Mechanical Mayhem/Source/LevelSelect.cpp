@@ -81,14 +81,15 @@ namespace Levels
 		text->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, 2.5f));
 		objectManager.AddObject(*text);
 
-		AddMapButton("Tutorial", Vector2D(-1.75f, 1.5f), Levels::Map::Tutorial);
+		/*AddMapButton("Tutorial", Vector2D(-1.75f, 1.5f), Levels::Map::Tutorial);
 		AddMapButton("Arena 3", Vector2D(1.75f, 1.5f), Levels::Map::Arena3);
 		AddMapButton("MediumBoy", Vector2D(-1.75f, 0.5f), Levels::Map::MediumBoy);
 		AddMapButton("Channels", Vector2D(1.75, 0.5f), Levels::Map::Channels);
 		AddMapButton("Separation", Vector2D(-1.75f, -0.5f), Levels::Map::Separation);
-		AddMapButton("Descent", Vector2D(1.75f, -0.5f), Levels::Map::Descent);
-		AddMapButton("Blah", Vector2D(-1.75f, -1.5f), Levels::Map::Blah);
-		AddMapButton("Chase", Vector2D(1.75f, -1.5f), Levels::Map::Chase);
+		AddMapButton("Descent", Vector2D(1.75f, -0.5f), Levels::Map::Descent);*/
+		AddMapButton("Blah", Vector2D(-1.75f, 1.5f), Levels::Map::Blah);
+		AddMapButton("Chase", Vector2D(1.75f, 1.5f), Levels::Map::Chase);
+		AddMapButton("Merge", Vector2D(-1.75f, 0.5f), Levels::Map::Merge);
 		AddMapButton("Main Menu", Vector2D(0.0f, -2.5f), Levels::Map::MainMenu);
 
 		Camera& camera = Graphics::GetInstance().GetDefaultCamera();

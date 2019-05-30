@@ -65,6 +65,9 @@ namespace Behaviors
 		//   dt = The (fixed) change in time since the last step.
 		void Update(float dt) override;
 
+		// Returns the current ability type.
+		Abilities::Abilities GetAbilityType() const;
+
 		// Sets the current ability.
 		// Params:
 		//   abilityType = The current ability.

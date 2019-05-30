@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	DimensionController.cpp
-// Author(s):	David Cohen (david.cohen)
+// Author(s):	David Cohen (david.cohen), A.J. Bussman
 // Project:		Yesterday's Mayonnaise
 // Course:		WANIC VGP2 2018-2019
 //
@@ -45,9 +45,8 @@ namespace Behaviors
 
 	// Constructor
 	DimensionController::DimensionController() : Component("DimensionController"), dimensions(std::vector<Dimension>()),
-		cooldown(5.0f), currentCooldown(10.0f), gameTimer(0.0), cdCount(-1), cdIndex(10), activeDimension(0)
+		cooldown(5.0f), currentCooldown(10.0f), cdIndex(10), cdCount(-1), cdCounts{ 0 }, gameTimer(0.0), activeDimension(0)
 	{
-		cdCounts = new float[11];
 		// Set the different cooldown times
 		cdCounts[0]  = 0.5f;
 		cdCounts[1]  = 0.75f;
@@ -98,12 +97,6 @@ namespace Behaviors
 
 			SetActiveDimension((activeDimension + 1) % GetDimensionCount());
 		}
-	}
-
-	// Shutdown function for this component
-	void DimensionController::Shutdown()
-	{
-		delete[] cdCounts;
 	}
 
 	// Calculates how long until the dimension can be switched again.
@@ -194,7 +187,7 @@ namespace Behaviors
 	void DimensionController::SetCoolDownTime()
 	{
 		// Check for new Cooldown time
-		if (newCooldown())
+		if (NeedsNewCooldown())
 		{
 			// Decrement cdindex
 			--cdIndex;
@@ -208,8 +201,8 @@ namespace Behaviors
 		cooldown = cdCounts[cdIndex];
 	}
 
-	// Returns if a newCooldown is needed
-	bool DimensionController::newCooldown()
+	// Returns if a NeedsNewCooldown is needed
+	bool DimensionController::NeedsNewCooldown()
 	{
 		// Return true if Cooldowm is greater than or equal to X and has iterated X times
 		if (cdIndex >= 7 && cdCount >= 5)

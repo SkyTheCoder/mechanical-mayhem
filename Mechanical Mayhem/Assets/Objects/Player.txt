@@ -23,7 +23,7 @@ Player
   {
     group : 1
     mask : 2
-    extents : { 0.49999, 0.4999 }
+    extents : { 0.29999, 0.4999 }
   }
   Animation
   {

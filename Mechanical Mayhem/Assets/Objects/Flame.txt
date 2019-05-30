@@ -1,6 +1,6 @@
-Fireball
+Flame
 {
-  numComponents : 6
+  numComponents : 5
   Transform
   {
     translation : { 0, 0 }
@@ -13,11 +13,6 @@ Fireball
     velocity : { 0, 0 }
     angularVelocity : 0
     mass : 1
-  }
-  Sprite
-  {
-    frameIndex : 0
-    color : { 1, 0.5, 0.0, 0.8 }
   }
   ColliderCircle
   {
@@ -36,6 +31,6 @@ Fireball
   }
   Behaviors::TimedDeath
   {
-    timeUntilDeath : 0.5
+    timeUntilDeath : 0.1
   }
 }
