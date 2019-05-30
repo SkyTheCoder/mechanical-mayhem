@@ -38,10 +38,8 @@ namespace Behaviors
 		// Constructor
 		// Params:
 		//   maxHealth = The max health for the object.
-		//   damage = The amount of health that is lost per hit.
-		//	 flashTime = Time to spend flashing.
-		//	 fc1/fc2 = Colors to switch between when flashing
-		Health(int maxHealth = 100, int damage = 10);
+		//   destroyOnDeath = hether the object should be destroyed when it dies.
+		Health(int maxHealth = 100, bool destroyOnDeath = true);
 
 		// Return a new copy of the component.
 		Component* Clone() const;
@@ -54,23 +52,26 @@ namespace Behaviors
 		//   dt = The change in time since the last step.
 		void Update(float dt) override;
 
-		// Returns the damage it deals
-		int GetDamage();
+		// Returns the current health
+		int GetHealth();
+		
+		// Returns the current health
+		int GetMaxHealth();
 
-		//// Write object data to file
-		//// Params:
-		////   parser = The parser that is writing this object to a file.
-		//void Serialize(Parser& parser) const override;
+		// Write object data to file
+		// Params:
+		//   parser = The parser that is writing this object to a file.
+		void Serialize(Parser& parser) const override;
 
-		//// Read object data from a file
-		//// Params:
-		////   parser = The parser that is reading this object's data from a file.
-		//void Deserialize(Parser& parser) override;
+		// Read object data from a file
+		// Params:
+		//   parser = The parser that is reading this object's data from a file.
+		void Deserialize(Parser& parser) override;
 
-		//// Receive an event and handle it (if applicable).
-		//// Params:
-		////   event = The event that has been received.
-		//void HandleEvent(const Event& event);
+		// Receive an event and handle it (if applicable).
+		// Params:
+		//   event = The event that has been received.
+		void HandleEvent(const Event& event);
 
 	private:
 		//------------------------------------------------------------------------------
@@ -79,9 +80,11 @@ namespace Behaviors
 
 		// Health left
 		int health;
+
 		// Max health
 		int maxHealth;
-		// Damage per hit
-		int damage;
+
+		// Whether the object should be destroyed when it dies
+		bool destroyOnDeath;
 	};
 }

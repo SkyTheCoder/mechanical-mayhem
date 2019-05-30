@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	Controls.h
+// File Name:	HUD.h
 // Author(s):	A.J. Bussman
-// Project:		Yesterday's Mayonnaise
+// Project:		Mechanical Mayhem
 // Course:		WANIC VGP2 2018-2019
 //
 // Copyright © 2018 DigiPen (USA) Corporation.
@@ -15,61 +15,59 @@
 // Include Files:
 //------------------------------------------------------------------------------
 
-#include "Vector2D.h"
-#include "Level.h"
 
 //------------------------------------------------------------------------------
 // Forward References:
 //------------------------------------------------------------------------------
 
-class Texture;
-class Mesh;
-class SpriteSource;
-class Space;
+class GameObject;
+class Vector2D;
 
 //------------------------------------------------------------------------------
 // Public Structures:
 //------------------------------------------------------------------------------
 
-namespace Levels
+namespace Behaviors
 {
-	enum class Map : int;
-
-	class Controls : public Level
+	class HUD
 	{
 	public:
 		//------------------------------------------------------------------------------
 		// Public Functions:
 		//------------------------------------------------------------------------------
 
-		// Creates an instance of Controls.
-		Controls(Space* HUDSpace);
+		// Constructor
+		HUD(GameObject* player, Vector2D translation);
 
-		// Load the resources associated with Controls.
-		void Load() override;
+		// Return a new copy of the component.
+		HUD* Clone() const;
 
-		// Initialize the memory associated with Controls.
-		void Initialize() override;
+		// Initialize data for this object.
+		void Initialize();
 
-		// Update Controls.
+		// Update function for this component.
 		// Params:
-		//	 dt = Change in time (in seconds) since the last game loop.
-		void Update(float dt) override;
+		//   dt = The (fixed) change in time since the last step.
+		void Update(float dt);
 
-		// Unload the resources associated with Controls.
-		void Unload() override;
+		~HUD();
 
 	private:
 		//------------------------------------------------------------------------------
-		// Private Functions:
+		// Private Variables:
 		//------------------------------------------------------------------------------
 
-		// Adds a new map button.
-		// name = The name of the level.
-		// position = The position of the button.
-		// map = The map the button should switch to.
-		void AddMapButton(const char* name, Vector2D position, Levels::Map map);
+		GameObject* player;
+
+		Vector2D translation;
+
+		// Health variables
+		std::vector<GameObject*> healthBar;
+		GameObject* healthText;
+		float prevHealth;
+
+		// Ability variables
+		std::vector<GameObject*> abilityBar;
+		float prevMana;
 	};
 }
-
-//----------------------------------------------------------------------------
