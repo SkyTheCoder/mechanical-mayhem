@@ -121,6 +121,9 @@ namespace Levels
 		// Private Variables:
 		//------------------------------------------------------------------------------
 
+		// Components
+		SoundManager* soundManager;
+
 		Map map;
 
 		GameObject* backgroundImage;

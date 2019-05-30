@@ -29,6 +29,11 @@ namespace Behaviors
 	class PlayerMovement;
 }
 
+namespace FMOD
+{
+	class Channel;
+}
+
 //------------------------------------------------------------------------------
 // Public Structures:
 //------------------------------------------------------------------------------
@@ -78,6 +83,9 @@ namespace Abilities
 		//   parser = The parser that is reading this object's data from a file.
 		void Deserialize(Parser& parser) override;
 
+		// Shutdown function for jetpack
+		void Shutdown() override;
+
 	private:
 		//------------------------------------------------------------------------------
 		// Private Functions:
@@ -93,6 +101,10 @@ namespace Abilities
 		// Other components
 		Behaviors::PlayerMovement* playerMovement;
 		Physics* physics;
+
+		// Sounds
+		SoundManager* soundManager;
+		FMOD::Channel* jetpackSound;
 
 		// Jetpack is being used
 		bool active;
