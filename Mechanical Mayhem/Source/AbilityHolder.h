@@ -65,6 +65,11 @@ namespace Behaviors
 		//   dt = The (fixed) change in time since the last step.
 		void Update(float dt) override;
 
+		// Updates components using a fixed timestep (usually just for physics).
+		// Params:
+		//	 dt = A fixed change in time, usually 1/60th of a second.
+		void FixedUpdate(float dt) override;
+
 		// Returns the current ability type.
 		Abilities::Abilities GetAbilityType() const;
 

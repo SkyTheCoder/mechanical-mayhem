@@ -115,6 +115,17 @@ namespace Behaviors
 		}
 	}
 
+	// Updates components using a fixed timestep (usually just for physics).
+	// Params:
+	//	 dt = A fixed change in time, usually 1/60th of a second.
+	void AbilityHolder::FixedUpdate(float dt)
+	{
+		if (ability != nullptr)
+		{
+			ability->FixedUpdate(dt);
+		}
+	}
+
 	// Returns the current ability type.
 	Abilities::Abilities AbilityHolder::GetAbilityType() const
 	{

@@ -59,6 +59,11 @@ namespace Abilities
 		//   dt = The change in time since the last update.
 		void Update(float dt) override;
 
+		// Updates components using a fixed timestep (usually just for physics).
+		// Params:
+		//	 dt = A fixed change in time, usually 1/60th of a second.
+		void FixedUpdate(float dt) override;
+
 		// Removes any objects that will be recreated in Initialize.
 		void Shutdown() override;
 

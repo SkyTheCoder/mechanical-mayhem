@@ -84,8 +84,17 @@ namespace Abilities
 			currentFuel = std::clamp(currentFuel + fuelRefillRate * dt, 0.0f, maxFuel);
 		}
 
-		// Position the flame in front of the flamethrower (close enough)
+		cooldownTimer -= dt;
+	}
 
+	// Updates components using a fixed timestep (usually just for physics).
+	// Params:
+	//	 dt = A fixed change in time, usually 1/60th of a second.
+	void Flamethrower::FixedUpdate(float dt)
+	{
+		UNREFERENCED_PARAMETER(dt);
+
+		// Position the flame in front of the flamethrower (close enough)
 		Vector2D offset(0.92f, -0.03f);
 
 		if (playerController->GetPlayerID() == 2)
@@ -98,8 +107,6 @@ namespace Abilities
 			flameEffect->GetComponent<Sprite>()->SetAlpha(1.0f);
 		else
 			flameEffect->GetComponent<Sprite>()->SetAlpha(0.0f);
-
-		cooldownTimer -= dt;
 	}
 
 	// Removes any objects that will be recreated in Initialize.
