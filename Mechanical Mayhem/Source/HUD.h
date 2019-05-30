@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	Credit.h
+// File Name:	HUD.h
 // Author(s):	A.J. Bussman
-// Project:		Yesterday's Mayonnaise
+// Project:		Mechanical Mayhem
 // Course:		WANIC VGP2 2018-2019
 //
 // Copyright © 2018 DigiPen (USA) Corporation.
@@ -15,61 +15,67 @@
 // Include Files:
 //------------------------------------------------------------------------------
 
-#include "Vector2D.h"
-#include "Level.h"
+#include <BetaObject.h>
+
+#include <Vector2D.h>
 
 //------------------------------------------------------------------------------
 // Forward References:
 //------------------------------------------------------------------------------
 
-class Texture;
-class Mesh;
-class SpriteSource;
-class Space;
+class GameObject;
 
 //------------------------------------------------------------------------------
 // Public Structures:
 //------------------------------------------------------------------------------
 
-namespace Levels
+namespace Behaviors
 {
-	enum class Map : int;
-
-	class Credit : public Level
+	class HUD : public BetaObject
 	{
 	public:
 		//------------------------------------------------------------------------------
 		// Public Functions:
 		//------------------------------------------------------------------------------
 
-		// Creates an instance of Credit.
-		Credit(Space* HUDSpace);
+		// Constructor
+		HUD(GameObject* player, Vector2D translation);
 
-		// Load the resources associated with Credit.
-		void Load() override;
+		// Return a new copy of the component.
+		HUD* Clone() const;
 
-		// Initialize the memory associated with Credit.
+		// Initialize data for this object.
 		void Initialize() override;
 
-		// Update Credit.
+		// Update function for this component.
 		// Params:
-		//	 dt = Change in time (in seconds) since the last game loop.
+		//   dt = The (fixed) change in time since the last step.
 		void Update(float dt) override;
 
-		// Unload the resources associated with Credit.
-		void Unload() override;
+		// Removes any objects that will be recreated in Initialize.
+		void Shutdown() override;
+
+		// Sets the current player pointer.
+		void SetPlayer(GameObject* player);
+
+		~HUD();
 
 	private:
 		//------------------------------------------------------------------------------
-		// Private Functions:
+		// Private Variables:
 		//------------------------------------------------------------------------------
 
-		// Adds a new map button.
-		// name = The name of the level.
-		// position = The position of the button.
-		// map = The map the button should switch to.
-		void AddMapButton(const char* name, Vector2D position, Levels::Map map);
+		GameObject* player;
+
+		Vector2D translation;
+
+		// Health variables
+		std::vector<GameObject*> healthBar;
+		GameObject* healthText;
+		float prevHealth;
+
+		// Ability variables
+		std::vector<GameObject*> abilityBar;
+		float prevMana;
 	};
 }
-
-//----------------------------------------------------------------------------

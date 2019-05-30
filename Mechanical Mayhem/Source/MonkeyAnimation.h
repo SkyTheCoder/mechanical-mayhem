@@ -90,6 +90,9 @@ namespace Behaviors
 		// Tells this animation component to use the sprite source with the specified variant.
 		void GetSpriteSources(std::string variant);
 
+		// Gets the appropriate jetpack flame sprite based on the current state.
+		SpriteSource* GetCurrentJetpackSprite() const;
+
 	private:
 		//------------------------------------------------------------------------------
 		// Private Functions:
@@ -139,6 +142,8 @@ namespace Behaviors
 
 		// Sprite sources
 		SpriteSource* anims[Abilities::ABILITY_MAX];
+		SpriteSource* jetpackJump;
+		SpriteSource* jetpackFall;
 
 		// Components
 		Animation* animation;

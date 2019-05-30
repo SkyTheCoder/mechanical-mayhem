@@ -56,7 +56,7 @@ namespace Behaviors
 		: Component("MonkeyAnimation"),
 		walkStart(walkStart), walkLength(walkLength), jumpStart(jumpStart), jumpLength(jumpLength),
 		idleStart(idleStart), idleLength(idleLength), currentState(StateIdle), nextState(StateIdle),
-		anims{ nullptr },
+		anims{ nullptr }, jetpackJump(nullptr), jetpackFall(nullptr),
 		animation(nullptr), physics(nullptr), transform(nullptr), sprite(nullptr), monkeyMovement(nullptr), abilityHolder(nullptr),
 		originalScale()
 	{
@@ -148,6 +148,17 @@ namespace Behaviors
 		anims[Abilities::ABILITY_JETPACK] = resourceManager.GetSpriteSource("AniJetpack" + variant + ".png");
 		anims[Abilities::ABILITY_FLAMETHROWER] = resourceManager.GetSpriteSource("AniFlame" + variant + ".png");
 		anims[Abilities::ABILITY_PROXIMITYMINE] = resourceManager.GetSpriteSource("AniMine" + variant + ".png");
+		jetpackJump = resourceManager.GetSpriteSource("AniJetpackJumpFire" + variant + ".png");
+		jetpackFall = resourceManager.GetSpriteSource("AniJetpackFallFire" + variant + ".png");
+	}
+
+	// Gets the appropriate jetpack flame sprite based on the current state.
+	SpriteSource* MonkeyAnimation::GetCurrentJetpackSprite() const
+	{
+		if (currentState == State::StateFall)
+			return jetpackFall;
+
+		return jetpackJump;
 	}
 
 	//------------------------------------------------------------------------------

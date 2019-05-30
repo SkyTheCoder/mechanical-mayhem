@@ -30,7 +30,7 @@
 //------------------------------------------------------------------------------
 
 // Default constructor.
-SpriteTextMono::SpriteTextMono() : text(), charWidth(0.5f), horizontalAlignment(Alignment::CENTER), verticalAlignment(Alignment::CENTER)
+SpriteTextMono::SpriteTextMono() : text(), horizontalAlignment(Alignment::CENTER), verticalAlignment(Alignment::CENTER)
 {
 }
 
@@ -137,8 +137,6 @@ void SpriteTextMono::Draw()
 //   parser = The parser that is writing this object to a file.
 void SpriteTextMono::Serialize(Parser& parser) const
 {
-	Sprite::Serialize(parser);
-
 	parser.WriteVariable("charWidth", charWidth);
 	unsigned uHorizontalAlignment = static_cast<unsigned>(horizontalAlignment);
 	parser.WriteVariable("horizontalAlignment", uHorizontalAlignment);
@@ -166,6 +164,14 @@ void SpriteTextMono::Deserialize(Parser& parser)
 // Params:
 //   text = New string to display.
 void SpriteTextMono::SetText(const char* text_)
+{
+	text = text_;
+}
+
+// Sets the string to display.
+// Params:
+//   text = New string to display.
+void SpriteTextMono::SetText(const std::string& text_)
 {
 	text = text_;
 }

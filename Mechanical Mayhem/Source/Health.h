@@ -21,7 +21,6 @@
 //------------------------------------------------------------------------------
 
 class Sprite;
-class SoundManager;
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -53,6 +52,12 @@ namespace Behaviors
 		//   dt = The change in time since the last step.
 		void Update(float dt) override;
 
+		// Returns the current health
+		int GetHealth();
+		
+		// Returns the current health
+		int GetMaxHealth();
+
 		// Write object data to file
 		// Params:
 		//   parser = The parser that is writing this object to a file.
@@ -72,9 +77,6 @@ namespace Behaviors
 		//------------------------------------------------------------------------------
 		// Private Variables:
 		//------------------------------------------------------------------------------
-
-		// Modules
-		SoundManager* soundManager;
 
 		// Health left
 		int health;

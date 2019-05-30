@@ -62,7 +62,7 @@ namespace Abilities
 		virtual void OnUse() = 0;
 
 		// Returns the % of mana/fuel/uses/whatever left on this ability.
-		virtual float GetMana() = 0;
+		virtual float GetMana() const = 0;
 
 		// Returns whether the player can hold down the use key to use the ability.
 		bool IsHoldAbility() const;

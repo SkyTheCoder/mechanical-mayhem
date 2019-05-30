@@ -152,7 +152,7 @@ namespace Abilities
 	}
 
 	// Returns the % of mana/fuel/uses/whatever left on this ability.
-	float Flamethrower::GetMana()
+	float Flamethrower::GetMana() const
 	{
 		return std::clamp(currentFuel / maxFuel, 0.0f, 1.0f);
 	}

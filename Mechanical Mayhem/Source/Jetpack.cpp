@@ -17,8 +17,10 @@
 #include "Jetpack.h"
 
 // Components
-#include "PlayerMovement.h"
+#include <Transform.h>
 #include <Physics.h>
+#include "PlayerMovement.h"
+#include "MonkeyAnimation.h"
 
 // Systems
 #include <Engine.h>
@@ -40,7 +42,8 @@ namespace Abilities
 	// Default Constructor
 	Jetpack::Jetpack()
 		: Ability("Jetpack", true),
-		playerMovement(nullptr), physics(nullptr),
+		transform(nullptr), physics(nullptr), playerMovement(nullptr), monkeyAnimation(nullptr),
+		flameEffect(nullptr),
 		active(false), jetpackForce(1), currentFuel(0), maxFuel(100),
 		fuelRefillRate(0.5f), fuelConsumptionRate(1.0f)
 	{
@@ -50,12 +53,17 @@ namespace Abilities
 	void Jetpack::Initialize()
 	{
 		// Get components
-		playerMovement = GetOwner()->GetComponent<Behaviors::PlayerMovement>();
+		transform = GetOwner()->GetComponent<Transform>();
 		physics = GetOwner()->GetComponent<Physics>();
+		playerMovement = GetOwner()->GetComponent<Behaviors::PlayerMovement>();
+		monkeyAnimation = GetOwner()->GetComponent<Behaviors::MonkeyAnimation>();
 		soundManager = Engine::GetInstance().GetModule<SoundManager>();
 
 		// Fill fuel tank
 		currentFuel = maxFuel;
+
+		flameEffect = new GameObject(*GetOwner()->GetSpace()->GetObjectManager().GetArchetypeByName(flameEffectName));
+		GetOwner()->GetSpace()->GetObjectManager().AddObject(*flameEffect);
 	}
 
 	// Clone the current ability.
@@ -70,7 +78,7 @@ namespace Abilities
 	void Jetpack::Update(float dt)
 	{
 		// Check if user is even using the jetpack
-		active = Input::GetInstance().CheckHeld(playerMovement->GetUpKeybind());
+		active = !playerMovement->IsOnGround() && Input::GetInstance().CheckHeld(playerMovement->GetUseKeybind());
 
 		// Manage fuel amounts
 		FuelManagement(dt);
@@ -108,13 +116,34 @@ namespace Abilities
 		}
 	}
 
+	// Updates components using a fixed timestep (usually just for physics).
+	// Params:
+	//	 dt = A fixed change in time, usually 1/60th of a second.
+	void Jetpack::FixedUpdate(float dt)
+	{
+		UNREFERENCED_PARAMETER(dt);
+
+		// Position the flame under the jetpack (close enough)
+		Vector2D offset(0.0f, -0.5f);
+
+		flameEffect->GetComponent<Transform>()->SetTranslation(transform->GetTranslation() + Vector2D(std::signbit(transform->GetScale().x) ? -offset.x : offset.x, offset.y));
+		flameEffect->GetComponent<Transform>()->SetScale(Vector2D(std::signbit(transform->GetScale().x) ? -1.0f : 1.0f, 1.0f));
+
+		flameEffect->GetComponent<Sprite>()->SetSpriteSource(monkeyAnimation->GetCurrentJetpackSprite());
+
+		if (IsActive())
+			flameEffect->GetComponent<Sprite>()->SetAlpha(1.0f);
+		else
+			flameEffect->GetComponent<Sprite>()->SetAlpha(0.0f);
+	}
+
 	// Callback for when the player attempts to use this ability.
 	void Jetpack::OnUse()
 	{
 	}
 
 	// Returns the % of mana/fuel/uses/whatever left on this ability.
-	float Jetpack::GetMana()
+	float Jetpack::GetMana() const
 	{
 		return std::clamp(currentFuel / maxFuel, 0.0f, 1.0f);
 	}
@@ -136,6 +165,7 @@ namespace Abilities
 	//   parser = The parser that is writing this object to a file.
 	void Jetpack::Serialize(Parser& parser) const
 	{
+		parser.WriteVariable("flameEffect", flameEffectName);
 		parser.WriteVariable("jetpackForce", jetpackForce);
 		parser.WriteVariable("currentFuel", currentFuel);
 		parser.WriteVariable("maxFuel", maxFuel);
@@ -148,6 +178,7 @@ namespace Abilities
 	//   parser = The parser that is reading this object's data from a file.
 	void Jetpack::Deserialize(Parser& parser)
 	{
+		parser.ReadVariable("flameEffect", flameEffectName);
 		parser.ReadVariable("jetpackForce", jetpackForce);
 		parser.ReadVariable("currentFuel", currentFuel);
 		parser.ReadVariable("maxFuel", maxFuel);
@@ -158,6 +189,8 @@ namespace Abilities
 	// Shutdown function for jetpack
 	void Jetpack::Shutdown()
 	{
+		flameEffect->Destroy();
+
 		// Stop jetpack sound
 		jetpackSound->stop();
 	}
