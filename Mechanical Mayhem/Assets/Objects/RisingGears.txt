@@ -16,7 +16,7 @@ RisingGears
   {
     group : 3
     mask : 8
-    extents : { 12, 2 }
+    extents : { 12, 1 }
   }
   Behaviors::RisingGears
   {
