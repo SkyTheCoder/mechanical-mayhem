@@ -26,6 +26,7 @@
 #include <MeshHelper.h>
 #include <Texture.h>
 #include <SpriteSource.h>
+#include "GameObject.h"
 
 // Components
 #include "SpriteText.h"
@@ -33,18 +34,11 @@
 #include "Sprite.h"
 #include "PlayerMovement.h"
 
+#include "HUD.h"
+
 //------------------------------------------------------------------------------
 // Public Functions:
 //------------------------------------------------------------------------------
-
-HUD::~HUD()
-{
-	delete PlayerIcon;
-	delete HealthBar;
-	delete HealthText;
-	delete AbilityBar;
-	delete AbilityIcon;
-}
 
 namespace Levels
 {
@@ -93,8 +87,8 @@ namespace Levels
 		}
 
 		// Create Player HUDs
-		HUD1 = AddPlayerHUD("Player1", Vector2D());
-		HUD2 = AddPlayerHUD("Player2", Vector2D());
+		HUD1 = new Behaviors::HUD(player1, Vector2D());
+		HUD2 = new Behaviors::HUD(player2, Vector2D());
 	}
 
 	// Initialize the memory associated with MainMenu.
@@ -103,20 +97,7 @@ namespace Levels
 		std::cout << "HUDLevel::Initialize" << std::endl;
 
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
-
-		// Test
-
-		GameObject* test = new GameObject("Test");
-		// Create a new transform.
-		test->AddComponent(new Transform(Vector2D(), Vector2D(1.0f, 1.0f)));
-
-		// Create a new sprite.
-		Sprite* sprite = new Sprite();
-		sprite->SetMesh(meshBackground);
-		sprite->SetSpriteSource(spriteSourceBackground);
-		test->AddComponent(sprite);
-
-		objectManager.AddObject(*test);
+		UNREFERENCED_PARAMETER(objectManager);
 	}
 
 	// Update Level 1.
@@ -133,42 +114,9 @@ namespace Levels
 	{
 		std::cout << "HUDLevel::Unload" << std::endl;
 
-		delete HUD1;
-		delete HUD2;
-
 		delete meshBackground;
 		delete textureBackground;
 		delete spriteSourceBackground;
-	}
-
-	//------------------------------------------------------------------------------
-	// Private Functions:
-	//------------------------------------------------------------------------------
-
-	// Creates a Player's HUD
-	// name = Which Player's HUD we're making.
-	// position = The position of the HUD.
-	HUD* HUDLevel::AddPlayerHUD(const char* name_, Vector2D position)
-	{
-		UNREFERENCED_PARAMETER(name_);
-		UNREFERENCED_PARAMETER(position);
-
-		// PlayerIcon
-		GameObject* PlayerIcon = new GameObject("PlayerIcon");
-
-		// HealthBar
-		GameObject* HealthBar = new GameObject("HealthBar");
-
-		// HealthText
-		GameObject* HealthText = new GameObject("HealthText");
-
-		// AbilityBar
-		GameObject* AbilityBar = new GameObject("AbilityBar");
-
-		// AbilityIcon
-		GameObject* AbilityIcon = new GameObject("AbilityIcon");
-
-		return new HUD(PlayerIcon, HealthBar, HealthText, AbilityBar, AbilityIcon);
 	}
 }
 //----------------------------------------------------------------------------

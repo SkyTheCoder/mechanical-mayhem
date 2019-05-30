@@ -27,25 +27,13 @@ class Mesh;
 class Texture;
 class SpriteSource;
 class GameObject;
+namespace Behaviors {
+	class HUD;
+}
 
 //------------------------------------------------------------------------------
 // Public Structures:
 //------------------------------------------------------------------------------
-
-struct HUD
-{
-	// Constructor
-	HUD(GameObject* PlayerIcon, GameObject* HealthBar, GameObject* HealthText, GameObject* AbilityBar, GameObject* AbilityIcon) :
-		PlayerIcon(PlayerIcon), HealthBar(HealthBar),  HealthText(HealthText), AbilityBar(AbilityBar), AbilityIcon(AbilityIcon) {}
-
-	~HUD();
-
-	GameObject* PlayerIcon;
-	GameObject* HealthBar;
-	GameObject* HealthText;
-	GameObject* AbilityBar;
-	GameObject* AbilityIcon;
-};
 
 namespace Levels
 {
@@ -77,21 +65,11 @@ namespace Levels
 
 	private:
 		//------------------------------------------------------------------------------
-		// Private Functions:
-		//------------------------------------------------------------------------------
-
-		// Adds a new map button.
-		// name = The name of the level.
-		// position = The position of the button.
-		// map = The map the button should switch to.
-		HUD* AddPlayerHUD(const char* name, Vector2D position);
-
-		//------------------------------------------------------------------------------
 		// Private Variables:
 		//------------------------------------------------------------------------------
 
 		// HUDs & Players
-		HUD* HUD1, * HUD2;
+		Behaviors::HUD* HUD1, * HUD2;
 		GameObject* player1, * player2;
 
 		Mesh* meshBackground;
