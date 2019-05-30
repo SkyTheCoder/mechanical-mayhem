@@ -5,7 +5,7 @@ Mine
   {
     translation : { 0, 0 }
     rotation : 0
-    scale : { 5, 5 }
+    scale : { 3, 3 }
   }
   Sprite
   {
@@ -16,7 +16,7 @@ Mine
   {
     group : 0
     mask : 0
-    radius : 2.5
+    radius : 1.5
   }
   Behaviors::Hazard
   {

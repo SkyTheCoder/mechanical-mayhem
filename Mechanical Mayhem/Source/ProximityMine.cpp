@@ -121,7 +121,7 @@ namespace Abilities
 	}
 
 	// Returns the % of mana/fuel/uses/whatever left on this ability.
-	float ProximityMine::GetMana()
+	float ProximityMine::GetMana() const
 	{
 		return std::clamp(static_cast<float>(maxProximityMines - proximityMines.size()) / maxProximityMines, 0.0f, 1.0f);
 	}

@@ -78,6 +78,9 @@ namespace Behaviors
 		//   abilityType = The current ability.
 		void SetAbility(Abilities::Abilities abilityType);
 
+		// Returns the current ability instance.
+		Abilities::Ability* GetAbility() const;
+
 	private:
 		//------------------------------------------------------------------------------
 		// Private Structures:

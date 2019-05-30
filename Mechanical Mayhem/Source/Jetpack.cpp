@@ -41,6 +41,7 @@ namespace Abilities
 	Jetpack::Jetpack()
 		: Ability("Jetpack", true),
 		playerMovement(nullptr), physics(nullptr),
+		flameEffect(nullptr),
 		active(false), jetpackForce(1), currentFuel(0), maxFuel(100),
 		fuelRefillRate(0.5f), fuelConsumptionRate(1.0f)
 	{
@@ -56,6 +57,9 @@ namespace Abilities
 
 		// Fill fuel tank
 		currentFuel = maxFuel;
+
+		//flameEffect = new GameObject(*GetOwner()->GetSpace()->GetObjectManager().GetArchetypeByName(flameEffectName));
+		//GetOwner()->GetSpace()->GetObjectManager().AddObject(*flameEffect);
 	}
 
 	// Clone the current ability.
@@ -108,13 +112,35 @@ namespace Abilities
 		}
 	}
 
+	// Updates components using a fixed timestep (usually just for physics).
+	// Params:
+	//	 dt = A fixed change in time, usually 1/60th of a second.
+	void Jetpack::FixedUpdate(float dt)
+	{
+		UNREFERENCED_PARAMETER(dt);
+
+		// Position the flame under the jetpack (close enough)
+		/*Vector2D offset(0.92f, -0.03f);
+
+		if (playerController->GetPlayerID() == 2)
+			offset = Vector2D(0.94f, 0.04f);
+
+		flameEffect->GetComponent<Transform>()->SetTranslation(transform->GetTranslation() + Vector2D(std::signbit(transform->GetScale().x) ? -offset.x : offset.x, offset.y));
+		flameEffect->GetComponent<Transform>()->SetScale(Vector2D(std::signbit(transform->GetScale().x) ? -1.0f : 1.0f, 1.0f));
+
+		if (cooldownTimer > 0.0f)
+			flameEffect->GetComponent<Sprite>()->SetAlpha(1.0f);
+		else
+			flameEffect->GetComponent<Sprite>()->SetAlpha(0.0f);*/
+	}
+
 	// Callback for when the player attempts to use this ability.
 	void Jetpack::OnUse()
 	{
 	}
 
 	// Returns the % of mana/fuel/uses/whatever left on this ability.
-	float Jetpack::GetMana()
+	float Jetpack::GetMana() const
 	{
 		return std::clamp(currentFuel / maxFuel, 0.0f, 1.0f);
 	}

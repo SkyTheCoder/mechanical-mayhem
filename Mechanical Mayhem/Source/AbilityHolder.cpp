@@ -157,6 +157,12 @@ namespace Behaviors
 			ability->Initialize();
 		}
 	}
+
+	// Returns the current ability instance.
+	Abilities::Ability* AbilityHolder::GetAbility() const
+	{
+		return ability;
+	}
 }
 
 //------------------------------------------------------------------------------

@@ -62,7 +62,7 @@ namespace Abilities
 		void OnUse() override;
 
 		// Returns the % of mana/fuel/uses/whatever left on this ability.
-		float GetMana() override;
+		float GetMana() const override;
 
 		// Write object data to file
 		// Params:

@@ -61,11 +61,16 @@ namespace Abilities
 		//   dt = The change in time since the last update.
 		void Update(float dt) override;
 
+		// Updates components using a fixed timestep (usually just for physics).
+		// Params:
+		//	 dt = A fixed change in time, usually 1/60th of a second.
+		void FixedUpdate(float dt) override;
+
 		// Callback for when the player attempts to use this ability.
 		void OnUse() override;
 
 		// Returns the % of mana/fuel/uses/whatever left on this ability.
-		float GetMana() override;
+		float GetMana() const override;
 
 		// Sets whether the jetpack is active
 		void SetActive(bool active_);
@@ -101,6 +106,9 @@ namespace Abilities
 		// Other components
 		Behaviors::PlayerMovement* playerMovement;
 		Physics* physics;
+
+		std::string flameEffectName;
+		GameObject* flameEffect;
 
 		// Sounds
 		SoundManager* soundManager;

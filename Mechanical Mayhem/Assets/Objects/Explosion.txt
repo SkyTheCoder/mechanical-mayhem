@@ -5,7 +5,7 @@ Explosion
   {
     translation : { 0, 0 }
     rotation : 0
-    scale : { 5, 5 }
+    scale : { 3, 3 }
   }
   Sprite
   {
