@@ -31,6 +31,11 @@ class GameObject;
 class Tilemap;
 class SoundManager;
 
+namespace Effects
+{
+	class ChromaticAberration;
+}
+
 //------------------------------------------------------------------------------
 // Public Structures:
 //------------------------------------------------------------------------------
@@ -124,6 +129,8 @@ namespace Levels
 		Map map;
 
 		GameObject* backgroundImage;
+
+		Effects::ChromaticAberration* chromaticAberration;
 
 		// Monkey
 		unsigned columnsMonkey;

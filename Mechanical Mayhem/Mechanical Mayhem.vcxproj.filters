@@ -16,6 +16,9 @@
     <Filter Include="Game\Abilities">
       <UniqueIdentifier>{392d8479-7ce2-4b88-bcff-56c4d35d750d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Effects">
+      <UniqueIdentifier>{0a732bbc-d6bb-433d-ae2d-e14f8bf31dac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -109,6 +112,9 @@
     <ClCompile Include="Source\SimpleAnimator.cpp">
       <Filter>Game\Behaviors</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ChromaticAberration.cpp">
+      <Filter>Game\Effects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -200,6 +206,9 @@
     </ClInclude>
     <ClInclude Include="Source\SimpleAnimator.h">
       <Filter>Game\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChromaticAberration.h">
+      <Filter>Game\Effects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -53,6 +53,9 @@
 #include "HUDEmpty.h"
 #include "HUDLevel.h"
 
+// Effects
+#include "ChromaticAberration.h"
+
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
@@ -69,6 +72,7 @@ namespace Levels
 	Level1::Level1(Map map_) : Level("Level1"),
 		map(map_),
 		backgroundImage(nullptr),
+		chromaticAberration(nullptr),
 		columnsMonkey(3), rowsMonkey(10),
 		columnsCat(3), rowsCat(10),
 		columnsSpikes(1), rowsSpikes(3),
@@ -182,6 +186,9 @@ namespace Levels
 		objectManager.AddArchetype(*objectFactory.CreateObject("Tilemap", resourceManager.GetMesh("Map"), resourceManager.GetSpriteSource("Tilemap.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("RisingGears", resourceManager.GetMesh("RisingGears"), resourceManager.GetSpriteSource("RisingGears.png")));
 
+		chromaticAberration = new Effects::ChromaticAberration();
+		chromaticAberration->SetIntensity(2.0f);
+
 		// Set the background color.
 		Graphics::GetInstance().SetBackgroundColor(Colors::Black);
 	}
@@ -213,7 +220,6 @@ namespace Levels
 
 		// Create the players and add them to the object manager.
 		GameObject* player = new GameObject(*objectManager.GetArchetypeByName("Player"));
-		//*reinterpret_cast<std::string*>(reinterpret_cast<uintptr_t>(player) + sizeof(void**)) = "Player1";
 		player->GetComponent<Behaviors::MonkeyAnimation>()->SetFrames(0, 8, 9, 4, 15, 4, 27, 2, 21, 4);
 		Behaviors::PlayerMovement* playerMovement = static_cast<Behaviors::PlayerMovement*>(player->GetComponent("PlayerMovement"));
 		playerMovement->SetKeybinds(VK_UP, VK_LEFT, VK_RIGHT, VK_RCONTROL);
@@ -222,7 +228,6 @@ namespace Levels
 		player->GetComponent<Behaviors::MonkeyAnimation>()->GetSpriteSources("A");
 
 		GameObject* player2 = new GameObject(*objectManager.GetArchetypeByName("Player"));
-		//*reinterpret_cast<std::string*>(reinterpret_cast<uintptr_t>(player2) + sizeof(void**)) = "Player2";
 		player2->GetComponent<Collider>()->SetGroup(2);
 		player2->GetComponent<Collider>()->SetMask(1 << 2);
 		player2->GetComponent<Behaviors::MonkeyAnimation>()->SetFrames(0, 8, 9, 4, 15, 4, 27, 2, 21, 4);
@@ -520,7 +525,7 @@ namespace Levels
 				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(9.0f, -45.0f));
 				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(9.0f, -45.0f));
 
-				gearHeight = -60.0f;
+				gearHeight = -62.0f;
 
 				break;
 			}
@@ -572,6 +577,8 @@ namespace Levels
 		GameObject* winText = new GameObject(*objectManager.GetArchetypeByName("Text"));
 		winText->GetComponent<SpriteTextMono>()->SetColor(Colors::White);
 		objectManager.AddObject(*winText);
+
+		Graphics::GetInstance().PushEffect(*chromaticAberration);
 	}
 
 	// Update Level 1.
@@ -587,35 +594,40 @@ namespace Levels
 
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
 
+		std::vector<GameObject*> players;
+		players.reserve(2);
+		objectManager.GetAllObjectsByName("Player", players);
+
 		if (input.CheckTriggered('I'))
 		{
-			std::vector<GameObject*> players;
-			players.reserve(2);
-			objectManager.GetAllObjectsByName("Player", players);
-
 			for (auto it = players.begin(); it != players.end(); ++it)
 				(*it)->GetComponent<Behaviors::AbilityHolder>()->SetAbility(Abilities::ABILITY_JETPACK);
 		}
 
 		if (input.CheckTriggered('O'))
 		{
-			std::vector<GameObject*> players;
-			players.reserve(2);
-			objectManager.GetAllObjectsByName("Player", players);
-
 			for (auto it = players.begin(); it != players.end(); ++it)
 				(*it)->GetComponent<Behaviors::AbilityHolder>()->SetAbility(Abilities::ABILITY_FLAMETHROWER);
 		}
 
 		if (input.CheckTriggered('P'))
 		{
-			std::vector<GameObject*> players;
-			players.reserve(2);
-			objectManager.GetAllObjectsByName("Player", players);
-
 			for (auto it = players.begin(); it != players.end(); ++it)
 				(*it)->GetComponent<Behaviors::AbilityHolder>()->SetAbility(Abilities::ABILITY_PROXIMITYMINE);
 		}
+
+		GameObject* risingGears = objectManager.GetObjectByName("RisingGears");
+
+		float lowestGearsDistance = FLT_MAX;
+		for (auto it = players.begin(); it != players.end(); ++it)
+		{
+			Vector2D playerTranslation = (*it)->GetComponent<Transform>()->GetTranslation();
+			Vector2D gearsTranslation = risingGears->GetComponent<Transform>()->GetTranslation();
+			float gearsDistancee = abs(playerTranslation.y - gearsTranslation.y);
+			lowestGearsDistance = min(lowestGearsDistance, gearsDistancee);
+		}
+
+		chromaticAberration->SetIntensity(50.0f / pow(max(1.0f, lowestGearsDistance - 3.0f), 1.5f));
 
 		// End game if a player dies
 		unsigned playerCount = objectManager.GetObjectCount("Player");
@@ -665,6 +677,8 @@ namespace Levels
 	// Shutdown function for Level 1
 	void Level1::Shutdown()
 	{
+		Graphics::GetInstance().RemoveEffect(*chromaticAberration);
+
 		Space* hudSpace = GetAltSpace();
 
 		// Set initial level to the HUD level - HUDSpace.
@@ -676,6 +690,8 @@ namespace Levels
 	void Level1::Unload()
 	{
 		// Free all allocated memory.
+		delete chromaticAberration;
+
 		delete dataStaticMap;
 		delete dataRedMap;
 		delete dataBlueMap;

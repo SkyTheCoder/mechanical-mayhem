@@ -46,7 +46,7 @@
 //------------------------------------------------------------------------------
 
 // Create a new sprite object.
-Sprite::Sprite() : Component("Sprite"), frameIndex(0), spriteSource(nullptr), mesh(nullptr), color(Colors::White), transform(nullptr)
+Sprite::Sprite() : Component("Sprite"), frameIndex(0), spriteSource(nullptr), mesh(nullptr), color(Colors::White), transform(nullptr), zDepth(0.0f)
 {
 
 }
@@ -131,7 +131,7 @@ void Sprite::Draw(const CS230::Matrix2D& matrix)
 	}
 
 	// Set the translation & scale for the mesh.
-	Graphics::GetInstance().SetTransform(reinterpret_cast<const Matrix2D&>(matrix));
+	Graphics::GetInstance().SetTransform(reinterpret_cast<const Matrix2D&>(matrix), zDepth);
 
 	Graphics::GetInstance().SetSpriteBlendColor(color);
 
@@ -198,6 +198,18 @@ void Sprite::SetColor(Color color_)
 const Color& Sprite::GetColor() const
 {
 	return color;
+}
+
+// Sets the depth of this sprite.
+void Sprite::SetZDepth(float depth)
+{
+	zDepth = depth;
+}
+
+// Gets the depth of this sprite.
+float Sprite::GetZDepth() const
+{
+	return zDepth;
 }
 
 //------------------------------------------------------------------------------

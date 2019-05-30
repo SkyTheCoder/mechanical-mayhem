@@ -116,6 +116,12 @@ public:
 	// Retrieves the blend color for the sprite.
 	const Color& GetColor() const;
 
+	// Sets the depth of this sprite.
+	void SetZDepth(float depth);
+
+	// Gets the depth of this sprite.
+	float GetZDepth() const;
+
 protected:
 	//------------------------------------------------------------------------------
 	// Protected Variables:
@@ -135,6 +141,9 @@ protected:
 
 	// Color used for blending/tint
 	Color color;
+
+	// The depth of this sprite.
+	float zDepth;
 };
 
 //------------------------------------------------------------------------------
