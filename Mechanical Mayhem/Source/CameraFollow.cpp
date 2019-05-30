@@ -150,7 +150,7 @@ namespace Behaviors
 		
 		// Smoothly interpolate the camera to its new position and distance.
 		camera.SetTranslation(Interpolate(camera.GetTranslation(), targetTranslationSum / static_cast<float>(max(1, targetTranslations.size())), targetMix));
-		camera.SetSize(Interpolate(camera.GetSize(), max(11.0f, highestDistance + 8.0f), distanceMix));
+		camera.SetSize(Interpolate(camera.GetSize(), max(9.0f, highestDistance + 8.0f), distanceMix));
 	}
 
 	// Receive an event and handle it (if applicable).
@@ -205,7 +205,7 @@ namespace Behaviors
 		Camera& camera = Graphics::GetInstance().GetDefaultCamera();
 
 		camera.SetTranslation(targetTranslationSum / static_cast<float>(max(1, players.size())));
-		camera.SetSize(max(11.0f, highestDistance + 8.0f));
+		camera.SetSize(max(9.0f, highestDistance + 8.0f));
 	}
 
 	// Adds a player to the player list.

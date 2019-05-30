@@ -105,6 +105,9 @@ namespace Abilities
 		if (playerController->GetPlayerID() == 2)
 			offset = Vector2D(0.94f, 0.04f);
 
+		// Thanks for scaling up everything, Kat.
+		offset *= 1.25f;
+
 		flameEffect->GetComponent<Transform>()->SetTranslation(transform->GetTranslation() + Vector2D(std::signbit(transform->GetScale().x) ? -offset.x : offset.x, offset.y));
 		flameEffect->GetComponent<Transform>()->SetScale(Vector2D(std::signbit(transform->GetScale().x) ? -1.0f : 1.0f, 1.0f));
 

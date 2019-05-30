@@ -5,7 +5,7 @@ FlameEffect
   {
     translation : { 0, 0 }
     rotation : 0
-    scale : { 0.5, 0.5 }
+    scale : { 0.75, 0.75 }
   }
   Sprite
   {

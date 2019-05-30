@@ -44,7 +44,7 @@ namespace Levels
 {
 	// Creates an instance of HUDLevel.
 	HUDLevel::HUDLevel() : Level("HUDLevel"), player1(nullptr), player2(nullptr),
-		meshBackground(nullptr), textureBackground(nullptr), spriteSourceBackground(nullptr), 
+		meshBackground(nullptr), textureBackground(nullptr), spriteSourceBackground(nullptr),
 		HUD1(nullptr), HUD2(nullptr)
 	{
 		HUDCamera.SetTranslation(Vector2D());
@@ -71,12 +71,12 @@ namespace Levels
 		FindPlayers();
 
 		// Create Player HUDs
-		HUD1 = new Behaviors::HUD(player1, Vector2D());
+		/*HUD1 = new Behaviors::HUD(player1, Vector2D());
 		HUD1->SetOwner(this);
 		HUD1->Initialize();
 		HUD2 = new Behaviors::HUD(player2, Vector2D());
 		HUD2->SetOwner(this);
-		HUD2->Initialize();
+		HUD2->Initialize();*/
 	}
 
 	// Update Level 1.
@@ -90,20 +90,20 @@ namespace Levels
 		if (player1 == nullptr || player2 == nullptr)
 			FindPlayers();
 
-		HUD1->SetPlayer(player1);
+		/*HUD1->SetPlayer(player1);
 		HUD2->SetPlayer(player2);
 
 		HUD1->Update(dt);
-		HUD2->Update(dt);
+		HUD2->Update(dt);*/
 	}
 
 	// Removes any objects that will be recreated in Initialize.
 	void HUDLevel::Shutdown()
 	{
-		HUD1->Shutdown();
+		/*HUD1->Shutdown();
 		delete HUD1;
 		HUD2->Shutdown();
-		delete HUD2;
+		delete HUD2;*/
 	}
 
 	// Unload the resources associated with MainMenu.
@@ -115,7 +115,7 @@ namespace Levels
 		delete textureBackground;
 		delete spriteSourceBackground;
 	}
-	
+
 	// Finds the current player pointers.
 	void HUDLevel::FindPlayers()
 	{

@@ -506,28 +506,24 @@ namespace Levels
 			}
 			case Map::Chase:
 			{
-				float staticSpikes[62] = {
-					0.0f, 15.0f, 1.0f, 15.0f, 2.0f, 15.0f, 3.0f, 15.0f, 0.0f, 16.0f, 1.0f, 16.0f, 2.0f, 16.0f, 14.0f, 16.0f, 15.0f, 16.0f, 16.0f, 16.0f, 17.0f, 16.0f, 18.0f, 16.0f, 19.0f, 16.0f, 0.0f, 17.0f, 1.0f, 17.0f, 0.0f, 18.0f,
-					0.0f, 19.0f, 0.0f, 20.0f, 1.0f, 29.0f, 2.0f, 29.0f, 3.0f, 29.0f, 4.0f, 29.0f, 0.0f, 36.0f, 0.0f, 37.0f, 0.0f, 38.0f, 0.0f, 39.0f, 0.0f, 40.0f, 0.0f, 43.0f, 0.0f, 44.0f, 0.0f, 45.0f, 0.0f, 46.0f
+				float staticSpikes[78] = {
+					1.0f, 6.0f, 2.0f, 6.0f, 3.0f, 6.0f, 1.0f, 7.0f, 2.0f, 7.0f, 1.0f, 8.0f, 0.0f, 15.0f, 1.0f, 15.0f, 2.0f, 15.0f, 3.0f, 15.0f, 0.0f, 16.0f, 1.0f, 16.0f, 2.0f, 16.0f, 14.0f, 16.0f, 15.0f, 16.0f, 16.0f, 16.0f,
+					17.0f, 16.0f, 18.0f, 16.0f, 19.0f, 16.0f, 0.0f, 17.0f, 1.0f, 17.0f, 15.0f, 20.0f, 1.0f, 29.0f, 2.0f, 29.0f, 3.0f, 29.0f, 4.0f, 29.0f, 6.0f, 31.0f, 7.0f, 31.0f, 0.0f, 36.0f, 0.0f, 37.0f, 0.0f, 38.0f, 0.0f, 39.0f,
+					0.0f, 40.0f, 12.0f, 42.0f, 0.0f, 43.0f, 13.0f, 43.0f, 0.0f, 44.0f, 0.0f, 45.0f, 0.0f, 46.0f
 				};
-				float redSpikes[14] = {
-					18.0f, 2.0f, 19.0f, 3.0f, 13.0f, 10.0f, 14.0f, 11.0f, 6.0f, 21.0f, 7.0f, 21.0f, 8.0f, 21.0f
+				float redSpikes[22] = {
+					19.0f, 2.0f, 20.0f, 3.0f, 13.0f, 10.0f, 14.0f, 11.0f, 6.0f, 21.0f, 7.0f, 21.0f, 8.0f, 21.0f, 18.0f, 38.0f, 19.0f, 38.0f, 20.0f, 38.0f, 21.0f, 38.0f
 				};
-				float blueSpikes[12] = {
-					20.0f, 10.0f, 19.0f, 11.0f, 12.0f, 27.0f, 13.0f, 27.0f, 14.0f, 27.0f, 15.0f, 27.0f
+				float blueSpikes[20] = {
+					4.0f, 6.0f, 5.0f, 6.0f, 6.0f, 6.0f, 7.0f, 6.0f, 20.0f, 10.0f, 19.0f, 11.0f, 12.0f, 27.0f, 13.0f, 27.0f, 14.0f, 27.0f, 15.0f, 27.0f
 				};
 				float abilities[10] = {
 					2.0f, 12.0f, 11.0f, 21.0f, 3.0f, 27.0f, 13.0f, 35.0f, 7.0f, 38.0f
 				};
 
-				AddStaticSpikes(staticSpikes, 31);
-				AddRedSpikes(redSpikes, 7, redDimension);
-				AddBlueSpikes(blueSpikes, 6, blueDimension);
-				AddAbilities(abilities, 5);
-
-				AddStaticSpikes(staticSpikes, 31);
-				AddRedSpikes(redSpikes, 7, redDimension);
-				AddBlueSpikes(blueSpikes, 6, blueDimension);
+				AddStaticSpikes(staticSpikes, 39);
+				AddRedSpikes(redSpikes, 11, redDimension);
+				AddBlueSpikes(blueSpikes, 10, blueDimension);
 				AddAbilities(abilities, 5);
 
 				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(9.0f, -45.0f));
@@ -539,23 +535,23 @@ namespace Levels
 			}
 			case Map::Merge:
 			{
-				float staticSpikes[48] = {
-					1.0f, 8.0f, 2.0f, 8.0f, 21.0f, 8.0f, 22.0f, 8.0f, 11.0f, 12.0f, 12.0f, 12.0f, 1.0f, 46.0f, 2.0f, 46.0f, 3.0f, 46.0f, 4.0f, 46.0f, 5.0f, 46.0f, 6.0f, 46.0f, 7.0f, 46.0f, 8.0f, 46.0f, 9.0f, 46.0f, 14.0f, 46.0f,
-					15.0f, 46.0f, 16.0f, 46.0f, 17.0f, 46.0f, 18.0f, 46.0f, 19.0f, 46.0f, 20.0f, 46.0f, 21.0f, 46.0f, 22.0f, 46.0f
+				float staticSpikes[60] = {
+					1.0f, 8.0f, 2.0f, 8.0f, 21.0f, 8.0f, 22.0f, 8.0f, 11.0f, 12.0f, 12.0f, 12.0f, 10.0f, 29.0f, 11.0f, 29.0f, 12.0f, 29.0f, 13.0f, 29.0f, 10.0f, 39.0f, 13.0f, 39.0f, 1.0f, 46.0f, 2.0f, 46.0f, 3.0f, 46.0f, 4.0f, 46.0f,
+					5.0f, 46.0f, 6.0f, 46.0f, 7.0f, 46.0f, 8.0f, 46.0f, 9.0f, 46.0f, 14.0f, 46.0f, 15.0f, 46.0f, 16.0f, 46.0f, 17.0f, 46.0f, 18.0f, 46.0f, 19.0f, 46.0f, 20.0f, 46.0f, 21.0f, 46.0f, 22.0f, 46.0f
 				};
-				float redSpikes[8] = {
-					9.0f, 14.0f, 14.0f, 14.0f, 9.0f, 15.0f, 14.0f, 15.0f
+				float redSpikes[16] = {
+					9.0f, 14.0f, 14.0f, 14.0f, 9.0f, 15.0f, 14.0f, 15.0f, 3.0f, 22.0f, 20.0f, 22.0f, 3.0f, 23.0f, 20.0f, 23.0f
 				};
-				float blueSpikes[16] = {
-					6.0f, 3.0f, 17.0f, 3.0f, 8.0f, 23.0f, 9.0f, 23.0f, 10.0f, 23.0f, 13.0f, 23.0f, 14.0f, 23.0f, 15.0f, 23.0f
+				float blueSpikes[28] = {
+					6.0f, 3.0f, 17.0f, 3.0f, 10.0f, 5.0f, 13.0f, 5.0f, 8.0f, 23.0f, 9.0f, 23.0f, 10.0f, 23.0f, 13.0f, 23.0f, 14.0f, 23.0f, 15.0f, 23.0f, 1.0f, 26.0f, 2.0f, 26.0f, 21.0f, 26.0f, 22.0f, 26.0f
 				};
 				float abilities[12] = {
 					5.0f, 6.0f, 18.0f, 6.0f, 2.0f, 27.0f, 21.0f, 27.0f, 2.0f, 39.0f, 21.0f, 39.0f
 				};
 
-				AddStaticSpikes(staticSpikes, 24);
-				AddRedSpikes(redSpikes, 4, redDimension);
-				AddBlueSpikes(blueSpikes, 8, blueDimension);
+				AddStaticSpikes(staticSpikes, 30);
+				AddRedSpikes(redSpikes, 8, redDimension);
+				AddBlueSpikes(blueSpikes, 14, blueDimension);
 				AddAbilities(abilities, 6);
 
 				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(14.0f, -41.0f));
@@ -597,6 +593,7 @@ namespace Levels
 		UNREFERENCED_PARAMETER(dt);
 
 		backgroundImage->GetComponent<Transform>()->SetTranslation(Graphics::GetInstance().GetDefaultCamera().GetTranslation());
+		backgroundImage->GetComponent<Transform>()->SetScale(Graphics::GetInstance().GetDefaultCamera().GetSize() * 2.0f);
 
 		Input& input = Input::GetInstance();
 
