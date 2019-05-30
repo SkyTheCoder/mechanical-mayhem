@@ -15,13 +15,15 @@
 // Include Files:
 //------------------------------------------------------------------------------
 
+#include <BetaObject.h>
+
+#include <Vector2D.h>
 
 //------------------------------------------------------------------------------
 // Forward References:
 //------------------------------------------------------------------------------
 
 class GameObject;
-class Vector2D;
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -29,7 +31,7 @@ class Vector2D;
 
 namespace Behaviors
 {
-	class HUD
+	class HUD : public BetaObject
 	{
 	public:
 		//------------------------------------------------------------------------------
@@ -43,21 +45,36 @@ namespace Behaviors
 		HUD* Clone() const;
 
 		// Initialize data for this object.
-		void Initialize();
+		void Initialize() override;
 
 		// Update function for this component.
 		// Params:
 		//   dt = The (fixed) change in time since the last step.
-		void Update(float dt);
+		void Update(float dt) override;
+
+		// Removes any objects that will be recreated in Initialize.
+		void Shutdown() override;
+
+		// Sets the current player pointer.
+		void SetPlayer(GameObject* player);
 
 		~HUD();
 
 	private:
 		//------------------------------------------------------------------------------
+		// Private Functions:
+		//------------------------------------------------------------------------------
+
+		// Sets the location for each HUD object
+		void SetHUDObjectLocations();
+
+		//------------------------------------------------------------------------------
 		// Private Variables:
 		//------------------------------------------------------------------------------
 
 		GameObject* player;
+		GameObject* hud;
+		GameObject* playerIcon;
 
 		Vector2D translation;
 
