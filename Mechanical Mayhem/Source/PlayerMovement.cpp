@@ -138,6 +138,14 @@ namespace Behaviors
 			// If the monkey's collider is colliding on the bottom, mark the monkey as on ground.
 			if (mapCollisionEvent.collision.bottom)
 			{
+				// Play landing sound
+				if (airTime > 0.1f)
+				{
+					FMOD::Channel* landing = soundManager->PlaySound("Landing final.wav");
+					landing->setVolume(15.0f);
+					landing->setPitch(RandomRange(1.0f, 2.0f));
+				}
+
 				onGround = true;
 				animOnGround = 3.5f / 60.0f;
 			}
@@ -249,20 +257,6 @@ namespace Behaviors
 
 		// Set the velocity.
 		physics->SetVelocity(velocity);
-
-		// Handle audio
-		if (airTime < 0.1f && (input.CheckHeld(keyRight) || input.CheckHeld(keyLeft)))
-		{
-			static float stepTimer = 0.0f;
-			stepTimer += dt;
-			if (stepTimer > 0.25f)
-			{
-				stepTimer = 0.0f;
-				FMOD::Channel* step = soundManager->PlaySound("step.wav");
-				step->setVolume(25.0f);
-				step->setPitch(RandomRange(1.0f, 2.0f));
-			}
-		}
 	}
 
 	// Moves vertically based on input
@@ -329,7 +323,20 @@ namespace Behaviors
 				velocity.y = jumpSpeed.y;
 			}
 
-			soundManager->PlaySound("jump.wav")->setVolume(5.0f);
+			// Handle sliding sounds
+			if (isSliding)
+			{
+				FMOD::Channel* walloff = soundManager->PlaySound("walloff.wav");
+				walloff->setVolume(7.0f);
+				walloff->setPitch(RandomRange(1.0f, 2.0f));
+			}
+			else
+			{
+				FMOD::Channel* jump = soundManager->PlaySound("jump.wav");
+				jump->setVolume(7.0f);
+				jump->setPitch(RandomRange(1.0f, 2.0f));
+			}
+
 			hasJumped = true;
 		}
 		
@@ -353,19 +360,46 @@ namespace Behaviors
 		// Clamp velocity.
 		// Use different terminal velocity depending on whether the monkey is sliding.
 		if (isSliding)
+		{
 			velocity.y = max(-slidingTerminalVelocity, velocity.y);
+
+			// Sliding sound
+			if (slideSound == nullptr)
+			{
+				slideSound = soundManager->PlaySound("wallslide.wav");
+				slideSound->setVolume(10.0f);
+			}
+		}
 		else
+		{
 			velocity.y = max(-terminalVelocity, velocity.y);
+
+			// Stop sliding sound
+			slideSound->stop();
+			slideSound = nullptr;
+		}
 
 		// Set the velocity.
 		physics->SetVelocity(velocity);
+
+		// Handle step audio
+		if (airTime < 0.1f && (input.CheckHeld(keyRight) || input.CheckHeld(keyLeft)) && !isSliding)
+		{
+			static float stepTimer = 0.0f;
+			stepTimer += dt;
+			if (stepTimer > 0.25f)
+			{
+				stepTimer = 0.0f;
+				FMOD::Channel* step = soundManager->PlaySound("step.wav");
+				step->setVolume(25.0f);
+				step->setPitch(RandomRange(1.0f, 2.0f));
+			}
+		}
 
 		onGround = false;
 		onLeftWall = false;
 		onRightWall = false;
 	}
-
-
 
 	// Called when the animation component is finished accessing variables.
 	void PlayerMovement::AnimFinished(float dt)

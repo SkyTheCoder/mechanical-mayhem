@@ -110,7 +110,7 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 	soundManager->AddEffect("step.wav");
 	soundManager->AddEffect("wallattach.wav");
 	soundManager->AddEffect("walloff.wav");
-	soundManager->AddEffect("wallslide.wav");
+	soundManager->AddEffect("wallslide.wav", true);
 	soundManager->AddMusic("SoundAlarm.wav");
 	soundManager->AddMusic("SoundMenuM.wav");
 	soundManager->AddMusic("SoundPlay.wav");
