@@ -76,7 +76,7 @@ namespace Behaviors
 			healthText->GetComponent<SpriteText>()->SetText(std::to_string(healthC->GetHealth() * 100.0f / healthC->GetMaxHealth()));
 
 			// Displaying ends of healthBar
-			if (healthC->GetHealth() < healthC->GetMaxHealth())
+			if (healthC->GetHealth() < 1.0f)
 				healthBar[2]->GetComponent<Sprite>()->SetAlpha(0.0f);
 			else
 				healthBar[2]->GetComponent<Sprite>()->SetAlpha(1.0f);
@@ -91,8 +91,8 @@ namespace Behaviors
 			Transform* health = healthBar[1]->GetComponent<Transform>();
 
 			// Get and set new scale
-			float normaScale = health->GetScale().x / prevHealth * healthC->GetMaxHealth();
-			float newScale = health->GetScale().x / prevHealth * healthC->GetHealth();
+			float normaScale = health->GetScale().x / prevHealth;
+			float newScale = normScale * healthC->GetHealth();
 			health->SetScale(Vector2D(newScale, health->GetScale().y));
 
 
@@ -115,7 +115,7 @@ namespace Behaviors
 		if (prevMana != ability->GetMana())
 		{
 			// Displaying ends of abilityBar
-			if (ability->GetMana() < ability->GetMaxMana())
+			if (ability->GetMana() < 1.0f)
 				abilityBar[2]->GetComponent<Sprite>()->SetAlpha(0.0f);
 			else
 				abilityBar[2]->GetComponent<Sprite>()->SetAlpha(1.0f);
@@ -129,8 +129,8 @@ namespace Behaviors
 			Transform* mana = abilityBar[1]->GetComponent<Transform>();
 
 			// Get and set new scale
-			float normaScale = mana->GetScale().x / prevMana * ability->GetMaxHealth();
-			float newScale = mana->GetScale().x / prevMana * ability->GetMana();
+			float normaScale = mana->GetScale().x / prevMana;
+			float newScale = normScale * ability->GetMana();
 			mana->SetScale(Vector2D(newScale, mana->GetScale().y));
 
 			// Create center offset for player 2
