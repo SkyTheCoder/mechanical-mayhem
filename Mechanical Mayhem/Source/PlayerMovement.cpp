@@ -34,6 +34,9 @@
 #include "AbilityHolder.h"
 #include "AbilityPickup.h"
 
+// Misc
+#include <Random.h>
+
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
@@ -246,6 +249,20 @@ namespace Behaviors
 
 		// Set the velocity.
 		physics->SetVelocity(velocity);
+
+		// Handle audio
+		if (airTime < 0.1f && (input.CheckHeld(keyRight) || input.CheckHeld(keyLeft)))
+		{
+			static float stepTimer = 0.0f;
+			stepTimer += dt;
+			if (stepTimer > 0.25f)
+			{
+				stepTimer = 0.0f;
+				FMOD::Channel* step = soundManager->PlaySound("step.wav");
+				step->setVolume(25.0f);
+				step->setPitch(RandomRange(1.0f, 2.0f));
+			}
+		}
 	}
 
 	// Moves vertically based on input
@@ -312,7 +329,7 @@ namespace Behaviors
 				velocity.y = jumpSpeed.y;
 			}
 
-			soundManager->PlaySound("jump.wav");
+			soundManager->PlaySound("jump.wav")->setVolume(5.0f);
 			hasJumped = true;
 		}
 		

@@ -101,7 +101,7 @@ void ColliderRectangle::SetExtents(const Vector2D& extents_)
 bool ColliderRectangle::IsCollidingWith(const Collider& other) const
 {
 	// The translation of the other collider.
-	Vector2D otherTranslation = static_cast<Transform*>(other.GetOwner()->GetComponent("Transform"))->GetTranslation();
+	Vector2D otherTranslation = other.transform->GetTranslation();
 
 	// The BoundingRectangle for this collider.
 	BoundingRectangle rectangle = BoundingRectangle(transform->GetTranslation(), extents);

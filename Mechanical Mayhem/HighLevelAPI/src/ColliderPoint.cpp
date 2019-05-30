@@ -67,7 +67,7 @@ void ColliderPoint::Draw()
 bool ColliderPoint::IsCollidingWith(const Collider& other) const
 {
 	// The translation of the other collider.
-	Vector2D otherTranslation = static_cast<Transform*>(other.GetOwner()->GetComponent("Transform"))->GetTranslation();
+	Vector2D otherTranslation = other.transform->GetTranslation();
 
 	switch (other.GetType())
 	{

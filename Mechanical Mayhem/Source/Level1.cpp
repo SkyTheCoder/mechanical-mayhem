@@ -199,13 +199,12 @@ namespace Levels
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
 
 		// Stop menu music and play in-game music
-		SoundManager* soundManager = Engine::GetInstance().GetModule<SoundManager>();
+		soundManager = Engine::GetInstance().GetModule<SoundManager>();
 		soundManager->GetMusicChannel()->stop();
 		// soundManager->PlaySound("");
 
-		// Play startup sounds
-		//soundManager->PlaySound("gamestart.wav");
-		soundManager->PlaySound("SoundFanf.wav");
+		// Play background music
+		soundManager->PlaySound("SoundPlay.wav");
 
 		// Load HUD Level
 		Space* hudSpace = GetAltSpace();
@@ -638,6 +637,14 @@ namespace Levels
 			GameObject* lastPlayer = objectManager.GetObjectByName("Player");
 			Behaviors::PlayerMovement* lastPlayerMovement = static_cast<Behaviors::PlayerMovement*>(lastPlayer->GetComponent("PlayerMovement"));
 
+			// Play win sound once
+			static bool playWinSound = true;
+			if (playWinSound)
+			{
+				playWinSound = false;
+				soundManager->PlaySound("SoundFanf.wav")->setVolume(5.0f);
+			}
+
 			// Set text to winText
 			SpriteTextMono* spriteText = winText->GetComponent<SpriteTextMono>();
 			switch (lastPlayerMovement->GetPlayerID())
@@ -696,8 +703,9 @@ namespace Levels
 		delete dataRedMap;
 		delete dataBlueMap;
 
-		// Play main menu music
-		Engine::GetInstance().GetModule<SoundManager>()->PlaySound("SoundMenuM.wav");
+		// Stop current music and play main menu music
+		soundManager->GetMusicChannel()->stop();
+		soundManager->PlaySound("SoundMenuM.wav");
 	}
 
 	//------------------------------------------------------------------------------

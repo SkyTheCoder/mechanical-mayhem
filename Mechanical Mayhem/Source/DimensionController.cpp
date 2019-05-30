@@ -18,8 +18,10 @@
 #include "DimensionController.h"
 
 // Systems
+#include <Engine.h>
 #include <GameObject.h>
 #include <Input.h>
+#include <SoundManager.h>
 #include <Space.h>
 #include <Interpolation.h>
 
@@ -29,6 +31,9 @@
 #include <Sprite.h>
 #include <ColliderTilemap.h>
 #include "Hazard.h"
+
+// Misc.
+#include <Random.h>
 
 //------------------------------------------------------------------------------
 
@@ -140,6 +145,16 @@ namespace Behaviors
 		{
 			static_cast<Hazard*>(spike->GetComponent("Hazard"))->SetCollidable(true);
 			static_cast<Sprite*>(spike->GetComponent("Sprite"))->SetAlpha(1.0f);
+		}
+
+		// Play sound
+		if (RandomRange(0, 1))
+		{
+			Engine::GetInstance().GetModule<SoundManager>()->PlaySound("SoundDimensionShiftA.wav");
+		}
+		else
+		{
+			Engine::GetInstance().GetModule<SoundManager>()->PlaySound("SoundDimensionShiftB.wav");
 		}
 	}
 

@@ -95,23 +95,25 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 	engine.AddModule(soundManager);
 	soundManager->AddEffect("ambience.wav");
 	soundManager->AddEffect("deathslapfinal.wav");
-	soundManager->AddEffect("flamethrower_loop.wav");
+	soundManager->AddEffect("flamethrower_loop.wav", true);
 	soundManager->AddEffect("flamethrower_start.wav");
 	soundManager->AddEffect("gamestart.wav");
 	soundManager->AddEffect("hoverselect.wav");
 	soundManager->AddEffect("jump.wav");
 	soundManager->AddEffect("Landing final.wav");
 	soundManager->AddEffect("menu Apress.wav");
-	soundManager->AddEffect("SoundAlarm.wav");
 	soundManager->AddEffect("SoundDimensionShiftA.wav");
 	soundManager->AddEffect("SoundDimensionShiftB.wav");
 	soundManager->AddEffect("SoundFanf.wav");
 	soundManager->AddEffect("SoundHorn.wav");
+	soundManager->AddEffect("SoundJetp.wav", true);
 	soundManager->AddEffect("step.wav");
 	soundManager->AddEffect("wallattach.wav");
 	soundManager->AddEffect("walloff.wav");
 	soundManager->AddEffect("wallslide.wav");
+	soundManager->AddMusic("SoundAlarm.wav");
 	soundManager->AddMusic("SoundMenuM.wav");
+	soundManager->AddMusic("SoundPlay.wav");
 
 	// Register components
 	GameObjectFactory& objectFactory = GameObjectFactory::GetInstance();

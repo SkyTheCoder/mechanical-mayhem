@@ -105,7 +105,7 @@ void ColliderCircle::SetRadius(float radius_)
 bool ColliderCircle::IsCollidingWith(const Collider& other) const
 {
 	// The translation of the other collider.
-	Vector2D otherTranslation = static_cast<Transform*>(other.GetOwner()->GetComponent("Transform"))->GetTranslation();
+	Vector2D otherTranslation = other.transform->GetTranslation();
 
 	// The Circle for this collider.
 	Circle circle = Circle(transform->GetTranslation(), radius);

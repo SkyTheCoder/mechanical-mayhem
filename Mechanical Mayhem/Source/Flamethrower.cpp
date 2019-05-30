@@ -18,10 +18,12 @@
 #include "Flamethrower.h"
 
 // Systems
+#include <Engine.h>
 #include <GameObject.h>
 #include <Space.h>
 #include <GameObjectManager.h>
 #include <Parser.h>
+#include <SoundManager.h>
 #include <Input.h>
 
 // Components
@@ -57,6 +59,7 @@ namespace Abilities
 		physics = GetOwner()->GetComponent<Physics>();
 		collider = GetOwner()->GetComponent<Collider>();
 		playerController = GetOwner()->GetComponent<Behaviors::PlayerMovement>();
+		soundManager = Engine::GetInstance().GetModule<SoundManager>();
 		flameArchetype = GetOwner()->GetSpace()->GetObjectManager().GetArchetypeByName(flameArchetypeName);
 		flameEffect = new GameObject(*GetOwner()->GetSpace()->GetObjectManager().GetArchetypeByName(flameEffectName));
 		GetOwner()->GetSpace()->GetObjectManager().AddObject(*flameEffect);
@@ -85,6 +88,8 @@ namespace Abilities
 		}
 
 		cooldownTimer -= dt;
+
+		HandleAudio();
 	}
 
 	// Updates components using a fixed timestep (usually just for physics).
@@ -113,6 +118,9 @@ namespace Abilities
 	void Flamethrower::Shutdown()
 	{
 		flameEffect->Destroy();
+
+		// Stop flamethrower sound
+		flamethrowerSound->stop();
 	}
 
 	// Callback for when the player attempts to use this ability.
@@ -177,6 +185,35 @@ namespace Abilities
 		parser.ReadVariable("maxFuel", maxFuel);
 		parser.ReadVariable("fuelRefillRate", fuelRefillRate);
 		parser.ReadVariable("fuelConsumptionRate", fuelConsumptionRate);
+	}
+
+	// Deals with audio for flamethrower
+	void Flamethrower::HandleAudio()
+	{
+		bool pressing = Input::GetInstance().CheckHeld(playerController->GetUseKeybind());
+
+		if (pressing && currentFuel > 0.0f)
+		{
+			if (flamethrowerSound == nullptr)
+			{
+				// TODO:
+				// Play flamethrower start first, then loop
+
+				//flamethrowerSound = soundManager->PlaySound("flamethrower_start.wav");
+
+				//if (flamethrowerSound is playing anything atm)
+				{
+					flamethrowerSound = soundManager->PlaySound("flamethrower_loop.wav");
+				}
+
+				flamethrowerSound->setVolume(2.0f);
+			}
+		}
+		else
+		{
+			flamethrowerSound->stop();
+			flamethrowerSound = nullptr;
+		}
 	}
 }
 

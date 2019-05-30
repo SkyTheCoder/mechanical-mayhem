@@ -98,12 +98,12 @@ bool ColliderTilemap::IsCollidingWith(const Collider& other) const
 	GameObjectManager& objectManager = GetOwner()->GetSpace()->GetObjectManager();
 
 	// The physics of the other object.
-	Physics* otherPhysics = static_cast<Physics*>(other.GetOwner()->GetComponent("Physics"));
+	Physics* otherPhysics = other.physics;
 
 	bool shouldResolve = otherPhysics != nullptr;
 
 	// The transform of the other object.
-	Transform* otherTransform = static_cast<Transform*>(other.GetOwner()->GetComponent("Transform"));
+	Transform* otherTransform = other.transform;
 
 	// The translation of the other collider.
 	Vector2D otherTranslation = otherTransform->GetTranslation();

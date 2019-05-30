@@ -26,10 +26,16 @@
 class Transform;
 class Physics;
 class Collider;
+class SoundManager;
 
 namespace Behaviors
 {
 	class PlayerMovement;
+}
+
+namespace FMOD
+{
+	class Channel;
 }
 
 //------------------------------------------------------------------------------
@@ -85,7 +91,14 @@ namespace Abilities
 
 	protected:
 		//------------------------------------------------------------------------------
-		// Protected Variables:
+		// Private Functions:
+		//------------------------------------------------------------------------------
+
+		// Deals with audio for flamethrower
+		void HandleAudio();
+
+		//------------------------------------------------------------------------------
+		// Private Variables:
 		//------------------------------------------------------------------------------
 
 		// Components
@@ -99,6 +112,10 @@ namespace Abilities
 
 		std::string flameEffectName;
 		GameObject* flameEffect;
+
+		// Sounds
+		SoundManager* soundManager;
+		FMOD::Channel* flamethrowerSound;
 
 		// Cooldown between shooting flames.
 		float speed;

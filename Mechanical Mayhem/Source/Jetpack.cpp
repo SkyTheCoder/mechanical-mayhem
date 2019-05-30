@@ -52,6 +52,7 @@ namespace Abilities
 		// Get components
 		playerMovement = GetOwner()->GetComponent<Behaviors::PlayerMovement>();
 		physics = GetOwner()->GetComponent<Physics>();
+		soundManager = Engine::GetInstance().GetModule<SoundManager>();
 
 		// Fill fuel tank
 		currentFuel = maxFuel;
@@ -84,6 +85,26 @@ namespace Abilities
 		{
 			// Add force if active
 			physics->AddForce(Vector2D(0.0f, jetpackForce));
+
+			if (jetpackSound == nullptr)
+			{
+				jetpackSound = soundManager->PlaySound("SoundJetp.wav");
+				jetpackSound->setVolume(15.0f);
+			}
+		}
+		else if (jetpackSound != nullptr)
+		{
+			// Fade volume down then stop
+			//float volume;
+			//jetpackSound->getVolume(&volume);
+			//jetpackSound->setVolume(volume / 2.0f);
+			//
+			//if (volume <= 0.125f)
+			{
+				jetpackSound->stop();
+			}
+
+			jetpackSound = nullptr;
 		}
 	}
 
@@ -132,6 +153,13 @@ namespace Abilities
 		parser.ReadVariable("maxFuel", maxFuel);
 		parser.ReadVariable("fuelRefillRate", fuelRefillRate);
 		parser.ReadVariable("fuelConsumptionRate", fuelConsumptionRate);
+	}
+
+	// Shutdown function for jetpack
+	void Jetpack::Shutdown()
+	{
+		// Stop jetpack sound
+		jetpackSound->stop();
 	}
 
 	//------------------------------------------------------------------------------
