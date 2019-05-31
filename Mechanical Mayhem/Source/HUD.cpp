@@ -71,8 +71,8 @@ namespace Behaviors
 		// Health bar
 		healthBarCenter = ojectFactory.CreateObject("HealthBar", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBar.png"));
 		healthBarEnd = ojectFactory.CreateObject("HealthBarEnd", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBarEnd.png"));
-		healthBarCenter->GetComponent<Sprite>()->SetColor(Color(1.0f, 0.2f, 0.2f));
-		healthBarEnd->GetComponent<Sprite>()->SetColor(Color(1.0f, 0.2f, 0.2f));
+		healthBarCenter->GetComponent<Sprite>()->SetColor(Color(97.0f / 255.0f, 184.0f / 255.0f, 92.0f / 255.0f));
+		healthBarEnd->GetComponent<Sprite>()->SetColor(Color(97.0f / 255.0f, 184.0f / 255.0f, 92.0f / 255.0f));
 
 		// Ability bar
 		abilityBarCenter = ojectFactory.CreateObject("AbilityBar", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBar.png"));
@@ -118,16 +118,22 @@ namespace Behaviors
 				switch (abilityHolder->GetAbilityType())
 				{
 				case Abilities::ABILITY_JETPACK:
-					abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(0.2f, 0.6f, 1.0f));
-					abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(0.2f, 0.6f, 1.0f));
+					abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(214.0f / 255.0f, 91.0f / 255.0f, 91.0f / 255.0f));
+					abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(214.0f / 255.0f, 91.0f / 255.0f, 91.0f / 255.0f));
+					//abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(0.2f, 0.6f, 1.0f));
+					//abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(0.2f, 0.6f, 1.0f));
 					break;
 				case Abilities::ABILITY_FLAMETHROWER:
-					abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(1.0f, 0.6f, 0.2f));
-					abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(1.0f, 0.6f, 0.2f));
+					abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(232.0f / 255.0f, 196.0f / 255.0f, 53.0f / 255.0f));
+					abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(232.0f / 255.0f, 196.0f / 255.0f, 53.0f / 255.0f));
+					//abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(1.0f, 0.6f, 0.2f));
+					//abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(1.0f, 0.6f, 0.2f));
 					break;
 				case Abilities::ABILITY_PROXIMITYMINE:
-					abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(1.0f, 1.0f, 0.2f));
-					abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(1.0f, 1.0f, 0.2f));
+					abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(63.0f / 255.0f, 140.0f / 255.0f, 227.0f / 255.0f));
+					abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(63.0f / 255.0f, 140.0f / 255.0f, 227.0f / 255.0f));
+					//abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(1.0f, 1.0f, 0.2f));
+					//abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(1.0f, 1.0f, 0.2f));
 					break;
 				}
 			}
