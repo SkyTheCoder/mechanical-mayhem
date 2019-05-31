@@ -47,8 +47,8 @@ namespace Behaviors
 		: BetaObject("HUD"),
 		playerID(0), health(nullptr), abilityHolder(nullptr), hudBackground(nullptr),
 		camera(camera),
-		healthBarCenter(nullptr), healthBarEnd(nullptr), animHealth(0.0f),
-		abilityBarCenter(nullptr), abilityBarEnd(nullptr), animAbility(0.0f)
+		healthBarCenter(nullptr), healthBarEnd(nullptr), healthBarBackgroundCenter(nullptr), healthBarBackgroundEnd(nullptr), animHealth(0.0f),
+		abilityBarCenter(nullptr), abilityBarEnd(nullptr), abilityBarBackgroundCenter(nullptr), abilityBarBackgroundEnd(nullptr), animAbility(0.0f)
 	{
 		SetPlayer(player);
 	}
@@ -71,24 +71,40 @@ namespace Behaviors
 		// Health bar
 		healthBarCenter = ojectFactory.CreateObject("HealthBar", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBar.png"));
 		healthBarEnd = ojectFactory.CreateObject("HealthBarEnd", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBarEnd.png"));
-		healthBarCenter->GetComponent<Sprite>()->SetColor(Color(97.0f / 255.0f, 184.0f / 255.0f, 92.0f / 255.0f));
-		healthBarEnd->GetComponent<Sprite>()->SetColor(Color(97.0f / 255.0f, 184.0f / 255.0f, 92.0f / 255.0f));
 
 		// Ability bar
 		abilityBarCenter = ojectFactory.CreateObject("AbilityBar", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBar.png"));
 		abilityBarEnd = ojectFactory.CreateObject("AbilityBarEnd", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBarEnd.png"));
 
-		// Set the Locations of the objects
-		SetHUDObjectLocations();
-
 		// Add HUD Objects
 		GameObjectManager& objectManager = static_cast<Level*>(GetOwner())->GetSpace()->GetObjectManager();
 
+		healthBarBackgroundCenter = new GameObject(*healthBarCenter);
+		healthBarBackgroundEnd = new GameObject(*healthBarEnd);
+
+		abilityBarBackgroundCenter = new GameObject(*abilityBarCenter);
+		abilityBarBackgroundEnd = new GameObject(*abilityBarEnd);
+
+		objectManager.AddObject(*healthBarBackgroundCenter);
+		objectManager.AddObject(*healthBarBackgroundEnd);
+		objectManager.AddObject(*abilityBarBackgroundCenter);
+		objectManager.AddObject(*abilityBarBackgroundEnd);
 		objectManager.AddObject(*healthBarCenter);
 		objectManager.AddObject(*healthBarEnd);
 		objectManager.AddObject(*abilityBarCenter);
 		objectManager.AddObject(*abilityBarEnd);
 		objectManager.AddObject(*hudBackground);
+
+		healthBarBackgroundCenter->GetComponent<Sprite>()->SetColor(Color(0.5f, 0.5f, 0.5f));
+		healthBarBackgroundEnd->GetComponent<Sprite>()->SetColor(Color(0.5f, 0.5f, 0.5f));
+		abilityBarBackgroundCenter->GetComponent<Sprite>()->SetColor(Color(0.5f, 0.5f, 0.5f));
+		abilityBarBackgroundEnd->GetComponent<Sprite>()->SetColor(Color(0.5f, 0.5f, 0.5f));
+
+		healthBarCenter->GetComponent<Sprite>()->SetColor(Color(255.0f / 255.0f, 0.0f / 255.0f, 14.0f / 255.0f));
+		healthBarEnd->GetComponent<Sprite>()->SetColor(Color(255.0f / 255.0f, 0.0f / 255.0f, 14.0f / 255.0f));
+
+		// Set the Locations of the objects
+		SetHUDObjectLocations();
 	}
 
 	// Update function for this component.
@@ -118,22 +134,20 @@ namespace Behaviors
 				switch (abilityHolder->GetAbilityType())
 				{
 				case Abilities::ABILITY_JETPACK:
-					abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(232.0f / 255.0f, 196.0f / 255.0f, 20.0f / 255.0f));
-					abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(232.0f / 255.0f, 196.0f / 255.0f, 53.0f / 255.0f));
+					abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(255.0f / 255.0f, 240.0f / 255.0f, 87.0f / 255.0f));
+					abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(255.0f / 255.0f, 240.0f / 255.0f, 87.0f / 255.0f));
 					//abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(0.2f, 0.6f, 1.0f));
 					//abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(0.2f, 0.6f, 1.0f));
 					break;
 				case Abilities::ABILITY_FLAMETHROWER:
-					abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(214.0f / 255.0f, 91.0f / 255.0f, 91.0f / 255.0f));
-					abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(214.0f / 255.0f, 91.0f / 255.0f, 91.0f / 255.0f));
-					//abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(1.0f, 0.6f, 0.2f));
-					//abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(1.0f, 0.6f, 0.2f));
+					abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(1.0f, 0.5f, 0.1f));
+					abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(1.0f, 0.5f, 0.1f));
 					break;
 				case Abilities::ABILITY_PROXIMITYMINE:
-					abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(63.0f / 255.0f, 140.0f / 255.0f, 227.0f / 255.0f));
-					abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(63.0f / 255.0f, 140.0f / 255.0f, 227.0f / 255.0f));
-					//abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(1.0f, 1.0f, 0.2f));
-					//abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(1.0f, 1.0f, 0.2f));
+					//abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(83.0f / 255.0f, 0.0f / 255.0f, 203.0f / 255.0f));
+					//abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(83.0f / 255.0f, 0.0f / 255.0f, 203.0f / 255.0f));
+					abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(1.0f, 1.0f, 0.2f));
+					abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(1.0f, 1.0f, 0.2f));
 					break;
 				}
 			}
@@ -143,87 +157,6 @@ namespace Behaviors
 		animAbility = Interpolate(animAbility, targetAbility, pow(0.35f, dt * 60.0f));
 
 		SetHUDObjectLocations();
-
-#if 0
-		// Get player's health component
-		Health* healthC = player->GetComponent<Health>();
-
-		// Check if their health has changed
-		if (animHealth != healthC->GetHealth())
-		{
-			// Update health text
-			healthText->GetComponent<SpriteTextMono>()->SetText(std::to_string(healthC->GetHealth() * 100.0f / healthC->GetMaxHealth()));
-
-			// Displaying ends of healthBar
-			if (healthC->GetHealth() < 1.0f)
-				healthBar[2]->GetComponent<Sprite>()->SetAlpha(0.0f);
-			else
-				healthBar[2]->GetComponent<Sprite>()->SetAlpha(1.0f);
-			
-			if (AlmostEqual(static_cast<float>(healthC->GetHealth()), 0.0f))
-				healthBar[0]->GetComponent<Sprite>()->SetAlpha(0.0f);
-			else
-				healthBar[0]->GetComponent<Sprite>()->SetAlpha(1.0f);
-
-
-			// Get healthBar's transform
-			Transform* health = healthBar[1]->GetComponent<Transform>();
-
-			// Get and set new scale
-			float normScale = health->GetScale().x / animHealth;
-			float newScale = normScale * healthC->GetHealth();
-			health->SetScale(Vector2D(newScale, health->GetScale().y));
-
-
-			// Create center offset for player 2
-			Vector2D offset = Vector2D((healthC->GetHealth() - animHealth) * normScale, 0.0f);
-			// if player1 negate offset
-			if (playerID == 1)
-				offset = Vector2D(-offset.x, 0.0f);
-			// Set new healthBars translation
-			health->SetTranslation(health->GetTranslation() + offset);
-
-			// Set prevHealth to the current health
-			animHealth = static_cast<float>(healthC->GetHealth());
-		}
-
-		// Get players's ability component
-		Abilities::Ability* ability = player->GetComponent<Behaviors::AbilityHolder>()->GetAbility();
-
-		// Check if their mana has changed
-		if (animAbility != ability->GetMana())
-		{
-			// Displaying ends of abilityBar
-			if (ability->GetMana() < 1.0f)
-				abilityBar[2]->GetComponent<Sprite>()->SetAlpha(0.0f);
-			else
-				abilityBar[2]->GetComponent<Sprite>()->SetAlpha(1.0f);
-
-			if (AlmostEqual(ability->GetMana(), 0.0f))
-				abilityBar[0]->GetComponent<Sprite>()->SetAlpha(0.0f);
-			else
-				abilityBar[0]->GetComponent<Sprite>()->SetAlpha(1.0f);
-
-			// Get ability's transform
-			Transform* mana = abilityBar[1]->GetComponent<Transform>();
-
-			// Get and set new scale
-			float normScale = mana->GetScale().x / animAbility;
-			float newScale = normScale * ability->GetMana();
-			mana->SetScale(Vector2D(newScale, mana->GetScale().y));
-
-			// Create center offset for player 2
-			Vector2D offset = Vector2D((ability->GetMana() - animAbility) * normScale, 0.0f);
-			// if player1 negate offset
-			if (playerID == 1)
-				offset = Vector2D(-offset.x, 0.0f);
-			// Set new healthBars translation
-			mana->SetTranslation(mana->GetTranslation() + offset);
-
-			// Set prevMana to the current mana
-			animAbility = ability->GetMana();
-		}
-#endif
 	}
 
 	// Removes any objects that will be recreated in Initialize.
@@ -266,27 +199,34 @@ namespace Behaviors
 		hudBackground->GetComponent<Transform>()->SetTranslation(Vector2D(flipx * x, y));
 
 		float healthBarLeft = flipx * x + flipx * 0.465f - flipx * 2.125f;
-		float healthBarWidth = flipx * 4.25f * animHealth;
+		float healthBarWidth = flipx * 4.25f;
 
-		//healthBarCenter->GetComponent<Transform>()->SetScale(Vector2D(flipx * 4.25f, 0.31f));
-		//healthBarCenter->GetComponent<Transform>()->SetTranslation(Vector2D(flipx * x + flipx * 0.49f, y + 0.12f));
-		//healthBarEnd->GetComponent<Transform>()->SetScale(Vector2D(flipx * 0.31f, 0.31f));
-		//healthBarEnd->GetComponent<Transform>()->SetTranslation(Vector2D(flipx * x + flipx * 2.74f, y + 0.12f));
+		healthBarBackgroundCenter->GetComponent<Transform>()->SetScale(Vector2D(healthBarWidth, 0.32f));
+		healthBarBackgroundCenter->GetComponent<Transform>()->SetTranslation(Vector2D(healthBarLeft + healthBarWidth / 2.0f, y + 0.12f));
+		healthBarBackgroundEnd->GetComponent<Transform>()->SetScale(Vector2D(flipx * 0.31f, 0.32f));
+		healthBarBackgroundEnd->GetComponent<Transform>()->SetTranslation(Vector2D(healthBarLeft + healthBarWidth + flipx * 0.155f, y + 0.12f));
+
+		healthBarWidth *= animHealth;
+
 		healthBarCenter->GetComponent<Transform>()->SetScale(Vector2D(healthBarWidth, 0.32f));
 		healthBarCenter->GetComponent<Transform>()->SetTranslation(Vector2D(healthBarLeft + healthBarWidth / 2.0f, y + 0.12f));
 		healthBarEnd->GetComponent<Transform>()->SetScale(Vector2D(flipx * 0.31f, 0.32f));
 		healthBarEnd->GetComponent<Transform>()->SetTranslation(Vector2D(healthBarLeft + healthBarWidth + flipx * 0.155f, y + 0.12f));
 
 		float abilityBarLeft = flipx * x + flipx * 0.465f - flipx * 2.125f;
-		float abilityBarWidth = flipx * 3.75f * animAbility;
+		float abilityBarWidth = flipx * 3.75f;
+
+		abilityBarBackgroundCenter->GetComponent<Transform>()->SetScale(Vector2D(abilityBarWidth, 0.27f));
+		abilityBarBackgroundCenter->GetComponent<Transform>()->SetTranslation(Vector2D(abilityBarLeft + abilityBarWidth / 2.0f, y - 0.37f));
+		abilityBarBackgroundEnd->GetComponent<Transform>()->SetScale(Vector2D(flipx * 0.27f, 0.27f));
+		abilityBarBackgroundEnd->GetComponent<Transform>()->SetTranslation(Vector2D(abilityBarLeft + abilityBarWidth + flipx * 0.135f, y - 0.37f));
+
+		abilityBarWidth *= animAbility;
 
 		abilityBarCenter->GetComponent<Transform>()->SetScale(Vector2D(abilityBarWidth, 0.27f));
 		abilityBarCenter->GetComponent<Transform>()->SetTranslation(Vector2D(abilityBarLeft + abilityBarWidth / 2.0f, y - 0.37f));
 		abilityBarEnd->GetComponent<Transform>()->SetScale(Vector2D(flipx * 0.27f, 0.27f));
 		abilityBarEnd->GetComponent<Transform>()->SetTranslation(Vector2D(abilityBarLeft + abilityBarWidth + flipx * 0.135f, y - 0.37f));
-
-		//abilityBarCenter->GetComponent<Transform>()->SetTranslation(Vector2D(flipx * x, y));
-		//abilityBarEnd->GetComponent<Transform>()->SetTranslation(Vector2D(flipx * x, y));
 	}
 
 	// Gets the player pointer.

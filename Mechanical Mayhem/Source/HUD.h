@@ -90,11 +90,15 @@ namespace Behaviors
 		// Health variables
 		GameObject* healthBarCenter;
 		GameObject* healthBarEnd;
+		GameObject* healthBarBackgroundCenter;
+		GameObject* healthBarBackgroundEnd;
 		float animHealth;
 
 		// Ability variables
 		GameObject* abilityBarCenter;
 		GameObject* abilityBarEnd;
+		GameObject* abilityBarBackgroundCenter;
+		GameObject* abilityBarBackgroundEnd;
 		float animAbility;
 	};
 }
