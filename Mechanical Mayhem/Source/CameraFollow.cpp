@@ -225,6 +225,9 @@ namespace Behaviors
 	//   gameObject = The game object of the player.
 	CameraFollow::PlayerData::PlayerData(GUID id) : id(id), transform(nullptr), physics(nullptr), velocity(0.0f, 0.0f), smoothedVelocity(0.0f, 0.0f)
 	{
+		GameObject* object = static_cast<GameObject*>(BetaObject::GetObjectByID(id));
+		transform = object->GetComponent<Transform>();
+		physics = object->GetComponent<Physics>();
 	}
 
 	// Gets the player's game object.

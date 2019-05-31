@@ -1,11 +1,18 @@
 DeathAnimation
 {
-  numComponents : 5
+  numComponents : 6
   Transform
   {
     translation : { 0, 0 }
     rotation : 0
     scale : { 1.5, 1.5 }
+  }
+  Physics
+  {
+    acceleration : { 0, 0 }
+    velocity : { 0, 0 }
+    angularVelocity : 0
+    mass : 1.0
   }
   Sprite
   {

@@ -17,6 +17,8 @@
 #include "HUDLevel.h"
 
 // Systems
+#include <sstream>
+#include <iomanip>
 #include "Archetypes.h"
 #include "Space.h"
 #include <Input.h>
@@ -91,9 +93,12 @@ namespace Levels
 		GameObjectFactory& objectFactory = GameObjectFactory::GetInstance();
 
 		dimensionSwapCountdown = objectFactory.CreateObject("Text", resourceManager.GetMesh("FontAtlas"), resourceManager.GetSpriteSource("Code New Roman@2x.png"));
-		dimensionSwapCountdown->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, 4.0f));
+		dimensionSwapCountdown->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, 3.25f));
+		dimensionSwapCountdown->GetComponent<Transform>()->SetScale(Vector2D(1.0f, 1.0f));
 		objectManager.AddObject(*dimensionSwapCountdown);
 		victoryText = objectFactory.CreateObject("Text", resourceManager.GetMesh("FontAtlas"), resourceManager.GetSpriteSource("Code New Roman@2x.png"));
+		victoryText->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, -1.5f));
+		victoryText->GetComponent<Transform>()->SetScale(Vector2D(1.0f, 1.0f));
 		objectManager.AddObject(*victoryText);
 	}
 
@@ -114,12 +119,11 @@ namespace Levels
 		}
 
 		// End game if a player dies
-		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
 		GameObjectManager& altObjectManager = GetAltSpace()->GetObjectManager();
 		unsigned playerCount = altObjectManager.GetObjectCount("Player");
 		if (playerCount == 1)
 		{
-			GameObject* lastPlayer = objectManager.GetObjectByName("Player");
+			GameObject* lastPlayer = altObjectManager.GetObjectByName("Player");
 			Behaviors::PlayerMovement* lastPlayerMovement = static_cast<Behaviors::PlayerMovement*>(lastPlayer->GetComponent("PlayerMovement"));
 
 			// Set text to winText
@@ -135,9 +139,11 @@ namespace Levels
 			}
 		}
 
-		float switchCooldown = altObjectManager.GetObjectByName("GameController")->GetComponent<Behaviors::DimensionController>()->GetCooldown();
+		float switchCooldown = altObjectManager.GetObjectByName("GameController")->GetComponent<Behaviors::DimensionController>()->GetCoolDown();
 
-		dimensionSwapCountdown->GetComponent<SpriteTextMono>()->SetText(std::to_string(std::ceil(switchCooldown)));
+		std::stringstream cooldownText;
+		cooldownText << std::fixed << std::setprecision(1) << ceil(switchCooldown * 10.0f) / 10.0f;
+		dimensionSwapCountdown->GetComponent<SpriteTextMono>()->SetText(cooldownText.str());
 
 		HUD1->Update(dt);
 		HUD2->Update(dt);

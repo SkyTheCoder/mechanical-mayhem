@@ -74,6 +74,9 @@ namespace Behaviors
 		// Returns the number of dimensions.
 		unsigned GetDimensionCount() const;
 
+		// Return time left for dimension switch
+		float GetCoolDown() const;
+
 		// Adds a new dimension.
 		// Params:
 		//   tilemap = The game object with the tilemap for the dimension.

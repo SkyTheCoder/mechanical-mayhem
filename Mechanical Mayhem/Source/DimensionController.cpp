@@ -50,7 +50,7 @@ namespace Behaviors
 
 	// Constructor
 	DimensionController::DimensionController() : Component("DimensionController"), dimensions(std::vector<Dimension>()),
-		cooldown(5.0f), currentCooldown(10.0f), cdIndex(10), cdCount(-1), cdCounts{ 0 }, gameTimer(0.0), activeDimension(0)
+		cooldown(5.0f), currentCooldown(10.0f), cdIndex(9), cdCount(-1), cdCounts{ 0 }, gameTimer(0.0), activeDimension(0)
 	{
 		// Set the different cooldown times
 		cdCounts[0]  = 0.5f;
@@ -62,8 +62,8 @@ namespace Behaviors
 		cdCounts[6]  = 3.0f;
 		cdCounts[7]  = 3.5f;
 		cdCounts[8]  = 4.0f;
-		cdCounts[9]  = 4.5f;
-		cdCounts[10] = 5.0f;
+		cdCounts[9]  = 4.25f;
+		//cdCounts[10] = 5.0f;
 	}
 
 	// Clone a component and return a pointer to the cloned component.
@@ -77,7 +77,7 @@ namespace Behaviors
 	// Initialize this component (happens at object creation).
 	void DimensionController::Initialize()
 	{
-		currentCooldown = 10.0f;
+		currentCooldown = 5.0f;
 	}
 
 	// Fixed update function for this component.
@@ -168,6 +168,12 @@ namespace Behaviors
 	unsigned DimensionController::GetDimensionCount() const
 	{
 		return static_cast<unsigned>(dimensions.size());
+	}
+
+	// Return time left for dimension switch
+	float DimensionController::GetCoolDown() const
+	{
+		return currentCooldown;
 	}
 
 	// Adds a new dimension.

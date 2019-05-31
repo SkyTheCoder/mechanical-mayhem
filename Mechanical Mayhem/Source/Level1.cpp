@@ -605,11 +605,6 @@ namespace Levels
 			dimensionController.SetActiveDimension(redDimension);
 		}
 
-		// Create winText and add to objectManager
-		GameObject* winText = new GameObject(*objectManager.GetArchetypeByName("Text"));
-		winText->GetComponent<SpriteTextMono>()->SetColor(Colors::White);
-		objectManager.AddObject(*winText);
-
 		Graphics::GetInstance().PushEffect(*chromaticAberration);
 		Graphics::GetInstance().PushEffect(*cameraShake);
 	}
@@ -662,17 +657,12 @@ namespace Levels
 		}
 
 		chromaticAberration->SetIntensity(50.0f / pow(max(1.0f, lowestGearsDistance - 0.5f), 1.5f));
-		cameraShake->SetIntensity(1.0f / (max(1.0f, lowestGearsDistance) * 75.0f));
+		cameraShake->SetIntensity(pow(1.0f / (max(1.0f, lowestGearsDistance) * 50.0f), 1.2f));
 
 		// End game if a player dies
 		unsigned playerCount = objectManager.GetObjectCount("Player");
 		if (playerCount == 1)
 		{
-			GameObject* winText = GetSpace()->GetObjectManager().GetObjectByName("Text");
-
-			GameObject* lastPlayer = objectManager.GetObjectByName("Player");
-			Behaviors::PlayerMovement* lastPlayerMovement = static_cast<Behaviors::PlayerMovement*>(lastPlayer->GetComponent("PlayerMovement"));
-
 			// Play win sound once
 			if (playWinSound)
 			{
@@ -682,22 +672,6 @@ namespace Levels
 				soundManager->GetMusicChannel()->stop();
 				soundManager->PlaySound("SoundFanf.wav")->setVolume(5.0f);
 			}
-
-			// Set text to winText
-			SpriteTextMono* spriteText = winText->GetComponent<SpriteTextMono>();
-			switch (lastPlayerMovement->GetPlayerID())
-			{
-			case 1:
-				spriteText->SetText("Ninja Monkey won! Press <SPACE> to return to level select");
-				break;
-			case 2:
-				spriteText->SetText("Cat Fighter won! Press <SPACE> to return to level select");
-				break;
-			}
-
-			// Text follows camera
-			static_cast<Transform*>(winText->GetComponent("Transform"))
-				->SetTranslation(Graphics::GetInstance().GetDefaultCamera().GetTranslation());
 
 			// Restart on <SPACE>
 			if (input.CheckTriggered(' '))

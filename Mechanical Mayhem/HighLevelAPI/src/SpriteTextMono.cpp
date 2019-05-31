@@ -93,14 +93,15 @@ void SpriteTextMono::Draw()
 
 	offset.y -= scale.y * 0.0625f;
 
-	const BoundingRectangle screenWorldDimensions = Graphics::GetInstance().GetDefaultCamera().GetScreenWorldDimensions();
+	// MULTIPLE CAMERAS BAD
+	/*const BoundingRectangle screenWorldDimensions = Graphics::GetInstance().GetDefaultCamera().GetScreenWorldDimensions();
 
 	// If the text would be off the screen, don't draw anything.
 	if (screenWorldDimensions.bottom > translation.y + offset.y
 		|| screenWorldDimensions.top < translation.y + offset.y + height
 		|| screenWorldDimensions.left > translation.x + offset.x + width
 		|| screenWorldDimensions.right < translation.x + offset.x)
-		return;
+		return;*/
 
 	Graphics::GetInstance().SetSpriteBlendColor(color);
 
