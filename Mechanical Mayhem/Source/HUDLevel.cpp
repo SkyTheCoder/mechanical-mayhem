@@ -27,12 +27,15 @@
 #include <Texture.h>
 #include <SpriteSource.h>
 #include "GameObject.h"
+#include <GameObjectFactory.h>
 
 // Components
 #include "SpriteText.h"
 #include <Transform.h>
 #include "Sprite.h"
 #include "PlayerMovement.h"
+#include <SpriteTextMono.h>
+#include "DimensionController.h"
 
 #include "HUD.h"
 
@@ -44,6 +47,7 @@ namespace Levels
 {
 	// Creates an instance of HUDLevel.
 	HUDLevel::HUDLevel() : Level("HUDLevel"), player1(nullptr), player2(nullptr),
+		dimensionSwapCountdown(nullptr), victoryText(nullptr),
 		meshBackground(nullptr), textureBackground(nullptr), spriteSourceBackground(nullptr),
 		HUD1(nullptr), HUD2(nullptr)
 	{
@@ -77,6 +81,20 @@ namespace Levels
 		HUD2 = new Behaviors::HUD(player2, HUDCamera);
 		HUD2->SetOwner(this);
 		HUD2->Initialize();
+
+		ResourceManager& resourceManager = GetSpace()->GetResourceManager();
+
+		resourceManager.GetMesh("FontAtlas", 12, 8);
+		resourceManager.GetSpriteSource("Code New Roman@2x.png", 12, 8);
+
+		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
+		GameObjectFactory& objectFactory = GameObjectFactory::GetInstance();
+
+		dimensionSwapCountdown = objectFactory.CreateObject("Text", resourceManager.GetMesh("FontAtlas"), resourceManager.GetSpriteSource("Code New Roman@2x.png"));
+		dimensionSwapCountdown->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, 4.0f));
+		objectManager.AddObject(*dimensionSwapCountdown);
+		victoryText = objectFactory.CreateObject("Text", resourceManager.GetMesh("FontAtlas"), resourceManager.GetSpriteSource("Code New Roman@2x.png"));
+		objectManager.AddObject(*victoryText);
 	}
 
 	// Update Level 1.
@@ -94,6 +112,32 @@ namespace Levels
 			HUD1->SetPlayer(player1);
 			HUD2->SetPlayer(player2);
 		}
+
+		// End game if a player dies
+		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
+		GameObjectManager& altObjectManager = GetAltSpace()->GetObjectManager();
+		unsigned playerCount = altObjectManager.GetObjectCount("Player");
+		if (playerCount == 1)
+		{
+			GameObject* lastPlayer = objectManager.GetObjectByName("Player");
+			Behaviors::PlayerMovement* lastPlayerMovement = static_cast<Behaviors::PlayerMovement*>(lastPlayer->GetComponent("PlayerMovement"));
+
+			// Set text to winText
+			SpriteTextMono* spriteText = victoryText->GetComponent<SpriteTextMono>();
+			switch (lastPlayerMovement->GetPlayerID())
+			{
+			case 1:
+				spriteText->SetText("Jerry won! Press <SPACE> to return to level select");
+				break;
+			case 2:
+				spriteText->SetText("Chad won! Press <SPACE> to return to level select");
+				break;
+			}
+		}
+
+		float switchCooldown = altObjectManager.GetObjectByName("GameController")->GetComponent<Behaviors::DimensionController>()->GetCooldown();
+
+		dimensionSwapCountdown->GetComponent<SpriteTextMono>()->SetText(std::to_string(std::ceil(switchCooldown)));
 
 		HUD1->Update(dt);
 		HUD2->Update(dt);

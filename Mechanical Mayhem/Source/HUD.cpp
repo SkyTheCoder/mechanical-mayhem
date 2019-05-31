@@ -118,14 +118,14 @@ namespace Behaviors
 				switch (abilityHolder->GetAbilityType())
 				{
 				case Abilities::ABILITY_JETPACK:
-					abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(214.0f / 255.0f, 91.0f / 255.0f, 91.0f / 255.0f));
-					abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(214.0f / 255.0f, 91.0f / 255.0f, 91.0f / 255.0f));
+					abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(232.0f / 255.0f, 196.0f / 255.0f, 20.0f / 255.0f));
+					abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(232.0f / 255.0f, 196.0f / 255.0f, 53.0f / 255.0f));
 					//abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(0.2f, 0.6f, 1.0f));
 					//abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(0.2f, 0.6f, 1.0f));
 					break;
 				case Abilities::ABILITY_FLAMETHROWER:
-					abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(232.0f / 255.0f, 196.0f / 255.0f, 53.0f / 255.0f));
-					abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(232.0f / 255.0f, 196.0f / 255.0f, 53.0f / 255.0f));
+					abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(214.0f / 255.0f, 91.0f / 255.0f, 91.0f / 255.0f));
+					abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(214.0f / 255.0f, 91.0f / 255.0f, 91.0f / 255.0f));
 					//abilityBarCenter->GetComponent<Sprite>()->SetColor(Color(1.0f, 0.6f, 0.2f));
 					//abilityBarEnd->GetComponent<Sprite>()->SetColor(Color(1.0f, 0.6f, 0.2f));
 					break;
