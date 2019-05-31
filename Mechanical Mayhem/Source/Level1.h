@@ -37,6 +37,11 @@ namespace Effects
 	class CameraShake;
 }
 
+namespace FMOD
+{
+	class Channel;
+}
+
 //------------------------------------------------------------------------------
 // Public Structures:
 //------------------------------------------------------------------------------
@@ -129,6 +134,7 @@ namespace Levels
 
 		// Components
 		SoundManager* soundManager;
+		FMOD::Channel* gearSound;
 		bool playWinSound;
 
 		Map map;
