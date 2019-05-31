@@ -150,6 +150,7 @@ namespace Behaviors
 		anims[Abilities::ABILITY_PROXIMITYMINE] = resourceManager.GetSpriteSource("AniMine" + variant + ".png");
 		jetpackJump = resourceManager.GetSpriteSource("AniJetpackJumpFire" + variant + ".png");
 		jetpackFall = resourceManager.GetSpriteSource("AniJetpackFallFire" + variant + ".png");
+		deathAnimation = resourceManager.GetSpriteSource("AniDeath" + variant + ".png");
 	}
 
 	// Gets the appropriate jetpack flame sprite based on the current state.
@@ -159,6 +160,12 @@ namespace Behaviors
 			return jetpackFall;
 
 		return jetpackJump;
+	}
+
+	// Gets the appropriate death animation.
+	SpriteSource* MonkeyAnimation::GetDeathAnimation() const
+	{
+		return deathAnimation;
 	}
 
 	//------------------------------------------------------------------------------

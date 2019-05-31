@@ -86,5 +86,9 @@ namespace Behaviors
 
 		// Whether the object should be destroyed when it dies
 		bool destroyOnDeath;
+
+		// Whether the object plays a death animation when it dies
+		bool hasDeathAnimation;
+		std::string deathAnimationName;
 	};
 }

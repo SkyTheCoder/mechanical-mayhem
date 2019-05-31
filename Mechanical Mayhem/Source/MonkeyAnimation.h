@@ -93,6 +93,9 @@ namespace Behaviors
 		// Gets the appropriate jetpack flame sprite based on the current state.
 		SpriteSource* GetCurrentJetpackSprite() const;
 
+		// Gets the appropriate death animation.
+		SpriteSource* GetDeathAnimation() const;
+
 	private:
 		//------------------------------------------------------------------------------
 		// Private Functions:
@@ -144,6 +147,8 @@ namespace Behaviors
 		SpriteSource* anims[Abilities::ABILITY_MAX];
 		SpriteSource* jetpackJump;
 		SpriteSource* jetpackFall;
+
+		SpriteSource* deathAnimation;
 
 		// Components
 		Animation* animation;

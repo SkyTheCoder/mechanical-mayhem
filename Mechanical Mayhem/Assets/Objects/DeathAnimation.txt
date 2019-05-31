@@ -1,0 +1,29 @@
+DeathAnimation
+{
+  numComponents : 5
+  Transform
+  {
+    translation : { 0, 0 }
+    rotation : 0
+    scale : { 1.5, 1.5 }
+  }
+  Sprite
+  {
+    frameIndex : 0
+    color : { 1, 1, 1, 1 }
+  }
+  Behaviors::TimedDeath
+  {
+    timeUntilDeath : 0.84
+  }
+  Animation
+  {
+  }
+  Behaviors::SimpleAnimator
+  {
+    animationStart : 0
+    animationLength : 12
+    animationSpeed : 0.07
+    looping : 0
+  }
+}

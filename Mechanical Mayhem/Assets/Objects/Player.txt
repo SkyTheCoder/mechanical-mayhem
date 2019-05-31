@@ -41,5 +41,7 @@ Player
   {
     maxHealth : 100
     destroyOnDeath : 1
+	hasDeathAnimation : 1
+	deathAnimationName : DeathAnimation
   }
 }
