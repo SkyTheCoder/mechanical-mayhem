@@ -78,6 +78,9 @@ namespace Levels
 		Behaviors::HUD* HUD1, * HUD2;
 		GameObject* player1, * player2;
 
+		GameObject* dimensionSwapCountdown;
+		GameObject* victoryText;
+
 		Mesh* meshBackground;
 		Texture * textureBackground;
 		SpriteSource* spriteSourceBackground;

@@ -458,20 +458,38 @@ namespace Levels
 			}
 			case Map::Descent:
 			{
-				float staticSpikes[44] = {
-					1.0f, 47.0f, 2.0f, 47.0f, 3.0f, 47.0f, 4.0f, 47.0f, 5.0f, 47.0f, 6.0f, 47.0f, 7.0f, 47.0f, 8.0f, 47.0f, 9.0f, 47.0f, 10.0f, 47.0f, 11.0f, 47.0f, 12.0f, 47.0f, 13.0f, 47.0f, 14.0f, 47.0f, 15.0f, 47.0f, 16.0f, 47.0f,
-					17.0f, 47.0f, 18.0f, 47.0f, 19.0f, 47.0f, 20.0f, 47.0f, 21.0f, 47.0f, 22.0f, 47.0f
+				float staticSpikes[144] = {
+					3.0f, 10.0f, 40.0f, 10.0f, 2.0f, 11.0f, 41.0f, 11.0f, 1.0f, 12.0f, 42.0f, 12.0f, 0.0f, 16.0f, 1.0f, 16.0f, 2.0f, 16.0f, 3.0f, 16.0f, 4.0f, 16.0f, 39.0f, 16.0f, 40.0f, 16.0f, 41.0f, 16.0f, 42.0f, 16.0f, 43.0f, 16.0f,
+					0.0f, 17.0f, 1.0f, 17.0f, 2.0f, 17.0f, 41.0f, 17.0f, 42.0f, 17.0f, 43.0f, 17.0f, 0.0f, 18.0f, 1.0f, 18.0f, 42.0f, 18.0f, 43.0f, 18.0f, 0.0f, 19.0f, 43.0f, 19.0f, 0.0f, 25.0f, 43.0f, 25.0f, 0.0f, 26.0f, 43.0f, 26.0f,
+					0.0f, 27.0f, 43.0f, 27.0f, 0.0f, 28.0f, 43.0f, 28.0f, 0.0f, 29.0f, 43.0f, 29.0f, 0.0f, 30.0f, 43.0f, 30.0f, 0.0f, 31.0f, 43.0f, 31.0f, 0.0f, 32.0f, 43.0f, 32.0f, 0.0f, 33.0f, 43.0f, 33.0f, 0.0f, 34.0f, 43.0f, 34.0f,
+					0.0f, 35.0f, 43.0f, 35.0f, 0.0f, 36.0f, 43.0f, 36.0f, 0.0f, 37.0f, 43.0f, 37.0f, 0.0f, 38.0f, 43.0f, 38.0f, 0.0f, 39.0f, 43.0f, 39.0f, 0.0f, 40.0f, 43.0f, 40.0f, 0.0f, 41.0f, 43.0f, 41.0f, 0.0f, 42.0f, 43.0f, 42.0f,
+					0.0f, 43.0f, 43.0f, 43.0f, 0.0f, 44.0f, 43.0f, 44.0f, 0.0f, 45.0f, 43.0f, 45.0f, 0.0f, 46.0f, 43.0f, 46.0f
+				};
+				float redSpikes[150] = {
+					23.0f, 12.0f, 24.0f, 12.0f, 25.0f, 12.0f, 26.0f, 12.0f, 27.0f, 12.0f, 28.0f, 12.0f, 29.0f, 12.0f, 30.0f, 12.0f, 31.0f, 12.0f, 32.0f, 12.0f, 33.0f, 12.0f, 34.0f, 12.0f, 35.0f, 12.0f, 36.0f, 12.0f, 37.0f, 12.0f, 38.0f, 12.0f,
+					39.0f, 12.0f, 28.0f, 13.0f, 29.0f, 13.0f, 30.0f, 13.0f, 31.0f, 13.0f, 32.0f, 13.0f, 33.0f, 13.0f, 34.0f, 13.0f, 35.0f, 13.0f, 36.0f, 13.0f, 37.0f, 13.0f, 38.0f, 13.0f, 39.0f, 13.0f, 40.0f, 13.0f, 33.0f, 14.0f, 34.0f, 14.0f,
+					35.0f, 14.0f, 36.0f, 14.0f, 37.0f, 14.0f, 38.0f, 14.0f, 39.0f, 14.0f, 40.0f, 14.0f, 41.0f, 14.0f, 38.0f, 15.0f, 39.0f, 15.0f, 40.0f, 15.0f, 41.0f, 15.0f, 42.0f, 15.0f, 42.0f, 20.0f, 41.0f, 21.0f, 41.0f, 22.0f, 41.0f, 23.0f,
+					42.0f, 24.0f, 13.0f, 34.0f, 15.0f, 34.0f, 17.0f, 34.0f, 33.0f, 34.0f, 35.0f, 34.0f, 14.0f, 35.0f, 16.0f, 35.0f, 34.0f, 35.0f, 4.0f, 41.0f, 5.0f, 41.0f, 6.0f, 41.0f, 8.0f, 41.0f, 9.0f, 41.0f, 24.0f, 41.0f, 25.0f, 41.0f,
+					26.0f, 41.0f, 28.0f, 41.0f, 29.0f, 41.0f, 3.0f, 42.0f, 7.0f, 42.0f, 23.0f, 42.0f, 27.0f, 42.0f, 3.0f, 43.0f, 7.0f, 43.0f, 23.0f, 43.0f, 27.0f, 43.0f
+				};
+				float blueSpikes[148] = {
+					4.0f, 12.0f, 5.0f, 12.0f, 6.0f, 12.0f, 7.0f, 12.0f, 8.0f, 12.0f, 9.0f, 12.0f, 10.0f, 12.0f, 11.0f, 12.0f, 12.0f, 12.0f, 13.0f, 12.0f, 14.0f, 12.0f, 15.0f, 12.0f, 16.0f, 12.0f, 17.0f, 12.0f, 18.0f, 12.0f, 19.0f, 12.0f,
+					20.0f, 12.0f, 3.0f, 13.0f, 4.0f, 13.0f, 5.0f, 13.0f, 6.0f, 13.0f, 7.0f, 13.0f, 8.0f, 13.0f, 9.0f, 13.0f, 10.0f, 13.0f, 11.0f, 13.0f, 12.0f, 13.0f, 13.0f, 13.0f, 14.0f, 13.0f, 15.0f, 13.0f, 2.0f, 14.0f, 3.0f, 14.0f,
+					4.0f, 14.0f, 5.0f, 14.0f, 6.0f, 14.0f, 7.0f, 14.0f, 8.0f, 14.0f, 9.0f, 14.0f, 10.0f, 14.0f, 1.0f, 15.0f, 2.0f, 15.0f, 3.0f, 15.0f, 4.0f, 15.0f, 5.0f, 15.0f, 1.0f, 20.0f, 2.0f, 21.0f, 2.0f, 22.0f, 2.0f, 23.0f,
+					1.0f, 24.0f, 8.0f, 34.0f, 10.0f, 34.0f, 26.0f, 34.0f, 28.0f, 34.0f, 30.0f, 34.0f, 9.0f, 35.0f, 27.0f, 35.0f, 29.0f, 35.0f, 14.0f, 41.0f, 15.0f, 41.0f, 18.0f, 41.0f, 19.0f, 41.0f, 34.0f, 41.0f, 35.0f, 41.0f, 37.0f, 41.0f,
+					38.0f, 41.0f, 39.0f, 41.0f, 16.0f, 42.0f, 20.0f, 42.0f, 36.0f, 42.0f, 40.0f, 42.0f, 16.0f, 43.0f, 20.0f, 43.0f, 36.0f, 43.0f, 40.0f, 43.0f
+				};
+				float abilities[16] = {
+					1.0f, 7.0f, 42.0f, 7.0f, 3.0f, 22.0f, 40.0f, 22.0f, 15.0f, 32.0f, 28.0f, 32.0f, 6.0f, 36.0f, 37.0f, 36.0f
 				};
 
-				float chipsSpawns[18] = {
-					17.0f, 7.0f, 21.0f, 10.0f, 6.0f, 12.0f, 5.0f, 21.0f, 18.0f, 21.0f, 13.0f, 27.0f, 14.0f, 32.0f, 9.0f, 43.0f, 20.0f, 43.0f
-				};
+				AddStaticSpikes(staticSpikes, 72);
+				AddRedSpikes(redSpikes, 75, redDimension);
+				AddBlueSpikes(blueSpikes, 74, blueDimension);
+				AddAbilities(abilities, 8);
 
-				AddStaticSpikes(staticSpikes, 22);
-				AddAbilities(chipsSpawns, 8);
-
-				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(5.0f, -4.0f));
-				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(15.0f, -4.0f));
+				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(16.0f, -38.0f));
+				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(27.0f, -38.0f));
 
 				break;
 			}
@@ -588,11 +606,6 @@ namespace Levels
 			dimensionController.SetActiveDimension(redDimension);
 		}
 
-		// Create winText and add to objectManager
-		GameObject* winText = new GameObject(*objectManager.GetArchetypeByName("Text"));
-		winText->GetComponent<SpriteTextMono>()->SetColor(Colors::White);
-		objectManager.AddObject(*winText);
-
 		Graphics::GetInstance().PushEffect(*chromaticAberration);
 		Graphics::GetInstance().PushEffect(*cameraShake);
 	}
@@ -648,17 +661,12 @@ namespace Levels
 		gearSound->setVolume(130.0f / pow(max(1.0f, lowestGearsDistance + 1.0f), 2.3f));
 
 		chromaticAberration->SetIntensity(50.0f / pow(max(1.0f, lowestGearsDistance - 0.5f), 1.5f));
-		cameraShake->SetIntensity(1.0f / (max(1.0f, lowestGearsDistance) * 75.0f));
+		cameraShake->SetIntensity(pow(1.0f / (max(1.0f, lowestGearsDistance) * 50.0f), 1.2f));
 
 		// End game if a player dies
 		unsigned playerCount = objectManager.GetObjectCount("Player");
 		if (playerCount == 1)
 		{
-			GameObject* winText = GetSpace()->GetObjectManager().GetObjectByName("Text");
-
-			GameObject* lastPlayer = objectManager.GetObjectByName("Player");
-			Behaviors::PlayerMovement* lastPlayerMovement = static_cast<Behaviors::PlayerMovement*>(lastPlayer->GetComponent("PlayerMovement"));
-
 			// Play win sound once
 			if (playWinSound)
 			{
@@ -668,22 +676,6 @@ namespace Levels
 				soundManager->GetMusicChannel()->stop();
 				soundManager->PlaySound("SoundFanf.wav")->setVolume(5.0f);
 			}
-
-			// Set text to winText
-			SpriteTextMono* spriteText = winText->GetComponent<SpriteTextMono>();
-			switch (lastPlayerMovement->GetPlayerID())
-			{
-			case 1:
-				spriteText->SetText("Ninja Monkey won! Press <SPACE> to return to level select");
-				break;
-			case 2:
-				spriteText->SetText("Cat Fighter won! Press <SPACE> to return to level select");
-				break;
-			}
-
-			// Text follows camera
-			static_cast<Transform*>(winText->GetComponent("Transform"))
-				->SetTranslation(Graphics::GetInstance().GetDefaultCamera().GetTranslation());
 
 			// Restart on <SPACE>
 			if (input.CheckTriggered(' '))

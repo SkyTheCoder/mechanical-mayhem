@@ -90,6 +90,7 @@ namespace Levels
 		AddMapButton("Blah", Vector2D(-1.75f, 1.5f), Levels::Map::Blah);
 		AddMapButton("Chase", Vector2D(1.75f, 1.5f), Levels::Map::Chase);
 		AddMapButton("Merge", Vector2D(-1.75f, 0.5f), Levels::Map::Merge);
+		AddMapButton("Descent", Vector2D(1.75f, 0.5f), Levels::Map::Descent);
 		AddMapButton("Main Menu", Vector2D(0.0f, -2.5f), Levels::Map::MainMenu);
 
 		Camera& camera = Graphics::GetInstance().GetDefaultCamera();

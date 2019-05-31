@@ -16,7 +16,7 @@ RedSpike
   {
     group : 3
     mask : 9
-    extents : { 0.495, 0.495 }
+    extents : { 0.25, 0.25 }
   }
   Behaviors::Hazard
   {

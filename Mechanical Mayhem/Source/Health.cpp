@@ -145,7 +145,7 @@ namespace Behaviors
 				deathAnimation->GetComponent<Transform>()->SetTranslation(GetOwner()->GetComponent<Transform>()->GetTranslation());
 
 				// Add to camera follow
-				//GOM.GetObjectByName("GameController")->GetComponent<CameraFollow>()->AddPlayer(deathAnimation);
+				GOM.GetObjectByName("GameController")->GetComponent<CameraFollow>()->AddPlayer(deathAnimation);
 
 				// Add to object manager
 				GOM.AddObject(*deathAnimation);
