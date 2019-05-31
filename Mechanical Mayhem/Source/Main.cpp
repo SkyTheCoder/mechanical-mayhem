@@ -104,6 +104,7 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 	soundManager->AddEffect("menu Apress.wav");
 	soundManager->AddEffect("SoundDimensionShiftA.wav");
 	soundManager->AddEffect("SoundDimensionShiftB.wav");
+	soundManager->AddEffect("SoundExplosion.wav");
 	soundManager->AddEffect("SoundFanf.wav");
 	soundManager->AddEffect("SoundHorn.wav");
 	soundManager->AddEffect("SoundJetp.wav", true);

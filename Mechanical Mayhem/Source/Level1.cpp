@@ -80,6 +80,7 @@ namespace Levels
 		columnsFlame(2), rowsFlame(2), columnsJetpackFlame(2), rowsJetpackFlame(2),
 		columnsRisingGears(1), rowsRisingGears(2),
 		columnsMine(2), rowsMine(2),
+		columnsMinePickup(2), rowsMinePickup(2), columnsJetpackPickup(2), rowsJetpackPickup(2), columnsFlamethrowerPickup(2), rowsFlamethrowerPickup(2),
 		dataStaticMap(nullptr), dataRedMap(nullptr), dataBlueMap(nullptr),
 		columnsMap(2), rowsMap(2)
 	{
@@ -100,6 +101,9 @@ namespace Levels
 		resourceManager.GetMesh("Explosion", Vector2D(1.0f / columnsExplosion, 1.0f / rowsExplosion), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("Flame", Vector2D(1.0f / columnsFlame, 1.0f / rowsFlame), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("Mine", Vector2D(1.0f / columnsMine, 1.0f / rowsMine), Vector2D(0.5f, 0.5f));
+		resourceManager.GetMesh("ProximityMinePickup", Vector2D(1.0f / columnsMinePickup, 1.0f / rowsMinePickup), Vector2D(0.5f, 0.5f));
+		resourceManager.GetMesh("JetpackPickup", Vector2D(1.0f / columnsJetpackPickup, 1.0f / rowsJetpackPickup), Vector2D(0.5f, 0.5f));
+		resourceManager.GetMesh("FlamethrowerPickup", Vector2D(1.0f / columnsFlamethrowerPickup, 1.0f / rowsFlamethrowerPickup), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("JetpackFlame", Vector2D(1.0f / columnsJetpackFlame, 1.0f / rowsJetpackFlame), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("RisingGears", Vector2D(1.0f / columnsRisingGears, 1.0f / rowsRisingGears), Vector2D(0.5f, 0.5f));
 
@@ -121,9 +125,9 @@ namespace Levels
 		resourceManager.GetSpriteSource("AniJetpackFallFireB.png", columnsJetpackFlame, rowsJetpackFlame);
 		resourceManager.GetSpriteSource("AniJetpackJumpFireA.png", columnsJetpackFlame, rowsJetpackFlame);
 		resourceManager.GetSpriteSource("AniJetpackJumpFireB.png", columnsJetpackFlame, rowsJetpackFlame);
-		resourceManager.GetSpriteSource("jetpackCollectible.png");
-		resourceManager.GetSpriteSource("flamethrowerCollectible.png");
-		resourceManager.GetSpriteSource("proximityMineCollectible.png");
+		resourceManager.GetSpriteSource("AniJetpackPickup.png", columnsJetpackPickup, rowsJetpackPickup);
+		resourceManager.GetSpriteSource("AniFlamethrowerPickup.png", columnsFlamethrowerPickup, rowsFlamethrowerPickup);
+		resourceManager.GetSpriteSource("AniMinePickup.png", columnsMinePickup, rowsMinePickup);
 		resourceManager.GetSpriteSource("BackgroundImage.png");
 		resourceManager.GetSpriteSource("Tilemap.png", columnsMap, rowsMap);
 		resourceManager.GetSpriteSource("RisingGears.png", columnsRisingGears, rowsRisingGears);
@@ -180,10 +184,9 @@ namespace Levels
 		objectManager.AddArchetype(*objectFactory.CreateObject("Text"));
 		objectManager.AddArchetype(*objectFactory.CreateObject("GameController"));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Collectible", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Collectible.png")));
-		objectManager.AddArchetype(*objectFactory.CreateObject("JetpackPickup", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("jetpackCollectible.png")));
-		objectManager.AddArchetype(*objectFactory.CreateObject("FlamethrowerPickup", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("flamethrowerCollectible.png")));
-		objectManager.AddArchetype(*objectFactory.CreateObject("ProximityMinePickup", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("proximityMineCollectible.png")));
-		objectManager.AddArchetype(*objectFactory.CreateObject("JetpackPickup", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Collectible.png")));
+		objectManager.AddArchetype(*objectFactory.CreateObject("JetpackPickup", resourceManager.GetMesh("JetpackPickup"), resourceManager.GetSpriteSource("AniJetpackPickup.png")));
+		objectManager.AddArchetype(*objectFactory.CreateObject("FlamethrowerPickup", resourceManager.GetMesh("FlamethrowerPickup"), resourceManager.GetSpriteSource("AniFlamethrowerPickup.png")));
+		objectManager.AddArchetype(*objectFactory.CreateObject("ProximityMinePickup", resourceManager.GetMesh("ProximityMinePickup"), resourceManager.GetSpriteSource("AniMinePickup.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Flame", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Circle.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Mine", resourceManager.GetMesh("Mine"), resourceManager.GetSpriteSource("AniMine.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Explosion", resourceManager.GetMesh("Explosion"), resourceManager.GetSpriteSource("AniMineExplode.png")));
