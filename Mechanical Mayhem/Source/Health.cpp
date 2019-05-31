@@ -20,11 +20,14 @@
 #include <Space.h>
 #include <Parser.h> // Read/WriteVariable
 //#include <Event.h>
+#include <Graphics.h>
 
 // Components
 #include <GameObject.h>
 #include <Sprite.h>
 #include <Collider.h>
+#include "MonkeyAnimation.h"
+#include "CameraFollow.h"
 
 //------------------------------------------------------------------------------
 
@@ -88,6 +91,8 @@ namespace Behaviors
 	{
 		parser.WriteVariable("maxHealth", maxHealth);
 		parser.WriteVariable("destroyOnDeath", destroyOnDeath);
+		parser.WriteVariable("hasDeathAnimation", hasDeathAnimation);
+		parser.WriteVariable("deathAnimationName", deathAnimationName);
 	}
 
 	// Read object data from a file
@@ -97,6 +102,8 @@ namespace Behaviors
 	{
 		parser.ReadVariable("maxHealth", maxHealth);
 		parser.ReadVariable("destroyOnDeath", destroyOnDeath);
+		parser.ReadVariable("hasDeathAnimation", hasDeathAnimation);
+		parser.ReadVariable("deathAnimationName", deathAnimationName);
 	}
 
 	// Receive an event and handle it (if applicable).
@@ -125,6 +132,24 @@ namespace Behaviors
 		if (event.type == ET_Death && event.sender == GetOwner()->GetID() && destroyOnDeath)
 		{
 			GetOwner()->Destroy();
+
+			if (hasDeathAnimation)
+			{
+				GameObjectManager& GOM = GetOwner()->GetSpace()->GetObjectManager();
+				GameObject* deathAnimation = new GameObject(*GOM.GetArchetypeByName(deathAnimationName));
+
+				// Get death animation
+				deathAnimation->GetComponent<Sprite>()->SetSpriteSource(GetOwner()->GetComponent<Behaviors::MonkeyAnimation>()->GetDeathAnimation());
+
+				// Set transform
+				deathAnimation->GetComponent<Transform>()->SetTranslation(GetOwner()->GetComponent<Transform>()->GetTranslation());
+
+				// Add to camera follow
+				//GOM.GetObjectByName("GameController")->GetComponent<CameraFollow>()->AddPlayer(deathAnimation);
+
+				// Add to object manager
+				GOM.AddObject(*deathAnimation);
+			}
 		}
 	}
 }

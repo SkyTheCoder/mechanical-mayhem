@@ -166,6 +166,10 @@ namespace Levels
 		unsigned columnsFlamethrowerPickup;
 		unsigned rowsFlamethrowerPickup;
 
+		// Death animations
+		unsigned columnsDeathAnimation;
+		unsigned rowsDeathAnimation;
+
 		// Flames
 		unsigned columnsFlame;
 		unsigned rowsFlame;

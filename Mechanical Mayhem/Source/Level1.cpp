@@ -80,6 +80,7 @@ namespace Levels
 		columnsExplosion(3), rowsExplosion(3),
 		columnsFlame(2), rowsFlame(2), columnsJetpackFlame(2), rowsJetpackFlame(2),
 		columnsRisingGears(1), rowsRisingGears(2),
+		columnsDeathAnimation(4), rowsDeathAnimation(4),
 		columnsMine(2), rowsMine(2),
 		columnsMinePickup(2), rowsMinePickup(2), columnsJetpackPickup(2), rowsJetpackPickup(2), columnsFlamethrowerPickup(2), rowsFlamethrowerPickup(2),
 		dataStaticMap(nullptr), dataRedMap(nullptr), dataBlueMap(nullptr),
@@ -107,6 +108,7 @@ namespace Levels
 		resourceManager.GetMesh("FlamethrowerPickup", Vector2D(1.0f / columnsFlamethrowerPickup, 1.0f / rowsFlamethrowerPickup), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("JetpackFlame", Vector2D(1.0f / columnsJetpackFlame, 1.0f / rowsJetpackFlame), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("RisingGears", Vector2D(1.0f / columnsRisingGears, 1.0f / rowsRisingGears), Vector2D(0.5f, 0.5f));
+		resourceManager.GetMesh("DeathAnimation", Vector2D(1.0f / columnsDeathAnimation, 1.0f / rowsDeathAnimation), Vector2D(0.5f, 0.5f));
 
 		resourceManager.GetSpriteSource("AniA.png", columnsMonkey, rowsMonkey);
 		resourceManager.GetSpriteSource("AniJetpackA.png", columnsMonkey, rowsMonkey);
@@ -132,6 +134,8 @@ namespace Levels
 		resourceManager.GetSpriteSource("BackgroundImage.png");
 		resourceManager.GetSpriteSource("Tilemap.png", columnsMap, rowsMap);
 		resourceManager.GetSpriteSource("RisingGears.png", columnsRisingGears, rowsRisingGears);
+		resourceManager.GetSpriteSource("AniDeathA.png", columnsDeathAnimation, rowsDeathAnimation);
+		resourceManager.GetSpriteSource("AniDeathB.png", columnsDeathAnimation, rowsDeathAnimation);
 
 		resourceManager.GetMesh("FontAtlas", 12, 8);
 		resourceManager.GetSpriteSource("Code New Roman@2x.png", 12, 8);
@@ -198,10 +202,10 @@ namespace Levels
 		objectManager.AddArchetype(*objectFactory.CreateObject("BlueSpike", resourceManager.GetMesh("Spikes"), resourceManager.GetSpriteSource("Spikes.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Tilemap", resourceManager.GetMesh("Map"), resourceManager.GetSpriteSource("Tilemap.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("RisingGears", resourceManager.GetMesh("RisingGears"), resourceManager.GetSpriteSource("RisingGears.png")));
+		objectManager.AddArchetype(*objectFactory.CreateObject("DeathAnimation", resourceManager.GetMesh("DeathAnimation"), resourceManager.GetSpriteSource("Circle.png")));
 
 		chromaticAberration = new Effects::ChromaticAberration();
 		chromaticAberration->SetIntensity(2.0f);
-
 		cameraShake = new Effects::CameraShake();
 
 		// Set the background color.

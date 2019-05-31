@@ -168,7 +168,7 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 	}
 
 	// TEMPORARY NON-FULLSCREEN (FOR DEBUG)
-	//startupSettings.fullscreen = false;
+	startupSettings.fullscreen = false;
 
 	// Game engine goes!
 	engine.Start(startupSettings);
