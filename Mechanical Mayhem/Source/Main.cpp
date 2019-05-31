@@ -104,6 +104,7 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 	soundManager->AddEffect("menu Apress.wav");
 	soundManager->AddEffect("SoundDimensionShiftA.wav");
 	soundManager->AddEffect("SoundDimensionShiftB.wav");
+	soundManager->AddEffect("SoundExplosion.wav");
 	soundManager->AddEffect("SoundFanf.wav");
 	soundManager->AddEffect("SoundHorn.wav");
 	soundManager->AddEffect("SoundJetp.wav", true);
@@ -167,7 +168,7 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 	}
 
 	// TEMPORARY NON-FULLSCREEN (FOR DEBUG)
-	startupSettings.fullscreen = false;
+	//startupSettings.fullscreen = false;
 
 	// Game engine goes!
 	engine.Start(startupSettings);

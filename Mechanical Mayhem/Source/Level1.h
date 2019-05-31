@@ -34,6 +34,7 @@ class SoundManager;
 namespace Effects
 {
 	class ChromaticAberration;
+	class CameraShake;
 }
 
 //------------------------------------------------------------------------------
@@ -135,6 +136,7 @@ namespace Levels
 		GameObject* backgroundImage;
 
 		Effects::ChromaticAberration* chromaticAberration;
+		Effects::CameraShake* cameraShake;
 
 		// Monkey
 		unsigned columnsMonkey;
@@ -155,7 +157,15 @@ namespace Levels
 		// Primed mine
 		unsigned columnsMine;
 		unsigned rowsMine;
-		
+
+		// Pickups
+		unsigned columnsMinePickup;
+		unsigned rowsMinePickup;
+		unsigned columnsJetpackPickup;
+		unsigned rowsJetpackPickup;
+		unsigned columnsFlamethrowerPickup;
+		unsigned rowsFlamethrowerPickup;
+
 		// Flames
 		unsigned columnsFlame;
 		unsigned rowsFlame;

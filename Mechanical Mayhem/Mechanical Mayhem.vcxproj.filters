@@ -118,6 +118,9 @@
     <ClCompile Include="Source\HUD.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CameraShake.cpp">
+      <Filter>Game\Effects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -215,6 +218,9 @@
     </ClInclude>
     <ClInclude Include="Source\HUD.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CameraShake.h">
+      <Filter>Game\Effects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

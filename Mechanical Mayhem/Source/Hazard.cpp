@@ -22,10 +22,14 @@
 #include <GameObject.h>
 #include <Parser.h>
 #include <Space.h>
+#include <SoundManager.h>
 #include <GameObjectManager.h>
 
 // Components
 #include <Collider.h>
+
+// Misc
+#include <Random.h>
 
 //------------------------------------------------------------------------------
 
@@ -113,6 +117,11 @@ namespace Behaviors
 						GameObject* destroyedObject = new GameObject(*destroyedArchetype);
 						destroyedObject->GetComponent<Transform>()->SetTranslation(GetOwner()->GetComponent<Transform>()->GetTranslation());
 						objectManager.AddObject(*destroyedObject);
+
+						// Play audio
+						FMOD::Channel* explosion = Engine::GetInstance().GetModule<SoundManager>()->PlaySound("SoundExplosion.wav");
+						explosion->setVolume(2.0f);
+						explosion->setPitch(RandomRange(1.0f, 2.0f));
 					}
 				}
 			}

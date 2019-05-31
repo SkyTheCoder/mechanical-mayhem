@@ -116,6 +116,7 @@ xcopy fmod\lib\fmodstudio64.dll "$(OutDir)" /Y</Command>
     <ClCompile Include="Source\Archetypes.cpp" />
     <ClCompile Include="Source\Button.cpp" />
     <ClCompile Include="Source\CameraFollow.cpp" />
+    <ClCompile Include="Source\CameraShake.cpp" />
     <ClCompile Include="Source\ChromaticAberration.cpp" />
     <ClCompile Include="Source\ColorChange.cpp" />
     <ClCompile Include="Source\Controls.cpp" />
@@ -154,6 +155,7 @@ xcopy fmod\lib\fmodstudio64.dll "$(OutDir)" /Y</Command>
     <ClInclude Include="Source\Archetypes.h" />
     <ClInclude Include="Source\Button.h" />
     <ClInclude Include="Source\CameraFollow.h" />
+    <ClInclude Include="Source\CameraShake.h" />
     <ClInclude Include="Source\ChromaticAberration.h" />
     <ClInclude Include="Source\ColorChange.h" />
     <ClInclude Include="Source\Controls.h" />
