@@ -1,0 +1,36 @@
+JetpackFlame
+{
+  numComponents : 5
+  Transform
+  {
+    translation : { 0, 0 }
+    rotation : 0
+    scale : { 0.5, 0.5 }
+  }
+  Physics
+  {
+    acceleration : { 0, 0 }
+    velocity : { 0, 0 }
+    angularVelocity : 0
+    mass : 1
+  }
+  ColliderCircle
+  {
+    group : 0
+    mask : 0
+    radius : 0.75
+  }
+  Behaviors::Hazard
+  {
+    alwaysCollidable : 1
+    collidable : 1
+    damage : 3
+    destroyOnCollide : 1
+    destroyOnCollideDelay : 0.01
+    destroyedArchetype : none
+  }
+  Behaviors::TimedDeath
+  {
+    timeUntilDeath : 0.075
+  }
+}
