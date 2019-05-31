@@ -224,6 +224,7 @@ namespace Levels
 
 		// Play background music
 		soundManager->PlaySound("SoundPlay.wav");
+		gearSound = soundManager->PlaySound("SoundGear.wav");
 
 		// Load HUD Level
 		Space* hudSpace = GetAltSpace();
@@ -655,6 +656,9 @@ namespace Levels
 			float gearsDistancee = abs(playerTranslation.y - gearsTranslation.y);
 			lowestGearsDistance = min(lowestGearsDistance, gearsDistancee);
 		}
+
+		// Play gear sound louder as it gets closer
+		gearSound->setVolume(130.0f / pow(max(1.0f, lowestGearsDistance + 1.0f), 2.3f));
 
 		chromaticAberration->SetIntensity(50.0f / pow(max(1.0f, lowestGearsDistance - 0.5f), 1.5f));
 		cameraShake->SetIntensity(pow(1.0f / (max(1.0f, lowestGearsDistance) * 50.0f), 1.2f));
