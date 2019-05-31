@@ -366,7 +366,14 @@ namespace Behaviors
 		if (isSliding)
 		{
 			velocity.y = max(-slidingTerminalVelocity, velocity.y);
+		}
+		else
+		{
+			velocity.y = max(-terminalVelocity, velocity.y);
+		}
 
+		if (animOnGround <= 0.0f && (animOnLeftWall > 0.0f && input.CheckHeld(keyLeft) || animOnRightWall > 0.0f && input.CheckHeld(keyRight)))
+		{
 			// Sliding sound
 			if (slideSound == nullptr)
 			{
@@ -374,10 +381,8 @@ namespace Behaviors
 				slideSound->setVolume(10.0f);
 			}
 		}
-		else
+		else if (slideSound != nullptr)
 		{
-			velocity.y = max(-terminalVelocity, velocity.y);
-
 			// Stop sliding sound
 			slideSound->stop();
 			slideSound = nullptr;

@@ -24,6 +24,7 @@
 //------------------------------------------------------------------------------
 
 class GameObject;
+class Camera;
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -31,6 +32,9 @@ class GameObject;
 
 namespace Behaviors
 {
+	class Health;
+	class AbilityHolder;
+
 	class HUD : public BetaObject
 	{
 	public:
@@ -39,7 +43,7 @@ namespace Behaviors
 		//------------------------------------------------------------------------------
 
 		// Constructor
-		HUD(GameObject* player, Vector2D translation);
+		HUD(GameObject* player, Camera& camera);
 
 		// Return a new copy of the component.
 		HUD* Clone() const;
@@ -62,20 +66,35 @@ namespace Behaviors
 
 	private:
 		//------------------------------------------------------------------------------
+		// Private Functions:
+		//------------------------------------------------------------------------------
+
+		// Sets the location for each HUD object
+		void SetHUDObjectLocations();
+		
+		// Gets the player pointer.
+		GameObject* GetPlayer();
+
+		//------------------------------------------------------------------------------
 		// Private Variables:
 		//------------------------------------------------------------------------------
 
-		GameObject* player;
+		GUID player;
+		int playerID;
+		Health* health;
+		AbilityHolder* abilityHolder;
+		GameObject* hudBackground;
 
-		Vector2D translation;
+		Camera& camera;
 
 		// Health variables
-		std::vector<GameObject*> healthBar;
-		GameObject* healthText;
-		float prevHealth;
+		GameObject* healthBarCenter;
+		GameObject* healthBarEnd;
+		float animHealth;
 
 		// Ability variables
-		std::vector<GameObject*> abilityBar;
-		float prevMana;
+		GameObject* abilityBarCenter;
+		GameObject* abilityBarEnd;
+		float animAbility;
 	};
 }

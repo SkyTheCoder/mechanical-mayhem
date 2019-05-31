@@ -1,7 +1,10 @@
 Jetpack
 {
-  flameEffect : JetpackFlame
-  jetpackForce : 10
+  flameArchetype : JetpackFlame
+  flameEffect : JetpackFlameEffect
+  jetpackForce : 20
+  flameSpeed : 10
+  flameCooldown : 0.1
   currentFuel : 3
   maxFuel : 3
   fuelRefillRate : 2

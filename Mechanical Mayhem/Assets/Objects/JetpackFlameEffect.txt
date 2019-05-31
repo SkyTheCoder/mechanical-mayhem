@@ -1,4 +1,4 @@
-JetpackFlame
+JetpackFlameEffect
 {
   numComponents : 4
   Transform

@@ -16,18 +16,19 @@
 #include "stdafx.h"
 #include "Jetpack.h"
 
-// Components
-#include <Transform.h>
-#include <Physics.h>
-#include "PlayerMovement.h"
-#include "MonkeyAnimation.h"
-
 // Systems
 #include <Engine.h>
 #include <Input.h>
 #include <Parser.h>
 #include <SoundManager.h>
 #include <Space.h>
+
+// Components
+#include <Transform.h>
+#include <Physics.h>
+#include <Collider.h>
+#include "PlayerMovement.h"
+#include "MonkeyAnimation.h"
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -42,9 +43,12 @@ namespace Abilities
 	// Default Constructor
 	Jetpack::Jetpack()
 		: Ability("Jetpack", true),
-		transform(nullptr), physics(nullptr), playerMovement(nullptr), monkeyAnimation(nullptr),
-		flameEffect(nullptr),
-		active(false), jetpackForce(1), currentFuel(0), maxFuel(100),
+		transform(nullptr), physics(nullptr), collider(nullptr), playerMovement(nullptr), monkeyAnimation(nullptr),
+		flameArchetype(nullptr), flameEffect(nullptr),
+		soundManager(nullptr), jetpackSound(nullptr),
+		active(false),
+		jetpackForce(1), flameSpeed(0.0f), flameCooldown(0.0f), flameCooldownTimer(0.0f),
+		currentFuel(0), maxFuel(100),
 		fuelRefillRate(0.5f), fuelConsumptionRate(1.0f)
 	{
 	}
@@ -55,6 +59,7 @@ namespace Abilities
 		// Get components
 		transform = GetOwner()->GetComponent<Transform>();
 		physics = GetOwner()->GetComponent<Physics>();
+		collider = GetOwner()->GetComponent<Collider>();
 		playerMovement = GetOwner()->GetComponent<Behaviors::PlayerMovement>();
 		monkeyAnimation = GetOwner()->GetComponent<Behaviors::MonkeyAnimation>();
 		soundManager = Engine::GetInstance().GetModule<SoundManager>();
@@ -62,6 +67,7 @@ namespace Abilities
 		// Fill fuel tank
 		currentFuel = maxFuel;
 
+		flameArchetype = new GameObject(*GetOwner()->GetSpace()->GetObjectManager().GetArchetypeByName(flameArchetypeName));
 		flameEffect = new GameObject(*GetOwner()->GetSpace()->GetObjectManager().GetArchetypeByName(flameEffectName));
 		GetOwner()->GetSpace()->GetObjectManager().AddObject(*flameEffect);
 	}
@@ -138,6 +144,26 @@ namespace Abilities
 			flameEffect->GetComponent<Sprite>()->SetAlpha(1.0f);
 		else
 			flameEffect->GetComponent<Sprite>()->SetAlpha(0.0f);
+
+		flameCooldownTimer -= dt;
+
+		if (IsActive())
+		{
+			if (flameCooldownTimer <= 0.0f)
+			{
+				// Create and place the new flame.
+				GameObject* flame = new GameObject(*flameArchetype);
+				flame->GetComponent<Transform>()->SetTranslation(transform->GetTranslation());
+				flame->GetComponent<Physics>()->SetVelocity(Vector2D(0.0f, -flameSpeed));
+
+				Collider* flameCollider = flame->GetComponent<Collider>();
+				flameCollider->SetGroup(collider->GetGroup());
+				flameCollider->SetMask(CM_GENERIC | CM_CREATE(collider->GetGroup()) | CM_HAZARD);
+				GetOwner()->GetSpace()->GetObjectManager().AddObject(*flame);
+
+				flameCooldownTimer = flameCooldown;
+			}
+		}
 	}
 
 	// Callback for when the player attempts to use this ability.
@@ -168,8 +194,11 @@ namespace Abilities
 	//   parser = The parser that is writing this object to a file.
 	void Jetpack::Serialize(Parser& parser) const
 	{
+		parser.WriteVariable("flameArchetype", flameArchetypeName);
 		parser.WriteVariable("flameEffect", flameEffectName);
 		parser.WriteVariable("jetpackForce", jetpackForce);
+		parser.WriteVariable("flameSpeed", flameSpeed);
+		parser.WriteVariable("flameCooldown", flameCooldown);
 		parser.WriteVariable("currentFuel", currentFuel);
 		parser.WriteVariable("maxFuel", maxFuel);
 		parser.WriteVariable("fuelRefillRate", fuelRefillRate);
@@ -181,8 +210,11 @@ namespace Abilities
 	//   parser = The parser that is reading this object's data from a file.
 	void Jetpack::Deserialize(Parser& parser)
 	{
+		parser.ReadVariable("flameArchetype", flameArchetypeName);
 		parser.ReadVariable("flameEffect", flameEffectName);
 		parser.ReadVariable("jetpackForce", jetpackForce);
+		parser.ReadVariable("flameSpeed", flameSpeed);
+		parser.ReadVariable("flameCooldown", flameCooldown);
 		parser.ReadVariable("currentFuel", currentFuel);
 		parser.ReadVariable("maxFuel", maxFuel);
 		parser.ReadVariable("fuelRefillRate", fuelRefillRate);
