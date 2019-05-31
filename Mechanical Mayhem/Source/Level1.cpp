@@ -55,6 +55,7 @@
 
 // Effects
 #include "ChromaticAberration.h"
+#include "CameraShake.h"
 
 //------------------------------------------------------------------------------
 
@@ -200,6 +201,8 @@ namespace Levels
 
 		chromaticAberration = new Effects::ChromaticAberration();
 		chromaticAberration->SetIntensity(2.0f);
+
+		cameraShake = new Effects::CameraShake();
 
 		// Set the background color.
 		Graphics::GetInstance().SetBackgroundColor(Colors::Black);
@@ -586,6 +589,7 @@ namespace Levels
 		objectManager.AddObject(*winText);
 
 		Graphics::GetInstance().PushEffect(*chromaticAberration);
+		Graphics::GetInstance().PushEffect(*cameraShake);
 	}
 
 	// Update Level 1.
@@ -636,6 +640,7 @@ namespace Levels
 		}
 
 		chromaticAberration->SetIntensity(50.0f / pow(max(1.0f, lowestGearsDistance - 3.0f), 1.5f));
+		cameraShake->SetIntensity(1.0f / (max(1.0f, lowestGearsDistance) * 75.0f));
 
 		// End game if a player dies
 		unsigned playerCount = objectManager.GetObjectCount("Player");
@@ -696,6 +701,7 @@ namespace Levels
 	void Level1::Shutdown()
 	{
 		Graphics::GetInstance().RemoveEffect(*chromaticAberration);
+		Graphics::GetInstance().RemoveEffect(*cameraShake);
 
 		Space* hudSpace = GetAltSpace();
 
@@ -709,6 +715,7 @@ namespace Levels
 	{
 		// Free all allocated memory.
 		delete chromaticAberration;
+		delete cameraShake;
 
 		delete dataStaticMap;
 		delete dataRedMap;
