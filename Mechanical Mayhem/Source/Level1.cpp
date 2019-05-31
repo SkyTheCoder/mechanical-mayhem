@@ -188,15 +188,15 @@ namespace Levels
 		objectManager.AddArchetype(*objectFactory.CreateObject("BackgroundImage", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("BackgroundImage.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Text"));
 		objectManager.AddArchetype(*objectFactory.CreateObject("GameController"));
-		objectManager.AddArchetype(*objectFactory.CreateObject("Collectible", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Collectible.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("JetpackPickup", resourceManager.GetMesh("JetpackPickup"), resourceManager.GetSpriteSource("AniJetpackPickup.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("FlamethrowerPickup", resourceManager.GetMesh("FlamethrowerPickup"), resourceManager.GetSpriteSource("AniFlamethrowerPickup.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("ProximityMinePickup", resourceManager.GetMesh("ProximityMinePickup"), resourceManager.GetSpriteSource("AniMinePickup.png")));
-		objectManager.AddArchetype(*objectFactory.CreateObject("Flame", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Circle.png")));
+		objectManager.AddArchetype(*objectFactory.CreateObject("Flame"));
+		objectManager.AddArchetype(*objectFactory.CreateObject("JetpackFlame"));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Mine", resourceManager.GetMesh("Mine"), resourceManager.GetSpriteSource("AniMine.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Explosion", resourceManager.GetMesh("Explosion"), resourceManager.GetSpriteSource("AniMineExplode.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("FlameEffect", resourceManager.GetMesh("Flame"), resourceManager.GetSpriteSource("AniFlame.png")));
-		objectManager.AddArchetype(*objectFactory.CreateObject("JetpackFlame", resourceManager.GetMesh("JetpackFlame"), resourceManager.GetSpriteSource("AniFlame.png")));
+		objectManager.AddArchetype(*objectFactory.CreateObject("JetpackFlameEffect", resourceManager.GetMesh("JetpackFlame"), resourceManager.GetSpriteSource("AniFlame.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("StaticSpike", resourceManager.GetMesh("Spikes"), resourceManager.GetSpriteSource("Spikes.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("RedSpike", resourceManager.GetMesh("Spikes"), resourceManager.GetSpriteSource("Spikes.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("BlueSpike", resourceManager.GetMesh("Spikes"), resourceManager.GetSpriteSource("Spikes.png")));
@@ -240,7 +240,7 @@ namespace Levels
 		GameObject* player = new GameObject(*objectManager.GetArchetypeByName("Player"));
 		player->GetComponent<Behaviors::MonkeyAnimation>()->SetFrames(0, 8, 9, 4, 15, 4, 27, 2, 21, 4);
 		Behaviors::PlayerMovement* playerMovement = static_cast<Behaviors::PlayerMovement*>(player->GetComponent("PlayerMovement"));
-		playerMovement->SetKeybinds(VK_UP, VK_LEFT, VK_RIGHT, VK_RCONTROL);
+		playerMovement->SetKeybinds('W', 'A', 'D', VK_LCONTROL);
 		playerMovement->SetPlayerID(1);
 		objectManager.AddObject(*player);
 		player->GetComponent<Behaviors::MonkeyAnimation>()->GetSpriteSources("A");
@@ -250,7 +250,7 @@ namespace Levels
 		player2->GetComponent<Collider>()->SetMask(1 << 2);
 		player2->GetComponent<Behaviors::MonkeyAnimation>()->SetFrames(0, 8, 9, 4, 15, 4, 27, 2, 21, 4);
 		Behaviors::PlayerMovement* player2Movement = static_cast<Behaviors::PlayerMovement*>(player2->GetComponent("PlayerMovement"));
-		player2Movement->SetKeybinds('W', 'A', 'D', VK_LCONTROL);
+		player2Movement->SetKeybinds(VK_UP, VK_LEFT, VK_RIGHT, VK_RCONTROL);
 		player2Movement->SetPlayerID(2);
 		objectManager.AddObject(*player2);
 		player2->GetComponent<Behaviors::MonkeyAnimation>()->GetSpriteSources("B");
@@ -539,7 +539,7 @@ namespace Levels
 				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(9.0f, -45.0f));
 				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(9.0f, -45.0f));
 
-				gearHeight = -62.0f;
+				gearHeight = -64.0f;
 
 				break;
 			}
@@ -564,8 +564,8 @@ namespace Levels
 				AddBlueSpikes(blueSpikes, 14, blueDimension);
 				AddAbilities(abilities, 6);
 
-				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(14.0f, -41.0f));
-				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(9.0f, -41.0f));
+				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(9.0f, -41.0f));
+				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(14.0f, -41.0f));
 
 				gearHeight = -50.0f;
 
@@ -643,7 +643,7 @@ namespace Levels
 			lowestGearsDistance = min(lowestGearsDistance, gearsDistancee);
 		}
 
-		chromaticAberration->SetIntensity(50.0f / pow(max(1.0f, lowestGearsDistance - 3.0f), 1.5f));
+		chromaticAberration->SetIntensity(50.0f / pow(max(1.0f, lowestGearsDistance - 0.5f), 1.5f));
 		cameraShake->SetIntensity(1.0f / (max(1.0f, lowestGearsDistance) * 75.0f));
 
 		// End game if a player dies

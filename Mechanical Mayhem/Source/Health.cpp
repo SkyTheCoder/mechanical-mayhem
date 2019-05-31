@@ -72,10 +72,10 @@ namespace Behaviors
 			GetOwner()->GetSpace()->GetObjectManager().DispatchEvent(new Event(ET_Death, "Death", 0.0f, GetOwner()->GetID()));
 	}
 
-	// Returns the current health (0.0 - 1.0)
+	// Returns the current health
 	int Health::GetHealth()
 	{
-		return health / maxHealth;
+		return health;
 	}
 
 	// Returns the current health

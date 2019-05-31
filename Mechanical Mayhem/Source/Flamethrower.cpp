@@ -139,17 +139,17 @@ namespace Abilities
 
 		cooldownTimer = cooldown;
 
-		// Create and place the new mine.
-		GameObject* fireball = new GameObject(*flameArchetype);
-		fireball->GetComponent<Transform>()->SetTranslation(transform->GetTranslation());
+		// Create and place the new flame.
+		GameObject* flame = new GameObject(*flameArchetype);
+		flame->GetComponent<Transform>()->SetTranslation(transform->GetTranslation());
 		Vector2D direction = Vector2D(std::signbit(transform->GetScale().x) ? -1.0f : 1.0f, 0.0f);
 
-		fireball->GetComponent<Physics>()->SetVelocity(direction * speed);
+		flame->GetComponent<Physics>()->SetVelocity(direction * speed);
 
-		Collider* fireballCollider = fireball->GetComponent<Collider>();
-		fireballCollider->SetGroup(collider->GetGroup());
-		fireballCollider->SetMask(CM_GENERIC | CM_CREATE(collider->GetGroup()) | CM_HAZARD);
-		GetOwner()->GetSpace()->GetObjectManager().AddObject(*fireball);
+		Collider* flameCollider = flame->GetComponent<Collider>();
+		flameCollider->SetGroup(collider->GetGroup());
+		flameCollider->SetMask(CM_GENERIC | CM_CREATE(collider->GetGroup()) | CM_HAZARD);
+		GetOwner()->GetSpace()->GetObjectManager().AddObject(*flame);
 
 		flameEffect->GetComponent<Sprite>()->SetAlpha(1.0f);
 	}

@@ -24,6 +24,7 @@
 
 class Transform;
 class Physics;
+class Collider;
 
 namespace Behaviors
 {
@@ -108,8 +109,12 @@ namespace Abilities
 		// Other components
 		Transform* transform;
 		Physics* physics;
+		Collider* collider;
 		Behaviors::PlayerMovement* playerMovement;
 		Behaviors::MonkeyAnimation* monkeyAnimation;
+
+		std::string flameArchetypeName;
+		GameObject* flameArchetype;
 
 		std::string flameEffectName;
 		GameObject* flameEffect;
@@ -123,7 +128,12 @@ namespace Abilities
 
 		// Speed
 		float jetpackForce;			// Force jetpack exerts when active
-		
+		float flameSpeed;			// Velocity of invisible flame particles
+
+		// Cooldown between shooting flames.
+		float flameCooldown;
+		float flameCooldownTimer;
+
 		// Fuel
 		float currentFuel;			// Current amount of fuel (f)
 		float maxFuel;				// Maximum fuel capacity (f)

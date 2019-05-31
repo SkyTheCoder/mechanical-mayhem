@@ -1,25 +1,36 @@
 JetpackFlame
 {
-  numComponents : 4
+  numComponents : 5
   Transform
   {
     translation : { 0, 0 }
     rotation : 0
-    scale : { 1.5, 1.5 }
+    scale : { 0.5, 0.5 }
   }
-  Sprite
+  Physics
   {
-    frameIndex : 0
-    color : { 1, 1, 1, 1 }
+    acceleration : { 0, 0 }
+    velocity : { 0, 0 }
+    angularVelocity : 0
+    mass : 1
   }
-  Animation
+  ColliderCircle
   {
+    group : 0
+    mask : 0
+    radius : 0.75
   }
-  Behaviors::SimpleAnimator
+  Behaviors::Hazard
   {
-    animationStart : 0
-    animationLength : 4
-    animationSpeed : 0.1
-    looping : 1
+    alwaysCollidable : 1
+    collidable : 1
+    damage : 3
+    destroyOnCollide : 1
+    destroyOnCollideDelay : 0.01
+    destroyedArchetype : none
+  }
+  Behaviors::TimedDeath
+  {
+    timeUntilDeath : 0.075
   }
 }
