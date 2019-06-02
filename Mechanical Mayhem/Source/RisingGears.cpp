@@ -103,24 +103,6 @@ namespace Behaviors
 		parser.ReadVariable("moveSpeed", moveSpeed);
 		parser.ReadVariable("startOffset", startOffset);
 	}
-
-	// Receive an event and handle it (if applicable).
-	// Params:
-	//   event = The event that has been received.
-	void RisingGears::HandleEvent(const Event& event)
-	{
-		// Check for collision event
-		if (event.name == "CollisionStarted" || event.name == "CollisionPersisted")
-		{
-			// Check if other object was player
-			GameObject& other = *static_cast<GameObject*>(event.GetSender());
-			if (other.GetName() == "Player")
-			{
-				// Destroy player
-				GetOwner()->GetSpace()->GetObjectManager().DispatchEvent(new Event(ET_Death, "Destroy", 0.0f, other.GetID(), other.GetID()));
-			}
-		}
-	}
 }
 
 //------------------------------------------------------------------------------

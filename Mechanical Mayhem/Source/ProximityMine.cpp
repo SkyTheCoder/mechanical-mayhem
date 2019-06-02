@@ -22,10 +22,12 @@
 #include <Space.h>
 #include <GameObjectManager.h>
 #include <Parser.h>
+#include <ExtendedInput.h>
 
 // Components
 #include <Transform.h>
 #include <Collider.h>
+#include "PlayerMovement.h"
 
 //------------------------------------------------------------------------------
 
@@ -118,6 +120,8 @@ namespace Abilities
 		mineCollider->SetMask(CM_GENERIC | CM_CREATE(collider->GetGroup()) | CM_HAZARD);
 		objectManager.AddObject(*mine);
 		proximityMines.push_back(mine->GetID());
+
+		ExtendedInput::GetInstance().SetVibration(0.0f, 0.5f, GetOwner()->GetComponent<Behaviors::PlayerMovement>()->GetPlayerID() - 1);
 	}
 
 	// Returns the % of mana/fuel/uses/whatever left on this ability.

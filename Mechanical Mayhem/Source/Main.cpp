@@ -25,6 +25,7 @@
 #include <Space.h>
 #include <SoundManager.h>
 #include <FullscreenManager.h>
+#include <ExtendedInput.h>
 
 // Initial game state
 #include "MainMenu.h"
@@ -89,6 +90,8 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 	engine.AddModule(new FullscreenManager());
 	engine.AddModule(space);
 	engine.AddModule(hudSpace);
+	engine.AddModule(ExtendedInput::GetInstance().CreateModule());
+	ExtendedInput::GetInstance().SetVibrationDecay(0.1f);
 
 	// Set up sound effects/music
 	SoundManager* soundManager = new SoundManager();

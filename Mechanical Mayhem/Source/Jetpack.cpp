@@ -19,6 +19,7 @@
 // Systems
 #include <Engine.h>
 #include <Input.h>
+#include <ExtendedInput.h>
 #include <Parser.h>
 #include <SoundManager.h>
 #include <Space.h>
@@ -84,7 +85,7 @@ namespace Abilities
 	void Jetpack::Update(float dt)
 	{
 		// Check if user is even using the jetpack
-		active = !playerMovement->IsOnGround() && Input::GetInstance().CheckHeld(playerMovement->GetUseKeybind());
+		active = !playerMovement->IsOnGround() && (Input::GetInstance().CheckHeld(playerMovement->GetUseKeybind()) || ExtendedInput::GetInstance().GetRTrigger() > 0.0f);
 
 		// Manage fuel amounts
 		FuelManagement(dt);

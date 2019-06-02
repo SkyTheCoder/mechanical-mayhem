@@ -61,11 +61,6 @@ namespace Behaviors
 		//   parser = The parser that is reading this object's data from a file.
 		void Deserialize(Parser& parser) override;
 
-		// Receive an event and handle it (if applicable).
-		// Params:
-		//   event = The event that has been received.
-		virtual void HandleEvent(const Event& event) override final;
-
 	private:
 		//------------------------------------------------------------------------------
 		// Private Variables:

@@ -22,6 +22,7 @@
 #include <GameObject.h>
 #include <Space.h>
 #include <Input.h>
+#include <ExtendedInput.h>
 
 // Components
 #include <Animation.h>
@@ -176,11 +177,15 @@ namespace Behaviors
 	void MonkeyAnimation::ChooseNextState()
 	{
 		Input& input = Input::GetInstance();
+		ExtendedInput& extendedInput = ExtendedInput::GetInstance();
 
 		Vector2D velocity = physics->GetVelocity();
 
+		bool movingLeft = extendedInput.GetLThumb(monkeyMovement->GetPlayerID() - 1).x < 0.0f || input.IsKeyDown(monkeyMovement->GetLeftKeybind());
+		bool movingRight = extendedInput.GetLThumb(monkeyMovement->GetPlayerID() - 1).x > 0.0f || input.IsKeyDown(monkeyMovement->GetRightKeybind());
+
 		// Check for wall-sliding.
-		bool wallSliding = monkeyMovement->animOnLeftWall > 0.0f && input.CheckHeld(monkeyMovement->GetLeftKeybind()) || monkeyMovement->animOnRightWall > 0.0f && input.CheckHeld(monkeyMovement->GetRightKeybind());
+		bool wallSliding = monkeyMovement->animOnLeftWall > 0.0f && movingLeft || monkeyMovement->animOnRightWall > 0.0f && movingRight;
 		
 		// If we are jumping/falling, use the jumping/falling state accordingly.
 		if (monkeyMovement->airTime > 0.1f)

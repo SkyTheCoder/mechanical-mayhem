@@ -19,6 +19,7 @@
 
 // Systems
 #include <Input.h>
+#include <ExtendedInput.h>
 #include <GameObject.h>
 
 // Components
@@ -89,18 +90,21 @@ namespace Behaviors
 	{
 		if (ability != nullptr)
 		{
+			Input& input = Input::GetInstance();
+			ExtendedInput& extendedInput = ExtendedInput::GetInstance();
+
 			ability->Update(dt);
 
 			if (ability->IsHoldAbility())
 			{
-				if (Input::GetInstance().CheckHeld(playerMovement->GetUseKeybind()))
+				if (input.IsKeyDown(playerMovement->GetUseKeybind()) || extendedInput.GetRTrigger(playerMovement->GetPlayerID() - 1) > 0.0f)
 				{
 					ability->OnUse();
 				}
 			}
 			else
 			{
-				if (Input::GetInstance().CheckTriggered(playerMovement->GetUseKeybind()))
+				if (input.CheckTriggered(playerMovement->GetUseKeybind()) || extendedInput.GetRTrigger(playerMovement->GetPlayerID() - 1) > 0.0f && extendedInput.GetRTrigger(playerMovement->GetPlayerID() - 1, 1) <= 0.0f)
 				{
 					ability->OnUse();
 				}

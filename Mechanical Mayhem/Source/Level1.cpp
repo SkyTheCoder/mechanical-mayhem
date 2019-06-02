@@ -32,6 +32,7 @@
 #include <Random.h>
 #include <GameObjectFactory.h>
 #include <SoundManager.h>
+#include <ExtendedInput.h>
 
 // Components
 #include "Sprite.h"
@@ -71,9 +72,11 @@ namespace Levels
 
 	// Creates an instance of Level 1.
 	Level1::Level1(Map map_) : Level("Level1"),
+		soundManager(nullptr), gearSound(nullptr),
+		playWinSound(false),
 		map(map_),
 		backgroundImage(nullptr),
-		chromaticAberration(nullptr),
+		chromaticAberration(nullptr), cameraShake(nullptr),
 		columnsMonkey(3), rowsMonkey(10),
 		columnsCat(3), rowsCat(10),
 		columnsSpikes(1), rowsSpikes(3),
@@ -648,12 +651,26 @@ namespace Levels
 
 		GameObject* risingGears = objectManager.GetObjectByName("RisingGears");
 
+		ExtendedInput& extendedInput = ExtendedInput::GetInstance();
+
 		float lowestGearsDistance = FLT_MAX;
 		for (auto it = players.begin(); it != players.end(); ++it)
 		{
+			int playerID = (*it)->GetComponent<Behaviors::PlayerMovement>()->GetPlayerID();
 			Vector2D playerTranslation = (*it)->GetComponent<Transform>()->GetTranslation();
 			Vector2D gearsTranslation = risingGears->GetComponent<Transform>()->GetTranslation();
 			float gearsDistancee = abs(playerTranslation.y - gearsTranslation.y);
+
+			float lowFreq = 0.0f;
+			float highFreq = 0.0f;
+
+			extendedInput.GetVibration(lowFreq, highFreq, playerID - 1);
+
+			lowFreq = max(lowFreq, 10.0f / (max(1.0f, gearsDistancee * 0.5f) * 50.0f));
+			highFreq = max(highFreq, 25.0f / (max(1.0f, gearsDistancee * 0.5f) * 50.0f));
+
+			extendedInput.SetVibration(lowFreq, highFreq, playerID - 1);
+
 			lowestGearsDistance = min(lowestGearsDistance, gearsDistancee);
 		}
 

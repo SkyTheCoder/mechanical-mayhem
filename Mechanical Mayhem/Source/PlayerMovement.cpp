@@ -24,6 +24,7 @@
 #include <SoundManager.h>
 #include "Space.h"
 #include <Interpolation.h>
+#include <ExtendedInput.h>
 
 // Components
 #include "Transform.h"
@@ -54,7 +55,7 @@ namespace Behaviors
 		keyUp(keyUp), keyLeft(keyLeft), keyRight(keyRight), keyUse(keyUse),
 		walkSpeed(5.0f), walkSpeedOld(walkSpeed), jumpSpeed(0.0f, 11.0f), jumpSpeedOld(jumpSpeed), slidingJumpSpeed(6.0f, 6.75f),
 		gravity(0.0f, -16.0f), slidingGravity(0.0f, -9.0f), terminalVelocity(9.0f), slidingTerminalVelocity(1.5f), gracePeriod(0.15f),
-		transform(nullptr), physics(nullptr), soundManager(nullptr),
+		transform(nullptr), physics(nullptr), soundManager(nullptr), slideSound(nullptr),
 		playerID(0), switchCharges(0),
 		onGround(false), onLeftWall(false), onRightWall(false), animOnGround(0.0f), animOnLeftWall(0.0f), animOnRightWall(0.0f),
 		hasJumped(false), airTime(0.0f), leftTime(0.0f), rightTime(0.0f), movementLerpGround(1.0f), movementLerpAir(0.98f),
@@ -97,7 +98,7 @@ namespace Behaviors
 
 		// Switch dimensions when pressing the key, there are unused charges, and dimension switching is not on cooldown.
 		Input& input = Input::GetInstance();
-		if (input.CheckTriggered(keyUse) && switchCharges > 0 && dimensionController.GetSwitchCooldown() <= 0.0f)
+		if (input.IsKeyDown(keyUse) && switchCharges > 0 && dimensionController.GetSwitchCooldown() <= 0.0f)
 		{
 			// Calculate next dimension ID
 			unsigned newDimension = (dimensionController.GetActiveDimension() + 1) % dimensionController.GetDimensionCount();
@@ -241,19 +242,23 @@ namespace Behaviors
 		Vector2D velocity = physics->GetVelocity();
 
 		// Initialize target velocity to 0.
-		float targetVelocityX = 0.0f;
+		float targetVelocityX = std::clamp(ExtendedInput::GetInstance().GetLThumb(playerID - 1).x * 2.0f, -1.0f, 1.0f);
 
 		// If the right arrow key is pressed, move to the right.
-		if (input.CheckHeld(keyRight))
+		if (input.IsKeyDown(keyRight))
 		{
-			targetVelocityX += walkSpeed;
+			targetVelocityX += 1.0f;
 		}
 
 		// If the right arrow key is pressed, move to the left.
-		if (input.CheckHeld(keyLeft))
+		if (input.IsKeyDown(keyLeft))
 		{
-			targetVelocityX -= walkSpeed;
+			targetVelocityX -= 1.0f;
 		}
+
+		targetVelocityX = std::clamp(targetVelocityX, -1.0f, 1.0f);
+
+		targetVelocityX *= walkSpeed;
 
 		// Smoothly interpolate the X component of the player's velocity.
 		float movementMix = 1.0f - pow(1.0f - (airTime < 1e-6f ? movementLerpGround : movementLerpAir), dt);
@@ -267,6 +272,7 @@ namespace Behaviors
 	void PlayerMovement::MoveVertical(float dt)
 	{
 		Input& input = Input::GetInstance();
+		ExtendedInput& extendedInput = ExtendedInput::GetInstance();
 
 		Vector2D velocity = physics->GetVelocity();
 
@@ -302,7 +308,7 @@ namespace Behaviors
 		bool canJump = airTime <= gracePeriod || onlyLeftWall || onlyRightWall;
 
 		// If the monkey has not jumped since landing, was on the ground recently, and the up arrow key is pressed, jump.
-		if (!hasJumped && canJump && input.CheckHeld(keyUp))
+		if (!hasJumped && canJump && (extendedInput.IsXBDown(XB_A, playerID - 1) || input.IsKeyDown(keyUp)))
 		{
 			if (isSliding)
 			{
@@ -372,7 +378,10 @@ namespace Behaviors
 			velocity.y = max(-terminalVelocity, velocity.y);
 		}
 
-		if (animOnGround <= 0.0f && (animOnLeftWall > 0.0f && input.CheckHeld(keyLeft) || animOnRightWall > 0.0f && input.CheckHeld(keyRight)))
+		bool movingLeft = extendedInput.GetLThumb(playerID - 1).x < 0.0f || input.IsKeyDown(keyLeft);
+		bool movingRight = extendedInput.GetLThumb(playerID - 1).x > 0.0f || input.IsKeyDown(keyRight);
+
+		if (animOnGround <= 0.0f && (animOnLeftWall > 0.0f && movingLeft || animOnRightWall > 0.0f && movingRight))
 		{
 			// Sliding sound
 			if (slideSound == nullptr)
@@ -392,7 +401,7 @@ namespace Behaviors
 		physics->SetVelocity(velocity);
 
 		// Handle step audio
-		if (airTime < 0.1f && (input.CheckHeld(keyRight) || input.CheckHeld(keyLeft)) && !isSliding)
+		if (airTime < 0.1f && (movingRight || movingLeft) && !isSliding)
 		{
 			stepTimer += dt;
 			if (stepTimer > 0.25f)

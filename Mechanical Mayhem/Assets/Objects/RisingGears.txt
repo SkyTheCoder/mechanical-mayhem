@@ -1,6 +1,6 @@
 RisingGears
 {
-  numComponents : 6
+  numComponents : 7
   Transform
   {
     translation : { 0, 0 }
@@ -15,7 +15,7 @@ RisingGears
   ColliderRectangle
   {
     group : 3
-    mask : 8
+    mask : 9
     extents : { 12, 1 }
   }
   Behaviors::RisingGears
@@ -32,5 +32,14 @@ RisingGears
     animationLength : 2
     animationSpeed : 0.2
     looping : 1
+  }
+  Behaviors::Hazard
+  {
+    alwaysCollidable : 1
+    collidable : 1
+    damage : 100
+    destroyOnCollide : 0
+    destroyOnCollideDelay : 0
+    destroyedArchetype : none
   }
 }

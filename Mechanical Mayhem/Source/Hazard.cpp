@@ -24,9 +24,11 @@
 #include <Space.h>
 #include <SoundManager.h>
 #include <GameObjectManager.h>
+#include <ExtendedInput.h>
 
 // Components
 #include <Collider.h>
+#include "PlayerMovement.h"
 
 // Misc
 #include <Random.h>
@@ -117,12 +119,23 @@ namespace Behaviors
 						GameObject* destroyedObject = new GameObject(*destroyedArchetype);
 						destroyedObject->GetComponent<Transform>()->SetTranslation(GetOwner()->GetComponent<Transform>()->GetTranslation());
 						objectManager.AddObject(*destroyedObject);
-
-						// Play audio
-						FMOD::Channel* explosion = Engine::GetInstance().GetModule<SoundManager>()->PlaySound("SoundExplosion.wav");
-						explosion->setVolume(2.0f);
-						explosion->setPitch(RandomRange(1.0f, 2.0f));
 					}
+				}
+
+				// If we damaged a player, give their controller a little shake.
+				if (other.GetName() == "Player")
+				{
+					PlayerMovement* playerMovement = other.GetComponent<PlayerMovement>();
+					ExtendedInput::GetInstance().SetVibration(pow(damage / 100.0f, 0.5f), pow(damage / 100.0f, 0.5f), playerMovement->GetPlayerID() - 1);
+				}
+
+				// If this object is a mine, play an explosion sound effect.
+				if (GetOwner()->GetName() == "Mine")
+				{
+					// Play audio
+					FMOD::Channel* explosion = Engine::GetInstance().GetModule<SoundManager>()->PlaySound("SoundExplosion.wav");
+					explosion->setVolume(2.0f);
+					explosion->setPitch(RandomRange(1.0f, 2.0f));
 				}
 			}
 		}
