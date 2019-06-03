@@ -92,42 +92,42 @@ namespace Levels
 		AddMenuButton("Separation", Vector2D(-1.75f, -0.5f), Levels::Map::Separation);
 		AddMenuButton("Descent", Vector2D(1.75f, -0.5f), Levels::Map::Descent);*/
 
-		MenuButton* blah = AddMenuButton("Blah", Vector2D(-1.75f, 1.5f), Levels::Map::Blah);
+		MenuButton* clockwork = AddMenuButton("Clockwork", Vector2D(-1.75f, 1.5f), Levels::Map::Clockwork);
 		MenuButton* chase = AddMenuButton("Chase", Vector2D(1.75f, 1.5f), Levels::Map::Chase);
 		MenuButton* merge = AddMenuButton("Merge", Vector2D(-1.75f, 0.5f), Levels::Map::Merge);
 		MenuButton* descent = AddMenuButton("Descent", Vector2D(1.75f, 0.5f), Levels::Map::Descent);
-		MenuButton* skip = AddMenuButton("Skip", Vector2D(0.0f, -0.5f), Levels::Map::Skip);
+		MenuButton* snake = AddMenuButton("Snake", Vector2D(0.0f, -0.5f), Levels::Map::Snake);
 		MenuButton* lobby = AddMenuButton("Lobby", Vector2D(0.0f, -2.5f), Levels::Map::Lobby);
 
-		blah->north = lobby;
-		blah->east = chase;
-		blah->south = merge;
-		blah->west = chase;
+		clockwork->north = lobby;
+		clockwork->east = chase;
+		clockwork->south = merge;
+		clockwork->west = chase;
 
 		chase->north = lobby;
-		chase->east = blah;
+		chase->east = clockwork;
 		chase->south = descent;
-		chase->west = blah;
+		chase->west = clockwork;
 
-		merge->north = blah;
+		merge->north = clockwork;
 		merge->east = descent;
-		merge->south = skip;
+		merge->south = snake;
 		merge->west = descent;
 
 		descent->north = chase;
 		descent->east = merge;
-		descent->south = skip;
+		descent->south = snake;
 		descent->west = merge;
 
-		skip->north = merge;
-		skip->east = descent;
-		skip->south = lobby;
-		skip->west = merge;
+		snake->north = merge;
+		snake->east = descent;
+		snake->south = lobby;
+		snake->west = merge;
 
-		lobby->north = skip;
-		lobby->south = blah;
+		lobby->north = snake;
+		lobby->south = clockwork;
 
-		SetDefaultButton(blah);
+		SetDefaultButton(clockwork);
 	}
 
 	// Update LevelSelect.

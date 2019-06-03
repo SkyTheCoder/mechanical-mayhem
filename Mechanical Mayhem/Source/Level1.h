@@ -62,10 +62,10 @@ namespace Levels
 		Channels,
 		Separation,
 		Descent,
-		Blah,
+		Clockwork,
 		Chase,
 		Merge,
-		Skip,
+		Snake,
 
 		MAX_MAP
 	};

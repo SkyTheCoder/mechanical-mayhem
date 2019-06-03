@@ -227,7 +227,7 @@ InputSource InputSchemeManager::AddScheme(InputScheme& scheme)
 	}
 
 	// Find the lowest unused player ID.
-	for (int i = 1; i <= 4; i++)
+	for (int i = 1; i <= 6; i++)
 	{
 		bool found = false;
 		for (auto it = inputSchemes.cbegin(); it != inputSchemes.cend(); ++it)

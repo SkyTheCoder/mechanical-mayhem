@@ -104,7 +104,7 @@ namespace Levels
 		joinHint2->GetComponent<SpriteTextMono>()->SetText("Press CTRL or START to join the lobby");
 		objectManager.AddObject(*joinHint2);
 
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 6; i++)
 		{
 			GameObject* text = new GameObject(*objectManager.GetArchetypeByName("Text"));
 			text->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, 1.0f - i * 0.5f));
