@@ -264,6 +264,8 @@ namespace Levels
 		for (int i = 0; i < static_cast<int>(inputSchemeManager.GetInputSchemes().size()); i++)
 		{
 			GameObject* player = new GameObject(*objectManager.GetArchetypeByName("Player"));
+			player->GetComponent<Collider>()->SetGroup(i + 1);
+			player->GetComponent<Collider>()->SetMask(CM_CREATE(i + 1));
 			player->GetComponent<Behaviors::MonkeyAnimation>()->SetFrames(0, 8, 9, 4, 15, 4, 27, 2, 21, 4);
 			Behaviors::PlayerMovement* playerMovement = static_cast<Behaviors::PlayerMovement*>(player->GetComponent("PlayerMovement"));
 			playerMovement->SetPlayerID(i + 1);
@@ -646,7 +648,7 @@ namespace Levels
 					players[i]->GetComponent<Transform>()->SetTranslation(i % 2 == 0 ? Vector2D(9.0f, -44.0f) : Vector2D(9.0f, -44.0f));
 				}
 
-				gearHeight = -50.0f;
+				gearHeight = -60.0f;
 
 				break;
 			}

@@ -14,8 +14,8 @@ BlueSpike
   }
   ColliderRectangle
   {
-    group : 3
-    mask : 9
+    group : 7
+    mask : 129
     extents : { 0.25, 0.25 }
   }
   Behaviors::Hazard
