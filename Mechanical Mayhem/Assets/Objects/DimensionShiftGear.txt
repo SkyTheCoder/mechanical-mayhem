@@ -1,0 +1,21 @@
+DimensionShiftGear
+{
+  numComponents : 4
+  Transform
+  {
+    translation : { 0, 0 }
+    rotation : 0
+    scale : { 2, 2 }
+  }
+  Sprite
+  {
+    frameIndex : 0
+    color : { 1 , 1 , 1 , 1 }
+  }
+  Animation
+  {
+  }
+  Behaviors::DimensionShiftGearAnimation
+  {
+  }
+}

@@ -50,7 +50,7 @@ namespace Behaviors
 
 	// Constructor
 	DimensionController::DimensionController() : Component("DimensionController"), dimensions(std::vector<Dimension>()),
-		cooldown(5.0f), currentCooldown(10.0f), cdIndex(9), cdCount(-1), cdCounts{ 0 }, gameTimer(0.0), activeDimension(0)
+		cooldown(5.0f), currentCooldown(5.0f), oldCooldown(currentCooldown), cdIndex(9), cdCount(-1), cdCounts{ 0 }, gameTimer(0.0), activeDimension(0)
 	{
 		// Set the different cooldown times
 		cdCounts[0]  = 0.5f;
@@ -78,6 +78,7 @@ namespace Behaviors
 	void DimensionController::Initialize()
 	{
 		currentCooldown = 5.0f;
+		soundManager = Engine::GetInstance().GetModule<SoundManager>();;
 	}
 
 	// Fixed update function for this component.
@@ -87,6 +88,7 @@ namespace Behaviors
 	{
 		gameTimer += dt;
 
+		oldCooldown = currentCooldown;
 		currentCooldown -= dt;
 
 		if (currentCooldown <= 0.0f)
@@ -101,6 +103,12 @@ namespace Behaviors
 			currentCooldown = cooldown;
 
 			SetActiveDimension((activeDimension + 1) % GetDimensionCount());
+		}
+
+		// Play timer tick effect
+		if (std::trunc(currentCooldown) != std::trunc(oldCooldown) && oldCooldown >= 1.0f)
+		{
+			 soundManager->PlaySound("SoundTick.wav");
 		}
 	}
 
@@ -147,14 +155,14 @@ namespace Behaviors
 			static_cast<Sprite*>(spike->GetComponent("Sprite"))->SetAlpha(1.0f);
 		}
 
-		// Play sound
+		// Play either dimension-shift sound
 		if (RandomRange(0, 1))
 		{
-			Engine::GetInstance().GetModule<SoundManager>()->PlaySound("SoundDimensionShiftA.wav");
+			soundManager->PlaySound("SoundDimensionShiftA.wav");
 		}
 		else
 		{
-			Engine::GetInstance().GetModule<SoundManager>()->PlaySound("SoundDimensionShiftB.wav");
+			soundManager->PlaySound("SoundDimensionShiftB.wav");
 		}
 	}
 

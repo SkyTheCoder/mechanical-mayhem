@@ -54,6 +54,7 @@
 #include "AbilityPickup.h"
 #include "Health.h"
 #include "SimpleAnimator.h"
+#include "DimensionShiftGearAnimation.h"
 
 //------------------------------------------------------------------------------
 
@@ -114,6 +115,7 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 	soundManager->AddEffect("SoundGear.wav", true);
 	soundManager->AddEffect("SoundHorn.wav");
 	soundManager->AddEffect("SoundJetp.wav", true);
+	soundManager->AddEffect("SoundTick.wav");
 	soundManager->AddEffect("step.wav");
 	soundManager->AddEffect("wallattach.wav");
 	soundManager->AddEffect("walloff.wav");
@@ -143,6 +145,7 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 		objectFactory.RegisterComponent<AbilityPickup>();
 		objectFactory.RegisterComponent<Health>();
 		objectFactory.RegisterComponent<SimpleAnimator>();
+		objectFactory.RegisterComponent<DimensionShiftGearAnimation>();
 	}
 
 	StartupSettings startupSettings;

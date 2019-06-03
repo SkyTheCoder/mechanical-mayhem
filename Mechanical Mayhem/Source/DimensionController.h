@@ -28,6 +28,7 @@
 
 class Transform;
 class Physics;
+class SoundManager;
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -120,9 +121,13 @@ namespace Behaviors
 		// Private Variables:
 		//------------------------------------------------------------------------------
 
+		// Modules
+		SoundManager* soundManager;
+
 		// Misc
 		float cooldown;
 		float currentCooldown;
+		float oldCooldown;
 		int cdIndex;
 		int cdCount;
 		float cdCounts[11];

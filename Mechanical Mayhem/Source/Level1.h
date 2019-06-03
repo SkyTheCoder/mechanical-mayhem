@@ -188,6 +188,10 @@ namespace Levels
 		unsigned columnsRisingGears;
 		unsigned rowsRisingGears;
 
+		// Dimension-shifting indicator gear
+		unsigned columnsDimensionShiftGear;
+		unsigned rowsDimensionShiftGear;
+
 		// Tilemap
 		Tilemap* dataStaticMap;
 		Tilemap* dataRedMap;

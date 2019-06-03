@@ -100,5 +100,8 @@ namespace Behaviors
 		GameObject* abilityBarBackgroundCenter;
 		GameObject* abilityBarBackgroundEnd;
 		float animAbility;
+
+		// Misc variables
+		GameObject* dimensionShiftGear;
 	};
 }
