@@ -35,6 +35,7 @@
 #include <Sprite.h>
 #include <SpriteTextMono.h>
 #include "PlayerMovement.h"
+#include "DimensionShiftGearAnimation.h"
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -76,6 +77,11 @@ namespace Behaviors
 		abilityBarCenter = ojectFactory.CreateObject("AbilityBar", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBar.png"));
 		abilityBarEnd = ojectFactory.CreateObject("AbilityBarEnd", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBarEnd.png"));
 
+		// DimensionShiftGear Indicator
+		resourceManager.GetSpriteSource("AniDimensionShiftGear.png", 3, 6);
+		resourceManager.GetMesh("DimensionShiftGear", Vector2D(1.0f / 3, 1.0f / 6), Vector2D(0.5f, 0.5f));
+		dimensionShiftGear = ojectFactory.CreateObject("DimensionShiftGear", resourceManager.GetMesh("DimensionShiftGear"), resourceManager.GetSpriteSource("AniDimensionShiftGear.png"));
+
 		// Add HUD Objects
 		GameObjectManager& objectManager = static_cast<Level*>(GetOwner())->GetSpace()->GetObjectManager();
 
@@ -94,6 +100,7 @@ namespace Behaviors
 		objectManager.AddObject(*abilityBarCenter);
 		objectManager.AddObject(*abilityBarEnd);
 		objectManager.AddObject(*hudBackground);
+		objectManager.AddObject(*dimensionShiftGear);
 
 		healthBarBackgroundCenter->GetComponent<Sprite>()->SetColor(Color(0.5f, 0.5f, 0.5f));
 		healthBarBackgroundEnd->GetComponent<Sprite>()->SetColor(Color(0.5f, 0.5f, 0.5f));
@@ -102,6 +109,8 @@ namespace Behaviors
 
 		healthBarCenter->GetComponent<Sprite>()->SetColor(Color(255.0f / 255.0f, 0.0f / 255.0f, 14.0f / 255.0f));
 		healthBarEnd->GetComponent<Sprite>()->SetColor(Color(255.0f / 255.0f, 0.0f / 255.0f, 14.0f / 255.0f));
+
+		dimensionShiftGear->GetComponent<Behaviors::DimensionShiftGearAnimation>()->SetFrames(1, 9, 8);
 
 		// Set the Locations of the objects
 		SetHUDObjectLocations();
@@ -229,6 +238,8 @@ namespace Behaviors
 		abilityBarCenter->GetComponent<Transform>()->SetTranslation(Vector2D(abilityBarLeft + abilityBarWidth / 2.0f, y - 0.37f));
 		abilityBarEnd->GetComponent<Transform>()->SetScale(Vector2D(flipx * 0.27f, 0.27f));
 		abilityBarEnd->GetComponent<Transform>()->SetTranslation(Vector2D(abilityBarLeft + abilityBarWidth + flipx * 0.135f, y - 0.37f));
+
+		dimensionShiftGear->GetComponent<Transform>()->SetTranslation(Vector2D(0.07f, 3.3f));
 	}
 
 	// Gets the player pointer.

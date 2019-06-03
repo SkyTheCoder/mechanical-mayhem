@@ -122,6 +122,7 @@ xcopy fmod\lib\fmodstudio64.dll "$(OutDir)" /Y</Command>
     <ClCompile Include="Source\Controls.cpp" />
     <ClCompile Include="Source\Credit.cpp" />
     <ClCompile Include="Source\DimensionController.cpp" />
+    <ClCompile Include="Source\DimensionShiftGearAnimation.cpp" />
     <ClCompile Include="Source\Flamethrower.cpp" />
     <ClCompile Include="Source\Hazard.cpp" />
     <ClCompile Include="Source\Health.cpp" />
@@ -164,6 +165,7 @@ xcopy fmod\lib\fmodstudio64.dll "$(OutDir)" /Y</Command>
     <ClInclude Include="Source\Controls.h" />
     <ClInclude Include="Source\Credit.h" />
     <ClInclude Include="Source\DimensionController.h" />
+    <ClInclude Include="Source\DimensionShiftGearAnimation.h" />
     <ClInclude Include="Source\Flamethrower.h" />
     <ClInclude Include="Source\Hazard.h" />
     <ClInclude Include="Source\Health.h" />
