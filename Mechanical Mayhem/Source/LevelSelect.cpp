@@ -96,6 +96,7 @@ namespace Levels
 		MenuButton* chase = AddMenuButton("Chase", Vector2D(1.75f, 1.5f), Levels::Map::Chase);
 		MenuButton* merge = AddMenuButton("Merge", Vector2D(-1.75f, 0.5f), Levels::Map::Merge);
 		MenuButton* descent = AddMenuButton("Descent", Vector2D(1.75f, 0.5f), Levels::Map::Descent);
+		MenuButton* skip = AddMenuButton("Skip", Vector2D(0.0f, -0.5f), Levels::Map::Skip);
 		MenuButton* lobby = AddMenuButton("Lobby", Vector2D(0.0f, -2.5f), Levels::Map::Lobby);
 
 		blah->north = lobby;
@@ -110,15 +111,20 @@ namespace Levels
 
 		merge->north = blah;
 		merge->east = descent;
-		merge->south = lobby;
+		merge->south = skip;
 		merge->west = descent;
 
 		descent->north = chase;
 		descent->east = merge;
-		descent->south = lobby;
+		descent->south = skip;
 		descent->west = merge;
 
-		lobby->north = merge;
+		skip->north = merge;
+		skip->east = descent;
+		skip->south = lobby;
+		skip->west = merge;
+
+		lobby->north = skip;
 		lobby->south = blah;
 
 		SetDefaultButton(blah);

@@ -65,6 +65,8 @@ namespace Levels
 		Blah,
 		Chase,
 		Merge,
+		Skip,
+
 		MAX_MAP
 	};
 
