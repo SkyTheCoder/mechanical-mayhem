@@ -30,7 +30,7 @@ RisingGears
   {
     animationStart : 0
     animationLength : 4
-    animationSpeed : 0.2
+    animationSpeed : 0.1
     looping : 1
   }
   Behaviors::Hazard
