@@ -189,9 +189,11 @@ namespace Levels
 		unsigned columnsRisingGears;
 		unsigned rowsRisingGears;
 
-		// Dimension-shifting indicator gear
-		unsigned columnsDimensionShiftGear;
-		unsigned rowsDimensionShiftGear;
+		// Player indicators
+		unsigned columnsPlayerIndicators;
+		unsigned rowsPlayerIndicators;
+
+		GameObject* playerIndicators[6];
 
 		// Tilemap
 		Tilemap* dataStaticMap;

@@ -84,9 +84,12 @@ namespace Levels
 		columnsExplosion(3), rowsExplosion(3),
 		columnsFlame(2), rowsFlame(2), columnsJetpackFlame(2), rowsJetpackFlame(2),
 		columnsRisingGears(1), rowsRisingGears(4),
+		columnsPlayerIndicators(3), rowsPlayerIndicators(2), playerIndicators{ nullptr },
 		columnsDeathAnimation(4), rowsDeathAnimation(4),
 		columnsMine(2), rowsMine(2),
-		columnsMinePickup(2), rowsMinePickup(2), columnsJetpackPickup(2), rowsJetpackPickup(2), columnsFlamethrowerPickup(2), rowsFlamethrowerPickup(2),
+		columnsMinePickup(2), rowsMinePickup(2),
+		columnsJetpackPickup(2), rowsJetpackPickup(2),
+		columnsFlamethrowerPickup(2), rowsFlamethrowerPickup(2),
 		dataStaticMap(nullptr), dataRedMap(nullptr), dataBlueMap(nullptr),
 		columnsMap(2), rowsMap(2)
 	{
@@ -112,6 +115,7 @@ namespace Levels
 		resourceManager.GetMesh("FlamethrowerPickup", Vector2D(1.0f / columnsFlamethrowerPickup, 1.0f / rowsFlamethrowerPickup), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("JetpackFlame", Vector2D(1.0f / columnsJetpackFlame, 1.0f / rowsJetpackFlame), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("RisingGears", Vector2D(1.0f / columnsRisingGears, 1.0f / rowsRisingGears), Vector2D(0.5f, 0.5f));
+		resourceManager.GetMesh("PlayerIndicators", Vector2D(1.0f / columnsPlayerIndicators, 1.0f / rowsPlayerIndicators), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("DeathAnimation", Vector2D(1.0f / columnsDeathAnimation, 1.0f / rowsDeathAnimation), Vector2D(0.5f, 0.5f));
 
 		resourceManager.GetSpriteSource("AniA.png", columnsMonkey, rowsMonkey);
@@ -139,6 +143,7 @@ namespace Levels
 		resourceManager.GetSpriteSource("Shadow.png");
 		resourceManager.GetSpriteSource("Tilemap.png", columnsMap, rowsMap);
 		resourceManager.GetSpriteSource("RisingGears.png", columnsRisingGears, rowsRisingGears);
+		resourceManager.GetSpriteSource("PlayerIndicators.png", columnsPlayerIndicators, rowsPlayerIndicators);
 		resourceManager.GetSpriteSource("AniDeathA.png", columnsDeathAnimation, rowsDeathAnimation);
 		resourceManager.GetSpriteSource("AniDeathB.png", columnsDeathAnimation, rowsDeathAnimation);
 
@@ -208,6 +213,7 @@ namespace Levels
 		objectManager.AddArchetype(*objectFactory.CreateObject("Tilemap", resourceManager.GetMesh("Map"), resourceManager.GetSpriteSource("Tilemap.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("RisingGears", resourceManager.GetMesh("RisingGears"), resourceManager.GetSpriteSource("RisingGears.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("DeathAnimation", resourceManager.GetMesh("DeathAnimation"), resourceManager.GetSpriteSource("Circle.png")));
+		objectManager.AddArchetype(*objectFactory.CreateObject("PlayerIndicators", resourceManager.GetMesh("PlayerIndicators"), resourceManager.GetSpriteSource("PlayerIndicators.png")));
 
 		chromaticAberration = new Effects::ChromaticAberration();
 		chromaticAberration->SetIntensity(2.0f);
@@ -630,6 +636,15 @@ namespace Levels
 			dimensionController.SetActiveDimension(redDimension);
 		}
 
+		for (int i = 0; i < 6; i++)
+		{
+			GameObject* playerIndicator = new GameObject(*objectManager.GetArchetypeByName("PlayerIndicators"));
+			playerIndicator->GetComponent<Sprite>()->SetAlpha(0.0f);
+			playerIndicator->GetComponent<Sprite>()->SetFrame(i);
+			objectManager.AddObject(*playerIndicator);
+			playerIndicators[i] = playerIndicator;
+		}
+
 		Graphics::GetInstance().PushEffect(*chromaticAberration);
 		Graphics::GetInstance().PushEffect(*cameraShake);
 	}
@@ -670,6 +685,11 @@ namespace Levels
 				(*it)->GetComponent<Behaviors::AbilityHolder>()->SetAbility(Abilities::ABILITY_PROXIMITYMINE);
 		}
 
+		for (int i = 0; i < 6; i++)
+		{
+			playerIndicators[i]->GetComponent<Sprite>()->SetAlpha(0.0f);
+		}
+
 		GameObject* risingGears = objectManager.GetObjectByName("RisingGears");
 
 		ExtendedInput& extendedInput = ExtendedInput::GetInstance();
@@ -677,7 +697,9 @@ namespace Levels
 		float lowestGearsDistance = FLT_MAX;
 		for (auto it = players.begin(); it != players.end(); ++it)
 		{
-			int controllerID = (*it)->GetComponent<Behaviors::PlayerMovement>()->GetControllerID();
+			Behaviors::PlayerMovement* playerMovement = (*it)->GetComponent<Behaviors::PlayerMovement>();
+			playerIndicators[playerMovement->GetPlayerID() - 1]->GetComponent<Transform>()->SetTranslation((*it)->GetComponent<Transform>()->GetTranslation() + Vector2D(0.0f, 2.0f));
+			playerIndicators[playerMovement->GetPlayerID() - 1]->GetComponent<Sprite>()->SetAlpha(1.0f);
 			Vector2D playerTranslation = (*it)->GetComponent<Transform>()->GetTranslation();
 			Vector2D gearsTranslation = risingGears->GetComponent<Transform>()->GetTranslation();
 			float gearsDistancee = abs(playerTranslation.y - gearsTranslation.y);
@@ -685,12 +707,12 @@ namespace Levels
 			float lowFreq = 0.0f;
 			float highFreq = 0.0f;
 
-			extendedInput.GetVibration(lowFreq, highFreq, controllerID);
+			extendedInput.GetVibration(lowFreq, highFreq, playerMovement->GetControllerID());
 
 			lowFreq = max(lowFreq, 10.0f / (max(1.0f, gearsDistancee * 0.5f) * 50.0f));
 			highFreq = max(highFreq, 25.0f / (max(1.0f, gearsDistancee * 0.5f) * 50.0f));
 
-			extendedInput.SetVibration(lowFreq, highFreq, controllerID);
+			extendedInput.SetVibration(lowFreq, highFreq, playerMovement->GetControllerID());
 
 			lowestGearsDistance = min(lowestGearsDistance, gearsDistancee);
 		}
@@ -726,7 +748,7 @@ namespace Levels
 				GetSpace()->SetLevel(new Levels::LevelSelect());
 			}
 		}
-		else if (playerCount <= 0)
+		else if (playerCount + objectManager.GetObjectCount("DeathAnimation") <= 0)
 		{
 			GetSpace()->SetLevel(new Levels::LevelSelect());
 		}
