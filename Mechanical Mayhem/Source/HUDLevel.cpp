@@ -48,10 +48,9 @@
 namespace Levels
 {
 	// Creates an instance of HUDLevel.
-	HUDLevel::HUDLevel() : Level("HUDLevel"), player1(nullptr), player2(nullptr),
+	HUDLevel::HUDLevel() : Level("HUDLevel"), HUDS{ nullptr }, players{ nullptr },
 		dimensionSwapCountdown(nullptr), victoryText(nullptr),
-		meshBackground(nullptr), textureBackground(nullptr), spriteSourceBackground(nullptr),
-		HUD1(nullptr), HUD2(nullptr)
+		meshBackground(nullptr), textureBackground(nullptr), spriteSourceBackground(nullptr)
 	{
 		HUDCamera.SetTranslation(Vector2D());
 		HUDCamera.SetSize(10.0f);
@@ -77,12 +76,15 @@ namespace Levels
 		FindPlayers();
 
 		// Create Player HUDs
-		HUD1 = new Behaviors::HUD(player1, HUDCamera);
-		HUD1->SetOwner(this);
-		HUD1->Initialize();
-		HUD2 = new Behaviors::HUD(player2, HUDCamera);
-		HUD2->SetOwner(this);
-		HUD2->Initialize();
+		for (int i = 0; i < 4; i++)
+		{
+			if (players[i] != nullptr)
+			{
+				HUDS[i] = new Behaviors::HUD(players[i], HUDCamera);
+				HUDS[i]->SetOwner(this);
+				HUDS[i]->Initialize();
+			}
+		}
 
 		ResourceManager& resourceManager = GetSpace()->GetResourceManager();
 
@@ -110,14 +112,6 @@ namespace Levels
 		UNREFERENCED_PARAMETER(dt);
 		HUDCamera.Use();
 
-		if (player1 == nullptr || player2 == nullptr)
-		{
-			FindPlayers();
-
-			HUD1->SetPlayer(player1);
-			HUD2->SetPlayer(player2);
-		}
-
 		// End game if a player dies
 		GameObjectManager& altObjectManager = GetAltSpace()->GetObjectManager();
 		unsigned playerCount = altObjectManager.GetObjectCount("Player");
@@ -131,10 +125,22 @@ namespace Levels
 			switch (lastPlayerMovement->GetPlayerID())
 			{
 			case 1:
-				spriteText->SetText("Jerry won! Press <SPACE> to return to level select");
+				spriteText->SetText("Jerry won! Press <SPACE> or start to return to level select");
 				break;
 			case 2:
-				spriteText->SetText("Chad won! Press <SPACE> to return to level select");
+				spriteText->SetText("Chad won! Press <SPACE> or start to return to level select");
+				break;
+			case 3:
+				spriteText->SetText("Jerry 2 won! Press <SPACE> or start to return to level select");
+				break;
+			case 4:
+				spriteText->SetText("Chad 2 won! Press <SPACE> or start to return to level select");
+				break;
+			case 5:
+				spriteText->SetText("Jerry 3 won! Press <SPACE> or start to return to level select");
+				break;
+			case 6:
+				spriteText->SetText("Chad 3 won! Press <SPACE> or start to return to level select");
 				break;
 			}
 		}
@@ -145,17 +151,22 @@ namespace Levels
 		cooldownText << std::fixed << std::setprecision(1) << ceil(switchCooldown * 10.0f) / 10.0f;
 		dimensionSwapCountdown->GetComponent<SpriteTextMono>()->SetText(cooldownText.str());
 
-		HUD1->Update(dt);
-		HUD2->Update(dt);
+		for (int i = 0; i < 4; i++)
+		{
+			if (HUDS[i] != nullptr)
+				HUDS[i]->Update(dt);
+		}
 	}
 
 	// Removes any objects that will be recreated in Initialize.
 	void HUDLevel::Shutdown()
 	{
-		HUD1->Shutdown();
-		delete HUD1;
-		HUD2->Shutdown();
-		delete HUD2;
+		for (int i = 0; i < 4; i++)
+		{
+			if (HUDS[i] != nullptr)
+				HUDS[i]->Shutdown();
+			delete HUDS[i];
+		}
 	}
 
 	// Unload the resources associated with MainMenu.
@@ -171,29 +182,22 @@ namespace Levels
 	// Finds the current player pointers.
 	void HUDLevel::FindPlayers()
 	{
-		player1 = nullptr;
-		player2 = nullptr;
+		for (int i = 0; i < 4; i++)
+			players[i] = nullptr;
 
 		// Set Player pointers
 		if (GetAltSpace() != nullptr)
 		{
-			std::vector<GameObject*> players;
-			players.reserve(2);
-			GetAltSpace()->GetObjectManager().GetAllObjectsByName("Player", players);
+			std::vector<GameObject*> playerObjects;
+			playerObjects.reserve(2);
+			GetAltSpace()->GetObjectManager().GetAllObjectsByName("Player", playerObjects);
 
-			for (auto it = players.begin(); it != players.end(); ++it)
+			for (auto it = playerObjects.begin(); it != playerObjects.end(); ++it)
 			{
 				Behaviors::PlayerMovement* playerMovement = (*it)->GetComponent<Behaviors::PlayerMovement>();
 				if (playerMovement != nullptr)
 				{
-					switch (playerMovement->GetPlayerID())
-					{
-					case 1:
-						player1 = *it;
-						break;
-					case 2:
-						player2 = *it;
-					}
+					players[playerMovement->GetPlayerID() - 1] = *it;
 				}
 			}
 		}

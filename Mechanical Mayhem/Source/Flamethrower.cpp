@@ -25,6 +25,7 @@
 #include <Parser.h>
 #include <SoundManager.h>
 #include <Input.h>
+#include <ExtendedInput.h>
 
 // Components
 #include <Transform.h>
@@ -47,6 +48,7 @@ namespace Abilities
 	// Constructor
 	Flamethrower::Flamethrower() : Ability("Flamethrower", true),
 		transform(nullptr), physics(nullptr), collider(nullptr), playerController(nullptr), flameArchetype(nullptr), flameEffect(nullptr),
+		soundManager(nullptr), flamethrowerSound(nullptr),
 		speed(0.0f), cooldown(0.0f), cooldownTimer(0.0f),
 		currentFuel(1.0f), maxFuel(1.0f), fuelRefillRate(0.5f), fuelConsumptionRate(1.0f)
 	{
@@ -78,7 +80,7 @@ namespace Abilities
 	{
 		UNREFERENCED_PARAMETER(dt);
 
-		if (Input::GetInstance().CheckHeld(playerController->GetUseKeybind()))
+		if (Input::GetInstance().IsKeyDown(playerController->GetUseKeybind()) || ExtendedInput::GetInstance().GetRTrigger(playerController->GetControllerID()) > 0.0f)
 		{
 			currentFuel = std::clamp(currentFuel - fuelConsumptionRate * dt, 0.0f, maxFuel);
 		}
@@ -193,7 +195,7 @@ namespace Abilities
 	// Deals with audio for flamethrower
 	void Flamethrower::HandleAudio()
 	{
-		bool pressing = Input::GetInstance().CheckHeld(playerController->GetUseKeybind());
+		bool pressing = Input::GetInstance().CheckHeld(playerController->GetUseKeybind()) || ExtendedInput::GetInstance().GetRTrigger(playerController->GetControllerID()) > 0.0f;
 
 		if (pressing && currentFuel > 0.0f)
 		{

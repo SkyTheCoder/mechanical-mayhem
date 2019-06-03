@@ -51,8 +51,10 @@ namespace Levels
 	enum class Map : int
 	{
 		MainMenu = 0,
+		Exit,
 		ControlScreen,
 		Credits,
+		Lobby,
 		LevelSelect,
 		Tutorial,
 		Arena3,

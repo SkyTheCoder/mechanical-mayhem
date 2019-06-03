@@ -97,14 +97,14 @@ namespace Behaviors
 
 			if (ability->IsHoldAbility())
 			{
-				if (input.IsKeyDown(playerMovement->GetUseKeybind()) || extendedInput.GetRTrigger(playerMovement->GetPlayerID() - 1) > 0.0f)
+				if (input.IsKeyDown(playerMovement->GetUseKeybind()) || extendedInput.GetRTrigger(playerMovement->GetControllerID()) > 0.0f)
 				{
 					ability->OnUse();
 				}
 			}
 			else
 			{
-				if (input.CheckTriggered(playerMovement->GetUseKeybind()) || extendedInput.GetRTrigger(playerMovement->GetPlayerID() - 1) > 0.0f && extendedInput.GetRTrigger(playerMovement->GetPlayerID() - 1, 1) <= 0.0f)
+				if (input.CheckTriggered(playerMovement->GetUseKeybind()) || extendedInput.GetRTrigger(playerMovement->GetControllerID()) > 0.0f && extendedInput.GetRTrigger(playerMovement->GetControllerID(), 1) <= 0.0f)
 				{
 					ability->OnUse();
 				}

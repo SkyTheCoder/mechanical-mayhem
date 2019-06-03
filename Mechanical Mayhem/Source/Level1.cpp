@@ -25,6 +25,7 @@
 #include "SpriteSource.h"
 #include <Texture.h>
 #include <Input.h>
+#include <ExtendedInput.h>
 #include "Archetypes.h"
 #include <glfw3.h>
 #include "Tilemap.h"
@@ -32,7 +33,7 @@
 #include <Random.h>
 #include <GameObjectFactory.h>
 #include <SoundManager.h>
-#include <ExtendedInput.h>
+#include "InputSchemeManager.h"
 
 // Components
 #include "Sprite.h"
@@ -218,6 +219,7 @@ namespace Levels
 	// Initialize the memory associated with Level 1.
 	void Level1::Initialize()
 	{
+		InputSchemeManager& inputSchemeManager = *Engine::GetInstance().GetModule<InputSchemeManager>();
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
 
 		// Stop menu music and play in-game music
@@ -240,33 +242,27 @@ namespace Levels
 		backgroundImage = new GameObject(*objectManager.GetArchetypeByName("BackgroundImage"));
 		objectManager.AddObject(*backgroundImage);
 
-		// Create the players and add them to the object manager.
-		GameObject* player = new GameObject(*objectManager.GetArchetypeByName("Player"));
-		player->GetComponent<Behaviors::MonkeyAnimation>()->SetFrames(0, 8, 9, 4, 15, 4, 27, 2, 21, 4);
-		Behaviors::PlayerMovement* playerMovement = static_cast<Behaviors::PlayerMovement*>(player->GetComponent("PlayerMovement"));
-		playerMovement->SetKeybinds('W', 'A', 'D', VK_LCONTROL);
-		playerMovement->SetPlayerID(1);
-		objectManager.AddObject(*player);
-		player->GetComponent<Behaviors::MonkeyAnimation>()->GetSpriteSources("A");
-
-		GameObject* player2 = new GameObject(*objectManager.GetArchetypeByName("Player"));
-		player2->GetComponent<Collider>()->SetGroup(2);
-		player2->GetComponent<Collider>()->SetMask(1 << 2);
-		player2->GetComponent<Behaviors::MonkeyAnimation>()->SetFrames(0, 8, 9, 4, 15, 4, 27, 2, 21, 4);
-		Behaviors::PlayerMovement* player2Movement = static_cast<Behaviors::PlayerMovement*>(player2->GetComponent("PlayerMovement"));
-		player2Movement->SetKeybinds(VK_UP, VK_LEFT, VK_RIGHT, VK_RCONTROL);
-		player2Movement->SetPlayerID(2);
-		objectManager.AddObject(*player2);
-		player2->GetComponent<Behaviors::MonkeyAnimation>()->GetSpriteSources("B");
-
 		// Create the Game Controller, which handles the camera and dimensions.
 		GameObject* gameController = new GameObject(*objectManager.GetArchetypeByName("GameController"));
-		static_cast<Behaviors::CameraFollow*>(gameController->GetComponent("CameraFollow"))->AddPlayer(player);
-		static_cast<Behaviors::CameraFollow*>(gameController->GetComponent("CameraFollow"))->AddPlayer(player2);
 		Behaviors::DimensionController& dimensionController = *static_cast<Behaviors::DimensionController*>(gameController->GetComponent("DimensionController"));
 		objectManager.AddObject(*gameController);
 		objectManager.DispatchEvent(new Event(ET_Generic, "SnapToTarget", 0.01f, GUID(), gameController->GetID()));
 		Graphics::GetInstance().GetDefaultCamera().SetSize(0.0f);
+
+		// Create the players and add them to the object manager.
+		std::vector<GameObject*> players;
+		for (int i = 0; i < static_cast<int>(inputSchemeManager.GetInputSchemes().size()); i++)
+		{
+			GameObject* player = new GameObject(*objectManager.GetArchetypeByName("Player"));
+			player->GetComponent<Behaviors::MonkeyAnimation>()->SetFrames(0, 8, 9, 4, 15, 4, 27, 2, 21, 4);
+			Behaviors::PlayerMovement* playerMovement = static_cast<Behaviors::PlayerMovement*>(player->GetComponent("PlayerMovement"));
+			playerMovement->SetPlayerID(i + 1);
+			playerMovement->SetInputScheme(inputSchemeManager.GetPlayerScheme(i + 1));
+			objectManager.AddObject(*player);
+			player->GetComponent<Behaviors::MonkeyAnimation>()->GetSpriteSources(i % 2 == 0 ? "A" : "B");
+			static_cast<Behaviors::CameraFollow*>(gameController->GetComponent("CameraFollow"))->AddPlayer(player);
+			players.push_back(player);
+		}
 
 		if (dataStaticMap != nullptr && dataRedMap != nullptr && dataBlueMap != nullptr)
 		{
@@ -321,10 +317,12 @@ namespace Levels
 				AddBlueSpikes(blueSpikes, 4, blueDimension);
 				AddAbilities(chipsSpawns, 6);
 
-				static_cast<Sprite*>(player2->GetComponent("Sprite"))->SetAlpha(0.0f);
-				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(1.0f, -28.0f));
-				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(1.0f, -28.0f));
-				static_cast<Behaviors::PlayerMovement*>(player2->GetComponent("PlayerMovement"))->SetKeybinds(VK_UP, VK_LEFT, VK_RIGHT, VK_RCONTROL);
+				for (unsigned i = 0; i < players.size(); i++)
+				{
+					players[i]->GetComponent<Transform>()->SetTranslation(Vector2D(1.0f, -28.0f));
+					players[i]->GetComponent<Sprite>()->SetAlpha(i == 0 ? 1.0f : 0.0f);
+					players[i]->GetComponent<Behaviors::PlayerMovement>()->SetInputScheme(inputSchemeManager.GetPlayerScheme(1));
+				}
 
 				break;
 			}
@@ -360,8 +358,10 @@ namespace Levels
 				AddBlueSpikes(blueSpikes, 36, blueDimension);
 				AddAbilities(chipsSpawns, 8);
 
-				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(6.0f, -15.0f));
-				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(42.0f, -15.0f));
+				for (unsigned i = 0; i < players.size(); i++)
+				{
+					players[i]->GetComponent<Transform>()->SetTranslation(i % 2 == 0 ? Vector2D(6.0f, -15.0f) : Vector2D(42.0f, -15.0f));
+				}
 
 				break;
 			}
@@ -393,8 +393,10 @@ namespace Levels
 				AddBlueSpikes(blueSpikes, 33, blueDimension);
 				AddAbilities(chipsSpawns, 8);
 
-				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(9.0f, -3.0f));
-				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(22.0f, -2.0f));
+				for (unsigned i = 0; i < players.size(); i++)
+				{
+					players[i]->GetComponent<Transform>()->SetTranslation(i % 2 == 0 ? Vector2D(9.0f, -3.0f) : Vector2D(22.0f, -2.0f));
+				}
 
 				break;
 			}
@@ -425,8 +427,10 @@ namespace Levels
 				AddBlueSpikes(blueSpikes, 21, blueDimension);
 				AddAbilities(chipsSpawns, 4);
 
-				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(6.0f, -26.0f));
-				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(23.0f, -27.0f));
+				for (unsigned i = 0; i < players.size(); i++)
+				{
+					players[i]->GetComponent<Transform>()->SetTranslation(i % 2 == 0 ? Vector2D(6.0f, -26.0f) : Vector2D(23.0f, -27.0f));
+				}
 
 				break;
 			}
@@ -454,8 +458,10 @@ namespace Levels
 				AddBlueSpikes(blueSpikes, 16, blueDimension);
 				AddAbilities(chipsSpawns, 4);
 
-				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(3.0f, -2.0f));
-				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(28.0f, -2.0f));
+				for (unsigned i = 0; i < players.size(); i++)
+				{
+					players[i]->GetComponent<Transform>()->SetTranslation(i % 2 == 0 ? Vector2D(3.0f, -2.0f) : Vector2D(28.0f, -2.0f));
+				}
 
 				break;
 			}
@@ -491,8 +497,10 @@ namespace Levels
 				AddBlueSpikes(blueSpikes, 74, blueDimension);
 				AddAbilities(abilities, 8);
 
-				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(16.0f, -38.0f));
-				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(27.0f, -38.0f));
+				for (unsigned i = 0; i < players.size(); i++)
+				{
+					players[i]->GetComponent<Transform>()->SetTranslation(i % 2 == 0 ? Vector2D(16.0f, -38.0f) : Vector2D(27.0f, -38.0f));
+				}
 
 				break;
 			}
@@ -529,8 +537,10 @@ namespace Levels
 				AddBlueSpikes(blueSpikes, 22, blueDimension);
 				AddAbilities(chipsSpawns, 10);
 
-				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(7.0f, -38.0f));
-				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(16.0f, -38.0f));
+				for (unsigned i = 0; i < players.size(); i++)
+				{
+					players[i]->GetComponent<Transform>()->SetTranslation(i % 2 == 0 ? Vector2D(7.0f, -38.0f) : Vector2D(16.0f, -38.0f));
+				}
 
 				gearHeight = -48.0f;
 
@@ -558,8 +568,10 @@ namespace Levels
 				AddBlueSpikes(blueSpikes, 10, blueDimension);
 				AddAbilities(abilities, 5);
 
-				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(9.0f, -45.0f));
-				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(9.0f, -45.0f));
+				for (unsigned i = 0; i < players.size(); i++)
+				{
+					players[i]->GetComponent<Transform>()->SetTranslation(i % 2 == 0 ? Vector2D(9.0f, -46.0f) : Vector2D(9.0f, -46.0f));
+				}
 
 				gearHeight = -64.0f;
 
@@ -586,8 +598,10 @@ namespace Levels
 				AddBlueSpikes(blueSpikes, 14, blueDimension);
 				AddAbilities(abilities, 6);
 
-				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(9.0f, -41.0f));
-				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(14.0f, -41.0f));
+				for (unsigned i = 0; i < players.size(); i++)
+				{
+					players[i]->GetComponent<Transform>()->SetTranslation(i % 2 == 0 ? Vector2D(8.0f, -41.0f) : Vector2D(15.0f, -41.0f));
+				}
 
 				gearHeight = -50.0f;
 
@@ -656,7 +670,7 @@ namespace Levels
 		float lowestGearsDistance = FLT_MAX;
 		for (auto it = players.begin(); it != players.end(); ++it)
 		{
-			int playerID = (*it)->GetComponent<Behaviors::PlayerMovement>()->GetPlayerID();
+			int controllerID = (*it)->GetComponent<Behaviors::PlayerMovement>()->GetControllerID();
 			Vector2D playerTranslation = (*it)->GetComponent<Transform>()->GetTranslation();
 			Vector2D gearsTranslation = risingGears->GetComponent<Transform>()->GetTranslation();
 			float gearsDistancee = abs(playerTranslation.y - gearsTranslation.y);
@@ -664,12 +678,12 @@ namespace Levels
 			float lowFreq = 0.0f;
 			float highFreq = 0.0f;
 
-			extendedInput.GetVibration(lowFreq, highFreq, playerID - 1);
+			extendedInput.GetVibration(lowFreq, highFreq, controllerID);
 
 			lowFreq = max(lowFreq, 10.0f / (max(1.0f, gearsDistancee * 0.5f) * 50.0f));
 			highFreq = max(highFreq, 25.0f / (max(1.0f, gearsDistancee * 0.5f) * 50.0f));
 
-			extendedInput.SetVibration(lowFreq, highFreq, playerID - 1);
+			extendedInput.SetVibration(lowFreq, highFreq, controllerID);
 
 			lowestGearsDistance = min(lowestGearsDistance, gearsDistancee);
 		}
@@ -694,8 +708,11 @@ namespace Levels
 				soundManager->PlaySound("SoundFanf.wav")->setVolume(5.0f);
 			}
 
-			// Restart on <SPACE>
-			if (input.CheckTriggered(' '))
+			// Restart on space, enter, or start.
+			bool controllerPressing = false;
+			for (int i = 0; i < 4; i++)
+				controllerPressing = controllerPressing || extendedInput.CheckXBTriggered(XB_START, i);
+			if (controllerPressing || input.CheckTriggered(' ') || input.CheckTriggered(VK_RETURN))
 			{
 				GetSpace()->SetLevel(new Levels::LevelSelect());
 			}
@@ -706,8 +723,11 @@ namespace Levels
 		}
 		else if (map == Map::Tutorial)
 		{
-			// Restart on <SPACE>
-			if (input.CheckTriggered(' '))
+			// Restart on space, enter, or start.
+			bool controllerPressing = false;
+			for (int i = 0; i < 4; i++)
+				controllerPressing = controllerPressing || extendedInput.CheckXBTriggered(XB_START, i);
+			if (controllerPressing || input.CheckTriggered(' ') || input.CheckTriggered(VK_RETURN))
 			{
 				GetSpace()->RestartLevel();
 			}

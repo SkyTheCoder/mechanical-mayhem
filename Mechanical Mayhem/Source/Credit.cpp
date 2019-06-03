@@ -52,6 +52,8 @@ namespace Levels
 	// Load the resources associated with Credit.
 	void Credit::Load()
 	{
+		Menu::Load();
+
 		std::cout << "Credit::Load" << std::endl;
 
 		GameObjectFactory& objectFactory = GameObjectFactory::GetInstance();
@@ -78,7 +80,9 @@ namespace Levels
 
 		objectManager.AddObject(*new GameObject(*objectManager.GetArchetypeByName("FullScreenImage")));
 
-		AddMapButton("Main Menu", Vector2D(0.0f, -2.5f), Levels::Map::MainMenu);
+		MenuButton* mainMenu = AddMenuButton("Main Menu", Vector2D(0.0f, -2.5f), Levels::Map::MainMenu);
+
+		SetDefaultButton(mainMenu);
 
 		Camera& camera = Graphics::GetInstance().GetDefaultCamera();
 		camera.SetTranslation(Vector2D());
@@ -90,37 +94,15 @@ namespace Levels
 	//	 dt = Change in time (in seconds) since the last game loop.
 	void Credit::Update(float dt)
 	{
-		UNREFERENCED_PARAMETER(dt);
+		Menu::Update(dt);
 	}
 
 	// Unload the resources associated with Credit.
 	void Credit::Unload()
 	{
+		Menu::Unload();
+
 		std::cout << "Credit::Unload" << std::endl;
-	}
-
-	//------------------------------------------------------------------------------
-	// Private Functions:
-	//------------------------------------------------------------------------------
-
-	// Adds a new map button.
-	// name = The name of the level.
-	// position = The position of the button.
-	// map = The map the button should switch to.
-	void Credit::AddMapButton(const char* name_, Vector2D position, Levels::Map map)
-	{
-		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
-
-		GameObject* levelButton = new GameObject(*objectManager.GetArchetypeByName("Button"));
-		static_cast<Transform*>(levelButton->GetComponent("Transform"))->SetTranslation(position);
-		static_cast<Behaviors::Button*>(levelButton->GetComponent("Button"))->SetMap(map);
-		objectManager.AddObject(*levelButton);
-
-		GameObject* text = new GameObject(*objectManager.GetArchetypeByName("Text"));
-		text->GetComponent<SpriteTextMono>()->SetText(name_);
-		text->GetComponent<SpriteTextMono>()->SetColor(Color(0.0f, 0.0f, 0.0f));
-		text->GetComponent<Transform>()->SetTranslation(position);
-		objectManager.AddObject(*text);
 	}
 }
 //----------------------------------------------------------------------------

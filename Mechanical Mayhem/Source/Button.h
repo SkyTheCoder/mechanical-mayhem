@@ -24,7 +24,8 @@
 // Forward Declarations:
 //------------------------------------------------------------------------------
 
-typedef class Sprite Sprite;
+class Animation;
+class Parser;
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -55,10 +56,23 @@ namespace Behaviors
 		// Initialize this component (happens at object creation).
 		void Initialize() override;
 
+		// Loads object data from a file.
+		// Params:
+		//   parser = The parser for the file we want to read from.
+		void Deserialize(Parser& parser) override;
+
+		// Saves object data to a file.
+		// Params:
+		//   parser = The parser for the file we want to write to.
+		void Serialize(Parser& parser) const override;
+
 		// Update function for this component.
 		// Params:
 		//   dt = The (fixed) change in time since the last step.
 		void Update(float dt) override;
+
+		// Called when the button is pressed.
+		void OnPress();
 
 		// Returns the map the button loads
 		Levels::Map GetMap();
@@ -66,16 +80,33 @@ namespace Behaviors
 		// Sets the map the button loads
 		void SetMap(Levels::Map map);
 
-	private:
+		// Sets whether the button is currently "selected," either by the mouse or a keyboard/controller.
+		void SetSelected(bool selected);
 
+		// Returns whether the button is currently "selected," either by the mouse or a keyboard/controller.
+		bool IsSelected() const;
+
+		// Gets the bounding rectangle of this button.
+		const BoundingRectangle& GetBoundingRect() const;
+
+	private:
 		//------------------------------------------------------------------------------
 		// Private Variables:
 		//------------------------------------------------------------------------------
 
 		// Components
-		Sprite* sprite;
-		BoundingRectangle boundingRact;
+		Animation* animation;
+		BoundingRectangle boundingRect;
 		Levels::Map map;
+
+		// Whether the button is currently "selected," either by the mouse or a keyboard/controller.
+		bool selected;
+
+		// Animation frame indexes.
+		int unselectedIndex;
+		int unselectedLength;
+		int selectedIndex;
+		int selectedLength;
 	};
 }
 

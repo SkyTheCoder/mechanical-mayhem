@@ -126,7 +126,7 @@ namespace Behaviors
 				if (other.GetName() == "Player")
 				{
 					PlayerMovement* playerMovement = other.GetComponent<PlayerMovement>();
-					ExtendedInput::GetInstance().SetVibration(pow(damage / 100.0f, 0.5f), pow(damage / 100.0f, 0.5f), playerMovement->GetPlayerID() - 1);
+					ExtendedInput::GetInstance().SetVibration(pow(damage / 100.0f, 0.5f), pow(damage / 100.0f, 0.5f), playerMovement->GetControllerID());
 				}
 
 				// If this object is a mine, play an explosion sound effect.

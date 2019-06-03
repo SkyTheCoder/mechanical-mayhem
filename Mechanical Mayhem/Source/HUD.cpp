@@ -66,7 +66,7 @@ namespace Behaviors
 		ResourceManager& resourceManager = static_cast<Level*>(GetOwner())->GetSpace()->GetResourceManager();
 
 		// HUD background
-		hudBackground = ojectFactory.CreateObject("HUDBackground", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Icon" + std::string(playerID == 1 ? "A" : "B") + "_01.png"));
+		hudBackground = ojectFactory.CreateObject("HUDBackground", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Icon" + std::string((playerID - 1) % 2 == 0 ? "A" : "B") + "_01.png"));
 
 		// Health bar
 		healthBarCenter = ojectFactory.CreateObject("HealthBar", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBar.png"));
@@ -187,8 +187,14 @@ namespace Behaviors
 		float y = screenDimensions.top - 1.5f;
 		
 		float flipx = 1.0f;
-		if (playerID == 2)
+		if ((playerID - 1) % 2 == 1)
 			flipx = -1.0f;
+
+		if (playerID > 2)
+			y = screenDimensions.bottom + 1.5f;
+
+		if (playerID > 4)
+			y = screenDimensions.center.y;
 
 		// HUD Outline
 		hudBackground->GetComponent<Transform>()->SetScale(Vector2D(flipx * 6.0f, 2.0f));

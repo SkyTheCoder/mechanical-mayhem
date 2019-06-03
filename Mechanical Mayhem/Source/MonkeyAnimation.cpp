@@ -181,8 +181,8 @@ namespace Behaviors
 
 		Vector2D velocity = physics->GetVelocity();
 
-		bool movingLeft = extendedInput.GetLThumb(monkeyMovement->GetPlayerID() - 1).x < 0.0f || input.IsKeyDown(monkeyMovement->GetLeftKeybind());
-		bool movingRight = extendedInput.GetLThumb(monkeyMovement->GetPlayerID() - 1).x > 0.0f || input.IsKeyDown(monkeyMovement->GetRightKeybind());
+		bool movingLeft = extendedInput.GetLThumb(monkeyMovement->GetControllerID()).x < 0.0f || input.IsKeyDown(monkeyMovement->GetLeftKeybind());
+		bool movingRight = extendedInput.GetLThumb(monkeyMovement->GetControllerID()).x > 0.0f || input.IsKeyDown(monkeyMovement->GetRightKeybind());
 
 		// Check for wall-sliding.
 		bool wallSliding = monkeyMovement->animOnLeftWall > 0.0f && movingLeft || monkeyMovement->animOnRightWall > 0.0f && movingRight;

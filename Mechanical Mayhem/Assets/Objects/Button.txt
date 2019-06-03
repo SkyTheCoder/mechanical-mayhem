@@ -1,6 +1,6 @@
 Button
 {
-  numComponents : 4
+  numComponents : 5
   Transform
   {
     translation : { 0, 0 }
@@ -18,7 +18,14 @@ Button
     mask : 0
     extents : { 1.5, 0.375 }
   }
+  Animation
+  {
+  }
   Behaviors::Button
   {
+    unselectedIndex : 0
+    unselectedLength : 1
+    selectedIndex : 1
+    selectedLength : 5
   }
 }

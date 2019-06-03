@@ -26,6 +26,7 @@
 #include <SoundManager.h>
 #include <FullscreenManager.h>
 #include <ExtendedInput.h>
+#include "InputSchemeManager.h"
 
 // Initial game state
 #include "MainMenu.h"
@@ -88,9 +89,10 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 
 	// Add additional modules to engine
 	engine.AddModule(new FullscreenManager());
+	engine.AddModule(new InputSchemeManager());
+	engine.AddModule(ExtendedInput::GetInstance().CreateModule());
 	engine.AddModule(space);
 	engine.AddModule(hudSpace);
-	engine.AddModule(ExtendedInput::GetInstance().CreateModule());
 	ExtendedInput::GetInstance().SetVibrationDecay(0.1f);
 
 	// Set up sound effects/music
@@ -170,9 +172,6 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 		settingsParser.WriteVariable("vSync", startupSettings.vSync);
 		settingsParser.EndScope();
 	}
-
-	// TEMPORARY NON-FULLSCREEN (FOR DEBUG)
-	//startupSettings.fullscreen = false;
 
 	// Game engine goes!
 	engine.Start(startupSettings);

@@ -53,6 +53,8 @@ namespace Levels
 	// Load the resources associated with LevelSelect.
 	void LevelSelect::Load()
 	{
+		Menu::Load();
+
 		std::cout << "LevelSelect::Load" << std::endl;
 
 		GameObjectFactory& objectFactory = GameObjectFactory::GetInstance();
@@ -81,17 +83,43 @@ namespace Levels
 		text->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, 2.5f));
 		objectManager.AddObject(*text);
 
-		/*AddMapButton("Tutorial", Vector2D(-1.75f, 1.5f), Levels::Map::Tutorial);
-		AddMapButton("Arena 3", Vector2D(1.75f, 1.5f), Levels::Map::Arena3);
-		AddMapButton("MediumBoy", Vector2D(-1.75f, 0.5f), Levels::Map::MediumBoy);
-		AddMapButton("Channels", Vector2D(1.75, 0.5f), Levels::Map::Channels);
-		AddMapButton("Separation", Vector2D(-1.75f, -0.5f), Levels::Map::Separation);
-		AddMapButton("Descent", Vector2D(1.75f, -0.5f), Levels::Map::Descent);*/
-		AddMapButton("Blah", Vector2D(-1.75f, 1.5f), Levels::Map::Blah);
-		AddMapButton("Chase", Vector2D(1.75f, 1.5f), Levels::Map::Chase);
-		AddMapButton("Merge", Vector2D(-1.75f, 0.5f), Levels::Map::Merge);
-		AddMapButton("Descent", Vector2D(1.75f, 0.5f), Levels::Map::Descent);
-		AddMapButton("Main Menu", Vector2D(0.0f, -2.5f), Levels::Map::MainMenu);
+		/*AddMenuButton("Tutorial", Vector2D(-1.75f, 1.5f), Levels::Map::Tutorial);
+		AddMenuButton("Arena 3", Vector2D(1.75f, 1.5f), Levels::Map::Arena3);
+		AddMenuButton("MediumBoy", Vector2D(-1.75f, 0.5f), Levels::Map::MediumBoy);
+		AddMenuButton("Channels", Vector2D(1.75, 0.5f), Levels::Map::Channels);
+		AddMenuButton("Separation", Vector2D(-1.75f, -0.5f), Levels::Map::Separation);
+		AddMenuButton("Descent", Vector2D(1.75f, -0.5f), Levels::Map::Descent);*/
+
+		MenuButton* blah = AddMenuButton("Blah", Vector2D(-1.75f, 1.5f), Levels::Map::Blah);
+		MenuButton* chase = AddMenuButton("Chase", Vector2D(1.75f, 1.5f), Levels::Map::Chase);
+		MenuButton* merge = AddMenuButton("Merge", Vector2D(-1.75f, 0.5f), Levels::Map::Merge);
+		MenuButton* descent = AddMenuButton("Descent", Vector2D(1.75f, 0.5f), Levels::Map::Descent);
+		MenuButton* lobby = AddMenuButton("Lobby", Vector2D(0.0f, -2.5f), Levels::Map::Lobby);
+
+		blah->north = lobby;
+		blah->east = chase;
+		blah->south = merge;
+		blah->west = chase;
+
+		chase->north = lobby;
+		chase->east = blah;
+		chase->south = descent;
+		chase->west = blah;
+
+		merge->north = blah;
+		merge->east = descent;
+		merge->south = lobby;
+		merge->west = descent;
+
+		descent->north = chase;
+		descent->east = merge;
+		descent->south = lobby;
+		descent->west = merge;
+
+		lobby->north = merge;
+		lobby->south = blah;
+
+		SetDefaultButton(blah);
 
 		Camera& camera = Graphics::GetInstance().GetDefaultCamera();
 		camera.SetTranslation(Vector2D());
@@ -103,37 +131,15 @@ namespace Levels
 	//	 dt = Change in time (in seconds) since the last game loop.
 	void LevelSelect::Update(float dt)
 	{
-		UNREFERENCED_PARAMETER(dt);
+		Menu::Update(dt);
 	}
 
 	// Unload the resources associated with LevelSelect.
 	void LevelSelect::Unload()
 	{
+		Menu::Unload();
+
 		std::cout << "LevelSelect::Unload" << std::endl;
-	}
-
-	//------------------------------------------------------------------------------
-	// Private Functions:
-	//------------------------------------------------------------------------------
-
-	// Adds a new map button.
-	// name = The name of the level.
-	// position = The position of the button.
-	// map = The map the button should switch to.
-	void LevelSelect::AddMapButton(const char* name_, Vector2D position, Levels::Map map)
-	{
-		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
-
-		GameObject* levelButton = new GameObject(*objectManager.GetArchetypeByName("Button"));
-		static_cast<Transform*>(levelButton->GetComponent("Transform"))->SetTranslation(position);
-		static_cast<Behaviors::Button*>(levelButton->GetComponent("Button"))->SetMap(map);
-		objectManager.AddObject(*levelButton);
-
-		GameObject*text = new GameObject(*objectManager.GetArchetypeByName("Text"));
-		text->GetComponent<SpriteTextMono>()->SetText(name_);
-		text->GetComponent<SpriteTextMono>()->SetColor(Color(0.0f, 0.0f, 0.0f));
-		text->GetComponent<Transform>()->SetTranslation(position);
-		objectManager.AddObject(*text);
 	}
 }
 //----------------------------------------------------------------------------

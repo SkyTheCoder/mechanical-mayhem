@@ -121,7 +121,7 @@ namespace Abilities
 		objectManager.AddObject(*mine);
 		proximityMines.push_back(mine->GetID());
 
-		ExtendedInput::GetInstance().SetVibration(0.0f, 0.5f, GetOwner()->GetComponent<Behaviors::PlayerMovement>()->GetPlayerID() - 1);
+		ExtendedInput::GetInstance().SetVibration(0.0f, 0.5f, GetOwner()->GetComponent<Behaviors::PlayerMovement>()->GetControllerID());
 	}
 
 	// Returns the % of mana/fuel/uses/whatever left on this ability.

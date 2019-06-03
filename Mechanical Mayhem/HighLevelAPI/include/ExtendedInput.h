@@ -69,10 +69,10 @@ public:
 	BetaObject* CreateModule();
 
 	// Returns whether the specified controller was connected a number of frames before the current frame.
-	bool WasControllerConnected(int controller = 0, unsigned framesBefore = 0) const;
+	bool IsControllerConnected(int controller = 0, unsigned framesBefore = 0) const;
 
 	// Returns whether the specified controller became connected this frame.
-	bool IsControllerConnected(int controller = 0) const;
+	bool ControllerConnectedThisFrame(int controller = 0) const;
 
 	// Test if extended button was down before and is still down
 	bool CheckXBHeld(ExtendedButton button, int controller = 0) const;

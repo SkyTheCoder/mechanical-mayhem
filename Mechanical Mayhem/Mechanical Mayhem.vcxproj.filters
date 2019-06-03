@@ -121,6 +121,15 @@
     <ClCompile Include="Source\CameraShake.cpp">
       <Filter>Game\Effects</Filter>
     </ClCompile>
+    <ClCompile Include="Source\InputSchemeManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Lobby.cpp">
+      <Filter>Game\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Menu.cpp">
+      <Filter>Game\Levels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -221,6 +230,15 @@
     </ClInclude>
     <ClInclude Include="Source\CameraShake.h">
       <Filter>Game\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\InputSchemeManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Lobby.h">
+      <Filter>Game\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Menu.h">
+      <Filter>Game\Levels</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

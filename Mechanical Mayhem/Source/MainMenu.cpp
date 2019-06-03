@@ -57,6 +57,8 @@ namespace Levels
 	// Load the resources associated with MainMenu.
 	void MainMenu::Load()
 	{
+		Menu::Load();
+
 		std::cout << "MainMenu::Load" << std::endl;
 
 		GameObjectFactory& objectFactory = GameObjectFactory::GetInstance();
@@ -95,9 +97,25 @@ namespace Levels
 		//static_cast<Transform*>(text->GetComponent("Transform"))->SetScale(Vector2D(32.0f, 32.0f));
 		objectManager.AddObject(*text);*/
 
-		AddMapButton("Controls", Vector2D(-1.75f, -2.5f), Levels::Map::ControlScreen);
-		AddMapButton("Credits", Vector2D(1.74f, -2.5f), Levels::Map::Credits);
-		AddMapButton("Level Select", Vector2D(0.0f, -1.4f), Levels::Map::LevelSelect);
+		MenuButton* controls = AddMenuButton("Controls", Vector2D(-1.75f, -2.5f), Levels::Map::ControlScreen);
+		MenuButton* credits = AddMenuButton("Credits", Vector2D(1.75f, -2.5f), Levels::Map::Credits);
+		MenuButton* lobby = AddMenuButton("Lobby", Vector2D(0.0f, -1.5f), Levels::Map::Lobby);
+		MenuButton* exit = AddMenuButton("Exit", Vector2D(0.0f, -3.5f), Levels::Map::Exit);
+
+		controls->north = lobby;
+		controls->east = credits;
+		controls->south = exit;
+		controls->west = credits;
+		credits->north = lobby;
+		credits->east = controls;
+		credits->south = exit;
+		credits->west = controls;
+		lobby->north = exit;
+		lobby->south = controls;
+		exit->north = controls;
+		exit->south = lobby;
+
+		SetDefaultButton(lobby);
 
 		Camera& camera = Graphics::GetInstance().GetDefaultCamera();
 		camera.SetTranslation(Vector2D());
@@ -114,39 +132,15 @@ namespace Levels
 	//	 dt = Change in time (in seconds) since the last game loop.
 	void MainMenu::Update(float dt)
 	{
-		UNREFERENCED_PARAMETER(dt);
+		Menu::Update(dt);
 	}
 
 	// Unload the resources associated with MainMenu.
 	void MainMenu::Unload()
 	{
+		Menu::Unload();
+
 		std::cout << "MainMenu::Unload" << std::endl;
-	}
-
-	//------------------------------------------------------------------------------
-	// Private Functions:
-	//------------------------------------------------------------------------------
-
-	// Adds a new map button.
-	// name = The name of the level.
-	// position = The position of the button.
-	// map = The map the button should switch to.
-	void MainMenu::AddMapButton(const char* name_, Vector2D position, Levels::Map map)
-	{
-		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
-
-		objectManager.AddArchetype(*new GameObject(*objectManager.GetArchetypeByName("Button")));
-
-		GameObject* levelButton = new GameObject(*objectManager.GetArchetypeByName("Button"));
-		static_cast<Transform*>(levelButton->GetComponent("Transform"))->SetTranslation(position);
-		static_cast<Behaviors::Button*>(levelButton->GetComponent("Button"))->SetMap(map);
-		objectManager.AddObject(*levelButton);
-
-		GameObject*text = new GameObject(*objectManager.GetArchetypeByName("Text"));
-		text->GetComponent<SpriteTextMono>()->SetText(name_);
-		text->GetComponent<SpriteTextMono>()->SetColor(Color(0.0f, 0.0f, 0.0f));
-		text->GetComponent<Transform>()->SetTranslation(position);
-		objectManager.AddObject(*text);
 	}
 }
 //----------------------------------------------------------------------------

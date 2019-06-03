@@ -25,6 +25,7 @@
 #include "Space.h"
 #include <Interpolation.h>
 #include <ExtendedInput.h>
+#include <Random.h>
 
 // Components
 #include "Transform.h"
@@ -35,8 +36,8 @@
 #include "AbilityHolder.h"
 #include "AbilityPickup.h"
 
-// Misc
-#include <Random.h>
+// Abilities
+#include "Jetpack.h"
 
 //------------------------------------------------------------------------------
 
@@ -51,14 +52,14 @@ namespace Behaviors
 	//------------------------------------------------------------------------------
 
 	// Constructor
-	PlayerMovement::PlayerMovement(unsigned keyUp, unsigned keyLeft, unsigned keyRight, unsigned keyUse) : Component("PlayerMovement"),
-		keyUp(keyUp), keyLeft(keyLeft), keyRight(keyRight), keyUse(keyUse),
+	PlayerMovement::PlayerMovement() : Component("PlayerMovement"),
 		walkSpeed(5.0f), walkSpeedOld(walkSpeed), jumpSpeed(0.0f, 11.0f), jumpSpeedOld(jumpSpeed), slidingJumpSpeed(6.0f, 6.75f),
 		gravity(0.0f, -16.0f), slidingGravity(0.0f, -9.0f), terminalVelocity(9.0f), slidingTerminalVelocity(1.5f), gracePeriod(0.15f),
-		transform(nullptr), physics(nullptr), soundManager(nullptr), slideSound(nullptr),
+		transform(nullptr), physics(nullptr), abilityHolder(nullptr),
+		soundManager(nullptr), slideSound(nullptr),
 		playerID(0), switchCharges(0),
 		onGround(false), onLeftWall(false), onRightWall(false), animOnGround(0.0f), animOnLeftWall(0.0f), animOnRightWall(0.0f),
-		hasJumped(false), airTime(0.0f), leftTime(0.0f), rightTime(0.0f), movementLerpGround(1.0f), movementLerpAir(0.98f),
+		hasJumped(false), airTime(0.0f), leftTime(0.0f), rightTime(0.0f), movementLerpGround(1.0f), movementLerpAir(0.98f), jumpCancelFactor(0.7f),
 		stepTimer(0.0f)
 	{
 	}
@@ -75,8 +76,9 @@ namespace Behaviors
 	void PlayerMovement::Initialize()
 	{
 		// Store the required components for ease of access.
-		transform = static_cast<Transform*>(GetOwner()->GetComponent("Transform"));
-		physics = static_cast<Physics*>(GetOwner()->GetComponent("Physics"));
+		transform = GetOwner()->GetComponent<Transform>();
+		physics = GetOwner()->GetComponent<Physics>();
+		abilityHolder = GetOwner()->GetComponent<AbilityHolder>();
 
 		// Add sounds
 		soundManager = Engine::GetInstance().GetModule<SoundManager>();
@@ -98,7 +100,7 @@ namespace Behaviors
 
 		// Switch dimensions when pressing the key, there are unused charges, and dimension switching is not on cooldown.
 		Input& input = Input::GetInstance();
-		if (input.IsKeyDown(keyUse) && switchCharges > 0 && dimensionController.GetSwitchCooldown() <= 0.0f)
+		if (input.IsKeyDown(inputScheme.keyUse) && switchCharges > 0 && dimensionController.GetSwitchCooldown() <= 0.0f)
 		{
 			// Calculate next dimension ID
 			unsigned newDimension = (dimensionController.GetActiveDimension() + 1) % dimensionController.GetDimensionCount();
@@ -129,7 +131,7 @@ namespace Behaviors
 			AbilityPickup* abilityPickup = other.GetComponent<AbilityPickup>();
 			if (abilityPickup != nullptr && abilityPickup->IsActive())
 			{
-				GetOwner()->GetComponent<AbilityHolder>()->SetAbility(abilityPickup->GetAbilityType());
+				abilityHolder->SetAbility(abilityPickup->GetAbilityType());
 			}
 		}
 
@@ -171,57 +173,58 @@ namespace Behaviors
 		}
 	}
 
-	// Sets the keybinds for the monkey.
-	// Params:
-	//   keyUp = The up keybind.
-	//   keyLeft = The left keybind.
-	//   keyRight = The right keybind.
-	void PlayerMovement::SetKeybinds(unsigned keyUp_, unsigned keyLeft_, unsigned keyRight_, unsigned keySwitch_)
+	// Sets the input scheme for the player.
+	void PlayerMovement::SetInputScheme(const InputScheme& scheme)
 	{
-		keyUp = keyUp_;
-		keyLeft = keyLeft_;
-		keyRight = keyRight_;
-		keyUse = keySwitch_;
+		inputScheme = scheme;
 	}
 
 	// Gets the keybind for jumping up.
 	unsigned PlayerMovement::GetUpKeybind() const
 	{
-		return keyUp;
+		return inputScheme.keyUp;
 	}
 
 	// Gets the keybind for left
 	unsigned PlayerMovement::GetLeftKeybind() const
 	{
-		return keyLeft;
+		return inputScheme.keyLeft;
 	}
 
 	// Gets the keybind for right
 	unsigned PlayerMovement::GetRightKeybind() const
 	{
-		return keyRight;
+		return inputScheme.keyRight;
 	}
 
 	// Gets the keybind for using an ability.
 	unsigned PlayerMovement::GetUseKeybind() const
 	{
-		return keyUse;
+		return inputScheme.keyUse;
 	}
 
 	// Sets the player's ID.
-	// Params:
-	//   newID = The ID to set to.
 	void PlayerMovement::SetPlayerID(int newID)
 	{
 		playerID = newID;
 	}
 
 	// Sets the player's ID.
-	// Returns:
-	//   The player's ID.
 	int PlayerMovement::GetPlayerID() const
 	{
 		return playerID;
+	}
+
+	// Sets the ID of the controller tied to this player.
+	void PlayerMovement::SetControllerID(int newID)
+	{
+		inputScheme.controllerID = newID;
+	}
+
+	// Gets the ID of the controller tied to this player.
+	int PlayerMovement::GetControllerID() const
+	{
+		return inputScheme.controllerID;
 	}
 
 	// Determines whether the player is grounded
@@ -242,16 +245,16 @@ namespace Behaviors
 		Vector2D velocity = physics->GetVelocity();
 
 		// Initialize target velocity to 0.
-		float targetVelocityX = std::clamp(ExtendedInput::GetInstance().GetLThumb(playerID - 1).x * 2.0f, -1.0f, 1.0f);
+		float targetVelocityX = std::clamp(ExtendedInput::GetInstance().GetLThumb(inputScheme.controllerID).x * 2.0f, -1.0f, 1.0f);
 
 		// If the right arrow key is pressed, move to the right.
-		if (input.IsKeyDown(keyRight))
+		if (input.IsKeyDown(inputScheme.keyRight))
 		{
 			targetVelocityX += 1.0f;
 		}
 
 		// If the right arrow key is pressed, move to the left.
-		if (input.IsKeyDown(keyLeft))
+		if (input.IsKeyDown(inputScheme.keyLeft))
 		{
 			targetVelocityX -= 1.0f;
 		}
@@ -308,7 +311,7 @@ namespace Behaviors
 		bool canJump = airTime <= gracePeriod || onlyLeftWall || onlyRightWall;
 
 		// If the monkey has not jumped since landing, was on the ground recently, and the up arrow key is pressed, jump.
-		if (!hasJumped && canJump && (extendedInput.IsXBDown(XB_A, playerID - 1) || input.IsKeyDown(keyUp)))
+		if (!hasJumped && canJump && (extendedInput.IsXBDown(XB_A, inputScheme.controllerID) || input.IsKeyDown(inputScheme.keyUp)))
 		{
 			if (isSliding)
 			{
@@ -365,6 +368,18 @@ namespace Behaviors
 			{
 				physics->AddForce(gravity);
 			}
+
+			if (velocity.y > 0.0f)
+			{
+				if (!(abilityHolder->GetAbilityType() == Abilities::ABILITY_JETPACK
+					&& static_cast<Abilities::Jetpack*>(abilityHolder->GetAbility())->IsActive()))
+				{
+					if (input.CheckReleased(inputScheme.keyUp) || extendedInput.CheckXBReleased(XB_A, inputScheme.controllerID))
+					{
+						velocity.y *= jumpCancelFactor;
+					}
+				}
+			}
 		}
 
 		// Clamp velocity.
@@ -378,8 +393,8 @@ namespace Behaviors
 			velocity.y = max(-terminalVelocity, velocity.y);
 		}
 
-		bool movingLeft = extendedInput.GetLThumb(playerID - 1).x < 0.0f || input.IsKeyDown(keyLeft);
-		bool movingRight = extendedInput.GetLThumb(playerID - 1).x > 0.0f || input.IsKeyDown(keyRight);
+		bool movingLeft = extendedInput.GetLThumb(inputScheme.controllerID).x < 0.0f || input.IsKeyDown(inputScheme.keyLeft);
+		bool movingRight = extendedInput.GetLThumb(inputScheme.controllerID).x > 0.0f || input.IsKeyDown(inputScheme.keyRight);
 
 		if (animOnGround <= 0.0f && (animOnLeftWall > 0.0f && movingLeft || animOnRightWall > 0.0f && movingRight))
 		{

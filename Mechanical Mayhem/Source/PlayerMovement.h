@@ -19,6 +19,9 @@
 
 #include "Vector2D.h" // Vector2D
 
+// Systems
+#include "InputSchemeManager.h"
+
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
@@ -42,6 +45,7 @@ namespace FMOD
 namespace Behaviors
 {
 	class MonkeyAnimation;
+	class AbilityHolder;
 
 	class PlayerMovement : public Component
 	{
@@ -51,7 +55,7 @@ namespace Behaviors
 		//------------------------------------------------------------------------------
 
 		// Constructor
-		PlayerMovement(unsigned keyUp = 0, unsigned keyLeft = 0, unsigned keyRight = 0, unsigned keyUse = 0);
+		PlayerMovement();
 
 		// Clone a component and return a pointer to the cloned component.
 		// Returns:
@@ -71,13 +75,8 @@ namespace Behaviors
 		//   event = The event that has been received.
 		void HandleEvent(const Event& event) override;
 
-		// Sets the keybinds for the monkey.
-		// Params:
-		//   keyUp = The up keybind.
-		//   keyLeft = The left keybind.
-		//   keyRight = The right keybind.
-		//	 keyUse = The use keybind.
-		void SetKeybinds(unsigned keyUp, unsigned keyLeft, unsigned keyRight, unsigned keyUse);
+		// Sets the input scheme for the player.
+		void SetInputScheme(const InputScheme& scheme);
 
 		// Gets the keybind for jumping up.
 		unsigned GetUpKeybind() const;
@@ -92,14 +91,16 @@ namespace Behaviors
 		unsigned GetUseKeybind() const;
 
 		// Sets the player's ID.
-		// Params:
-		//   newID = The ID to set to.
 		void SetPlayerID(int newID);
 
-		// Sets the player's ID.
-		// Returns:
-		//   The player's ID.
+		// Gets the player's ID.
 		int GetPlayerID() const;
+
+		// Sets the ID of the controller tied to this player.
+		void SetControllerID(int newID);
+
+		// Gets the ID of the controller tied to this player.
+		int GetControllerID() const;
 
 		// Starts PowerUp Timer
 		void StartPUTimer();
@@ -126,10 +127,7 @@ namespace Behaviors
 		//------------------------------------------------------------------------------
 
 		// Keybinds
-		unsigned keyUp;
-		unsigned keyLeft;
-		unsigned keyRight;
-		unsigned keyUse;
+		InputScheme inputScheme;
 
 		// Movement properties
 		float walkSpeed;
@@ -146,6 +144,7 @@ namespace Behaviors
 		// Components
 		Transform* transform;
 		Physics* physics;
+		AbilityHolder* abilityHolder;
 
 		// Sound manager
 		SoundManager* soundManager;
@@ -167,6 +166,7 @@ namespace Behaviors
 		float rightTime;
 		float movementLerpGround;
 		float movementLerpAir;
+		float jumpCancelFactor;
 
 		float stepTimer;
 

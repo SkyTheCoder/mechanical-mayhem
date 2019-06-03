@@ -46,7 +46,7 @@ namespace Behaviors
 	//   maxHealth = The max health for the object.
 	//   destroyOnDeath = hether the object should be destroyed when it dies.
 	Health::Health(int maxHealth, bool destroyOnDeath) : Component("Health"),
-		health(maxHealth), maxHealth(maxHealth), destroyOnDeath(destroyOnDeath)
+		health(maxHealth), maxHealth(maxHealth), destroyOnDeath(destroyOnDeath), hasDeathAnimation(false)
 	{
 	}
 

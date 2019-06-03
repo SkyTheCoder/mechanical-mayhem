@@ -85,7 +85,7 @@ namespace Abilities
 	void Jetpack::Update(float dt)
 	{
 		// Check if user is even using the jetpack
-		active = !playerMovement->IsOnGround() && (Input::GetInstance().CheckHeld(playerMovement->GetUseKeybind()) || ExtendedInput::GetInstance().GetRTrigger() > 0.0f);
+		active = !playerMovement->IsOnGround() && (Input::GetInstance().CheckHeld(playerMovement->GetUseKeybind()) || ExtendedInput::GetInstance().GetRTrigger(playerMovement->GetControllerID()) > 0.0f);
 
 		// Manage fuel amounts
 		FuelManagement(dt);

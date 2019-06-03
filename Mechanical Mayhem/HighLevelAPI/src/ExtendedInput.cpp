@@ -39,7 +39,7 @@ BetaObject* ExtendedInput::CreateModule()
 }
 
 // Returns whether the specified controller was connected a number of frames before the current frame.
-bool ExtendedInput::WasControllerConnected(int controller, unsigned framesBefore) const
+bool ExtendedInput::IsControllerConnected(int controller, unsigned framesBefore) const
 {
 	if (framesBefore >= inputBuffer.size() || controller < 0 || controller >= XUSER_MAX_COUNT)
 		return false;
@@ -48,9 +48,9 @@ bool ExtendedInput::WasControllerConnected(int controller, unsigned framesBefore
 }
 
 // Returns whether the specified controller became connected this frame.
-bool ExtendedInput::IsControllerConnected(int controller) const
+bool ExtendedInput::ControllerConnectedThisFrame(int controller) const
 {
-	return WasControllerConnected(controller, 0) && !WasControllerConnected(controller, 1);
+	return IsControllerConnected(controller, 0) && !IsControllerConnected(controller, 1);
 }
 
 // Test if extended button was down before and is still down
@@ -325,8 +325,8 @@ void ExtendedInput::SendVibrationState(float lowFreq, float highFreq, int contro
 {
 	XINPUT_VIBRATION vibration;
 	ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
-	vibration.wLeftMotorSpeed = static_cast<unsigned short>(std::clamp(lowFreq, 0.0f, 1.0f) * 65536.0f);
-	vibration.wRightMotorSpeed = static_cast<unsigned short>(std::clamp(highFreq, 0.0f, 1.0f) * 65536.0f);
+	vibration.wLeftMotorSpeed = static_cast<unsigned short>(std::clamp(lowFreq, 0.0f, 1.0f) * 65535.0f);
+	vibration.wRightMotorSpeed = static_cast<unsigned short>(std::clamp(highFreq, 0.0f, 1.0f) * 65535.0f);
 	XInputSetState(controller, &vibration);
 }
 

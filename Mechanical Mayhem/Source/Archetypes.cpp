@@ -89,7 +89,7 @@ namespace Archetypes
 		player->AddComponent(new Animation());
 
 		// Create a new player movement.
-		player->AddComponent(new Behaviors::PlayerMovement(VK_UP, VK_LEFT, VK_RIGHT, VK_RCONTROL));
+		player->AddComponent(new Behaviors::PlayerMovement());
 
 		// Create a new MonkeyAnimation.
 		player->AddComponent(new Behaviors::MonkeyAnimation(0, 8, 9, 1, 15, 1));
