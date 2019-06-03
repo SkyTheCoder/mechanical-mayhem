@@ -72,6 +72,14 @@ namespace Levels
 		objectManager.AddArchetype(*objectFactory.CreateObject("Text", resourceManager.GetMesh("FontAtlas"), resourceManager.GetSpriteSource("Code New Roman@2x.png")));
 	}
 
+	// Sets the camera position.
+	void Menu::FixCamera()
+	{
+		Camera& camera = Graphics::GetInstance().GetDefaultCamera();
+		camera.SetTranslation(Vector2D());
+		camera.SetSize(9.0f);
+	}
+
 	// Update Menu.
 	// Params:
 	//	 dt = Change in time (in seconds) since the last game loop.
@@ -194,6 +202,8 @@ namespace Levels
 	// Unload the resources associated with Menu.
 	void Menu::Unload()
 	{
+		std::cout << "Menu::Unload" << std::endl;
+
 		for (auto it = menuButtons.begin(); it != menuButtons.end(); ++it)
 			delete *it;
 	}
@@ -216,7 +226,6 @@ namespace Levels
 
 		GameObject* text = new GameObject(*objectManager.GetArchetypeByName("Text"));
 		text->GetComponent<SpriteTextMono>()->SetText(name_);
-		text->GetComponent<SpriteTextMono>()->SetColor(Color(0.0f, 0.0f, 0.0f));
 		text->GetComponent<Transform>()->SetTranslation(position);
 		objectManager.AddObject(*text);
 

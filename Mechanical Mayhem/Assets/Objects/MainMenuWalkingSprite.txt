@@ -1,0 +1,36 @@
+MainMenuWalkingSprite
+{
+  numComponents : 6
+  Transform
+  {
+    translation : { 0, 0 }
+    rotation : 0
+    scale : { 2, 2 }
+  }
+  Sprite
+  {
+    frameIndex : 0
+    color : { 1 , 1 , 1 , 1 }
+  }
+  Physics
+  {
+    acceleration : { 0, 0 }
+    velocity : { 5, 0 }
+    angularVelocity : 0
+    mass : 1
+  }
+  Animation
+  {
+  }
+  Behaviors::SimpleAnimator
+  {
+    animationStart : 0
+    animationLength : 8
+    animationSpeed : 0.06
+    looping : 1
+  }
+  Behaviors::TimedDeath
+  {
+    timeUntilDeath : 60
+  }
+}

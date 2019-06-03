@@ -85,7 +85,7 @@ namespace Behaviors
 		//   wallSlideLength = The number of frames of the wallSlide animation.
 		void SetFrames(unsigned walkStart, unsigned walkLength,
 			unsigned jumpStart, unsigned jumpLength, unsigned fallStart, unsigned fallLength,
-			unsigned idleStart, unsigned idleLength, unsigned wallSlideStart, unsigned WallSlideLength);
+			unsigned idleStart, unsigned idleLength, unsigned wallSlideStart, unsigned wallSlideLength);
 
 		// Tells this animation component to use the sprite source with the specified variant.
 		void GetSpriteSources(std::string variant);

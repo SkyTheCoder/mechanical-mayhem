@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	HUDLevel.h
-// Author(s):	A.J. Bussman
+// Author(s):	A.J. Bussman, David Cohen (david.cohen), Daniel Walther (daniel.walther)
 // Project:		Mechanical Mayhem
 // Course:		WANIC VGP2 2018-2019
 //
@@ -23,11 +23,10 @@
 // Forward References:
 //------------------------------------------------------------------------------
 
-class Mesh;
-class Texture;
-class SpriteSource;
 class GameObject;
-namespace Behaviors {
+
+namespace Behaviors
+{
 	class HUD;
 }
 
@@ -80,10 +79,7 @@ namespace Levels
 
 		GameObject* dimensionSwapCountdown;
 		GameObject* victoryText;
-
-		Mesh* meshBackground;
-		Texture * textureBackground;
-		SpriteSource* spriteSourceBackground;
+		GameObject* dimensionShiftGear;
 
 		Camera HUDCamera;
 	};

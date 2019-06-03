@@ -23,7 +23,7 @@ void main()
 	vec4 texel = texture2D(diffuse, offsetTexCoord);
 
 	// Don't bother drawing if pixel is mostly transparent
-	if(texel.a < 0.4)
+	if(texel.a < 0.01)
 		discard;
 
 	fragColor = texel * vertexColor * blendColor * tintColor;

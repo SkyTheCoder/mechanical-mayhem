@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	HUDLevel.cpp
-// Author(s):	A.J. Bussman
+// Author(s):	A.J. Bussman, David Cohen (david.cohen), Daniel Walther (daniel.walther)
 // Project:		Mechanical Mayhem
 // Course:		WANIC VGP2 2018-2019
 //
@@ -38,6 +38,7 @@
 #include "PlayerMovement.h"
 #include <SpriteTextMono.h>
 #include "DimensionController.h"
+#include "DimensionShiftGearAnimation.h"
 
 #include "HUD.h"
 
@@ -49,8 +50,7 @@ namespace Levels
 {
 	// Creates an instance of HUDLevel.
 	HUDLevel::HUDLevel() : Level("HUDLevel"), HUDS{ nullptr }, players{ nullptr },
-		dimensionSwapCountdown(nullptr), victoryText(nullptr),
-		meshBackground(nullptr), textureBackground(nullptr), spriteSourceBackground(nullptr)
+		dimensionSwapCountdown(nullptr), victoryText(nullptr)
 	{
 		HUDCamera.SetTranslation(Vector2D());
 		HUDCamera.SetSize(10.0f);
@@ -60,12 +60,6 @@ namespace Levels
 	void HUDLevel::Load()
 	{
 		std::cout << "HUDLevel::Load" << std::endl;
-
-		// Test
-		// Create the mesh and sprite source for the main menu.
-		meshBackground = CreateQuadMesh(Vector2D(1.0f, 1.0f), Vector2D(0.5f, 0.5f));
-		textureBackground = Texture::CreateTextureFromFile("Spring.png");
-		spriteSourceBackground = new SpriteSource(1, 1, textureBackground);
 	}
 
 	// Initialize the memory associated with MainMenu.
@@ -90,14 +84,23 @@ namespace Levels
 
 		resourceManager.GetMesh("FontAtlas", 12, 8);
 		resourceManager.GetSpriteSource("Code New Roman@2x.png", 12, 8);
+		resourceManager.GetSpriteSource("AniDimensionShiftGear.png", 3, 6);
+		resourceManager.GetMesh("DimensionShiftGear", Vector2D(1.0f / 3, 1.0f / 6), Vector2D(0.5f, 0.5f));
 
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
 		GameObjectFactory& objectFactory = GameObjectFactory::GetInstance();
 
+		// DimensionShiftGear Indicator
+		dimensionShiftGear = objectFactory.CreateObject("DimensionShiftGear", resourceManager.GetMesh("DimensionShiftGear"), resourceManager.GetSpriteSource("AniDimensionShiftGear.png"));
+		dimensionShiftGear->GetComponent<Transform>()->SetTranslation(Vector2D(0.07f, 3.52f));
+		dimensionShiftGear->GetComponent<Behaviors::DimensionShiftGearAnimation>()->SetFrames(1, 9, 8);
+		objectManager.AddObject(*dimensionShiftGear);
+
 		dimensionSwapCountdown = objectFactory.CreateObject("Text", resourceManager.GetMesh("FontAtlas"), resourceManager.GetSpriteSource("Code New Roman@2x.png"));
-		dimensionSwapCountdown->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, 3.25f));
-		dimensionSwapCountdown->GetComponent<Transform>()->SetScale(Vector2D(1.0f, 1.0f));
+		dimensionSwapCountdown->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, 3.5f));
+		dimensionSwapCountdown->GetComponent<Transform>()->SetScale(Vector2D(0.75f, 0.75f));
 		objectManager.AddObject(*dimensionSwapCountdown);
+
 		victoryText = objectFactory.CreateObject("Text", resourceManager.GetMesh("FontAtlas"), resourceManager.GetSpriteSource("Code New Roman@2x.png"));
 		victoryText->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, -1.5f));
 		victoryText->GetComponent<Transform>()->SetScale(Vector2D(1.0f, 1.0f));
@@ -173,10 +176,6 @@ namespace Levels
 	void HUDLevel::Unload()
 	{
 		std::cout << "HUDLevel::Unload" << std::endl;
-
-		delete meshBackground;
-		delete textureBackground;
-		delete spriteSourceBackground;
 	}
 
 	// Finds the current player pointers.

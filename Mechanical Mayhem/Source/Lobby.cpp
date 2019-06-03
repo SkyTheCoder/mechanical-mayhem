@@ -24,8 +24,6 @@
 #include <ResourceManager.h>
 #include <Space.h>
 #include <GameObject.h>
-#include <Graphics.h>
-#include <Camera.h>
 #include <Input.h>
 #include <ExtendedInput.h>
 #include "InputSchemeManager.h"
@@ -50,7 +48,7 @@ namespace Levels
 	//------------------------------------------------------------------------------
 
 	// Creates an instance of Lobby.
-	Lobby::Lobby() : Level("Lobby")
+	Lobby::Lobby() : Level("Lobby"), joinHint(nullptr), joinHint2(nullptr), levelSelect(nullptr)
 	{
 	}
 
@@ -58,6 +56,15 @@ namespace Levels
 	void Lobby::Load()
 	{
 		Menu::Load();
+
+		GameObjectFactory& objectFactory = GameObjectFactory::GetInstance();
+		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
+		ResourceManager& resourceManager = GetSpace()->GetResourceManager();
+
+		resourceManager.GetMesh("AniMainMenu", Vector2D(1.0f / 2, 1.0f / 2), Vector2D(0.5f, 0.5f));
+		resourceManager.GetSpriteSource("AniMainMenu.png", 2, 2);
+
+		objectManager.AddArchetype(*objectFactory.CreateObject("FullScreenBackground", resourceManager.GetMesh("AniMainMenu"), resourceManager.GetSpriteSource("AniMainMenu.png")));
 
 		std::cout << "Lobby::Load" << std::endl;
 	}
@@ -69,6 +76,8 @@ namespace Levels
 
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
 
+		objectManager.AddObject(*new GameObject(*objectManager.GetArchetypeByName("FullScreenBackground")));
+
 		// Create and add descriptive text
 		GameObject* title = new GameObject(*objectManager.GetArchetypeByName("Text"));
 		title->GetComponent<SpriteTextMono>()->SetText("Lobby");
@@ -76,7 +85,7 @@ namespace Levels
 		objectManager.AddObject(*title);
 
 		MenuButton* mainMenu = AddMenuButton("Main Menu", Vector2D(-1.75f, -2.5f), Levels::Map::MainMenu);
-		MenuButton* levelSelect = AddMenuButton("Level Select", Vector2D(1.75f, -2.5f), Levels::Map::LevelSelect);
+		levelSelect = AddMenuButton("Level Select", Vector2D(1.75f, -2.5f), Levels::Map::LevelSelect);
 
 		mainMenu->east = levelSelect;
 		mainMenu->west = levelSelect;
@@ -85,9 +94,15 @@ namespace Levels
 
 		SetDefaultButton(levelSelect);
 
-		Camera& camera = Graphics::GetInstance().GetDefaultCamera();
-		camera.SetTranslation(Vector2D());
-		camera.SetSize(10.0f);
+		joinHint = new GameObject(*objectManager.GetArchetypeByName("Text"));
+		joinHint->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, -1.0f));
+		joinHint->GetComponent<SpriteTextMono>()->SetText("The game requires at least 2 players to start!");
+		objectManager.AddObject(*joinHint);
+
+		joinHint2 = new GameObject(*objectManager.GetArchetypeByName("Text"));
+		joinHint2->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, -1.5f));
+		joinHint2->GetComponent<SpriteTextMono>()->SetText("Press CTRL or START to join the lobby");
+		objectManager.AddObject(*joinHint2);
 
 		for (int i = 0; i < 4; i++)
 		{
@@ -103,6 +118,8 @@ namespace Levels
 	//	 dt = Change in time (in seconds) since the last game loop.
 	void Lobby::Update(float dt)
 	{
+		FixCamera();
+
 		Menu::Update(dt);
 
 		InputSchemeManager& inputSchemeManager = *Engine::GetInstance().GetModule<InputSchemeManager>();
@@ -166,6 +183,18 @@ namespace Levels
 			SpriteTextMono* spriteText = playerIcons[static_cast<size_t>(it->playerID) - 1]->GetComponent<SpriteTextMono>();
 			spriteText->SetAlpha(1.0f);
 			spriteText->SetText("Player " + std::to_string(it->playerID) + ": " + it->GetName());
+		}
+		if (inputSchemes.size() < 2)
+		{
+			joinHint->GetComponent<Sprite>()->SetAlpha(1.0f);
+			joinHint2->GetComponent<Sprite>()->SetAlpha(1.0f);
+			levelSelect->button->SetMap(Levels::Map::Lobby);
+		}
+		else
+		{
+			joinHint->GetComponent<Sprite>()->SetAlpha(0.0f);
+			joinHint2->GetComponent<Sprite>()->SetAlpha(0.0f);
+			levelSelect->button->SetMap(Levels::Map::LevelSelect);
 		}
 	}
 

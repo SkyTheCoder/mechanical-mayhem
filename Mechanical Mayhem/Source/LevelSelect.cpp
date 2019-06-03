@@ -27,8 +27,6 @@
 #include <Texture.h>
 #include <SpriteSource.h>
 #include <Mesh.h>
-#include <Graphics.h>
-#include <Camera.h>
 
 // Components
 #include <SpriteTextMono.h>
@@ -62,10 +60,12 @@ namespace Levels
 		ResourceManager& resourceManager = GetSpace()->GetResourceManager();
 
 		resourceManager.GetMesh("Quad", Vector2D(1.0f, 1.0f), Vector2D(0.5f, 0.5f));
+		resourceManager.GetMesh("AniMainMenu", Vector2D(1.0f / 2, 1.0f / 2), Vector2D(0.5f, 0.5f));
 		resourceManager.GetSpriteSource("Button.png");
 		resourceManager.GetMesh("FontAtlas", 12, 8);
-		resourceManager.GetSpriteSource("Code New Roman@2x.png", 12, 8);
+		resourceManager.GetSpriteSource("AniMainMenu.png", 2, 2);
 
+		objectManager.AddArchetype(*objectFactory.CreateObject("FullScreenBackground", resourceManager.GetMesh("AniMainMenu"), resourceManager.GetSpriteSource("AniMainMenu.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Button", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Button.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("Text", resourceManager.GetMesh("FontAtlas"), resourceManager.GetSpriteSource("Code New Roman@2x.png")));
 	}
@@ -76,6 +76,8 @@ namespace Levels
 		std::cout << "LevelSelect::Initialize" << std::endl;
 
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
+
+		objectManager.AddObject(*new GameObject(*objectManager.GetArchetypeByName("FullScreenBackground")));
 
 		// Create and add descriptive text
 		GameObject* text = new GameObject(*objectManager.GetArchetypeByName("Text"));
@@ -120,10 +122,6 @@ namespace Levels
 		lobby->south = blah;
 
 		SetDefaultButton(blah);
-
-		Camera& camera = Graphics::GetInstance().GetDefaultCamera();
-		camera.SetTranslation(Vector2D());
-		camera.SetSize(10.0f);
 	}
 
 	// Update LevelSelect.
@@ -131,6 +129,8 @@ namespace Levels
 	//	 dt = Change in time (in seconds) since the last game loop.
 	void LevelSelect::Update(float dt)
 	{
+		FixCamera();
+		
 		Menu::Update(dt);
 	}
 

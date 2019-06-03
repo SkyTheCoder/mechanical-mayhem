@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	HUD.cpp
-// Author(s):	A.J. Bussman
+// Author(s):	A.J. Bussman, David Cohen (david.cohen)
 // Project:		Mechanical Mayhem
 // Course:		WANIC VGP2 2018-2019
 //
@@ -35,7 +35,6 @@
 #include <Sprite.h>
 #include <SpriteTextMono.h>
 #include "PlayerMovement.h"
-#include "DimensionShiftGearAnimation.h"
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -63,24 +62,19 @@ namespace Behaviors
 	// Initialize data for this object.
 	void HUD::Initialize()
 	{
-		GameObjectFactory& ojectFactory = GameObjectFactory::GetInstance();
+		GameObjectFactory& objectFactory = GameObjectFactory::GetInstance();
 		ResourceManager& resourceManager = static_cast<Level*>(GetOwner())->GetSpace()->GetResourceManager();
 
 		// HUD background
-		hudBackground = ojectFactory.CreateObject("HUDBackground", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Icon" + std::string((playerID - 1) % 2 == 0 ? "A" : "B") + "_01.png"));
+		hudBackground = objectFactory.CreateObject("HUDBackground", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("Icon" + std::string((playerID - 1) % 2 == 0 ? "A" : "B") + "_01.png"));
 
 		// Health bar
-		healthBarCenter = ojectFactory.CreateObject("HealthBar", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBar.png"));
-		healthBarEnd = ojectFactory.CreateObject("HealthBarEnd", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBarEnd.png"));
+		healthBarCenter = objectFactory.CreateObject("HealthBar", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBar.png"));
+		healthBarEnd = objectFactory.CreateObject("HealthBarEnd", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBarEnd.png"));
 
 		// Ability bar
-		abilityBarCenter = ojectFactory.CreateObject("AbilityBar", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBar.png"));
-		abilityBarEnd = ojectFactory.CreateObject("AbilityBarEnd", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBarEnd.png"));
-
-		// DimensionShiftGear Indicator
-		resourceManager.GetSpriteSource("AniDimensionShiftGear.png", 3, 6);
-		resourceManager.GetMesh("DimensionShiftGear", Vector2D(1.0f / 3, 1.0f / 6), Vector2D(0.5f, 0.5f));
-		dimensionShiftGear = ojectFactory.CreateObject("DimensionShiftGear", resourceManager.GetMesh("DimensionShiftGear"), resourceManager.GetSpriteSource("AniDimensionShiftGear.png"));
+		abilityBarCenter = objectFactory.CreateObject("AbilityBar", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBar.png"));
+		abilityBarEnd = objectFactory.CreateObject("AbilityBarEnd", resourceManager.GetMesh("Quad"), resourceManager.GetSpriteSource("HealthBarEnd.png"));
 
 		// Add HUD Objects
 		GameObjectManager& objectManager = static_cast<Level*>(GetOwner())->GetSpace()->GetObjectManager();
@@ -100,7 +94,6 @@ namespace Behaviors
 		objectManager.AddObject(*abilityBarCenter);
 		objectManager.AddObject(*abilityBarEnd);
 		objectManager.AddObject(*hudBackground);
-		objectManager.AddObject(*dimensionShiftGear);
 
 		healthBarBackgroundCenter->GetComponent<Sprite>()->SetColor(Color(0.5f, 0.5f, 0.5f));
 		healthBarBackgroundEnd->GetComponent<Sprite>()->SetColor(Color(0.5f, 0.5f, 0.5f));
@@ -109,8 +102,6 @@ namespace Behaviors
 
 		healthBarCenter->GetComponent<Sprite>()->SetColor(Color(255.0f / 255.0f, 0.0f / 255.0f, 14.0f / 255.0f));
 		healthBarEnd->GetComponent<Sprite>()->SetColor(Color(255.0f / 255.0f, 0.0f / 255.0f, 14.0f / 255.0f));
-
-		dimensionShiftGear->GetComponent<Behaviors::DimensionShiftGearAnimation>()->SetFrames(1, 9, 8);
 
 		// Set the Locations of the objects
 		SetHUDObjectLocations();
@@ -193,14 +184,14 @@ namespace Behaviors
 
 		// Center for HUDOutline
 		float x = screenDimensions.left + 3.5f;
-		float y = screenDimensions.top - 1.5f;
+		float y = screenDimensions.top - 1.25f;
 		
 		float flipx = 1.0f;
 		if ((playerID - 1) % 2 == 1)
 			flipx = -1.0f;
 
 		if (playerID > 2)
-			y = screenDimensions.bottom + 1.5f;
+			y = screenDimensions.bottom + 1.25f;
 
 		if (playerID > 4)
 			y = screenDimensions.center.y;
@@ -238,8 +229,6 @@ namespace Behaviors
 		abilityBarCenter->GetComponent<Transform>()->SetTranslation(Vector2D(abilityBarLeft + abilityBarWidth / 2.0f, y - 0.37f));
 		abilityBarEnd->GetComponent<Transform>()->SetScale(Vector2D(flipx * 0.27f, 0.27f));
 		abilityBarEnd->GetComponent<Transform>()->SetTranslation(Vector2D(abilityBarLeft + abilityBarWidth + flipx * 0.135f, y - 0.37f));
-
-		dimensionShiftGear->GetComponent<Transform>()->SetTranslation(Vector2D(0.07f, 3.3f));
 	}
 
 	// Gets the player pointer.

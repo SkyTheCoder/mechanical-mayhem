@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	HUD.h
-// Author(s):	A.J. Bussman
+// Author(s):	A.J. Bussman, David Cohen (david.cohen)
 // Project:		Mechanical Mayhem
 // Course:		WANIC VGP2 2018-2019
 //
@@ -100,8 +100,5 @@ namespace Behaviors
 		GameObject* abilityBarBackgroundCenter;
 		GameObject* abilityBarBackgroundEnd;
 		float animAbility;
-
-		// Misc variables
-		GameObject* dimensionShiftGear;
 	};
 }

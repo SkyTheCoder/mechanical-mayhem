@@ -1,0 +1,36 @@
+MainMenuFallingSprite
+{
+  numComponents : 6
+  Transform
+  {
+    translation : { 0, 0 }
+    rotation : 0
+    scale : { 2, 2 }
+  }
+  Sprite
+  {
+    frameIndex : 0
+    color : { 1 , 1 , 1 , 1 }
+  }
+  Physics
+  {
+    acceleration : { 0, 0 }
+    velocity : { 0, -5 }
+    angularVelocity : 0
+    mass : 1
+  }
+  Animation
+  {
+  }
+  Behaviors::SimpleAnimator
+  {
+    animationStart : 15
+    animationLength : 4
+    animationSpeed : 0.2
+    looping : 1
+  }
+  Behaviors::TimedDeath
+  {
+    timeUntilDeath : 60
+  }
+}

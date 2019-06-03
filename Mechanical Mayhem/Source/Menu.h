@@ -52,6 +52,9 @@ namespace Levels
 		// Load the resources associated with Menu.
 		void Load() override;
 
+		// Sets the camera position.
+		void FixCamera();
+
 		// Update Menu.
 		// Params:
 		//	 dt = Change in time (in seconds) since the last game loop.

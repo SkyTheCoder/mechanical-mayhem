@@ -1,0 +1,25 @@
+FullScreenBackground
+{
+  numComponents : 4
+  Transform
+  {
+    translation : { 0, 0 }
+    rotation : 0
+    scale : { 16, 9 }
+  }
+  Sprite
+  {
+    frameIndex : 0
+    color : { 1 , 1 , 1 , 1 }
+  }
+  Animation
+  {
+  }
+  Behaviors::SimpleAnimator
+  {
+    animationStart : 0
+    animationLength : 4
+    animationSpeed : 0.1
+    looping : 1
+  }
+}

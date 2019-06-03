@@ -121,7 +121,7 @@ namespace Behaviors
 		switch (map)
 		{
 		case Levels::Map::MainMenu:
-			GetOwner()->GetSpace()->SetLevel(new Levels::MainMenu());
+			GetOwner()->GetSpace()->SetLevel(new Levels::MainMenu(true));
 			break;
 		case Levels::Map::Exit:
 			Engine::GetInstance().Stop();

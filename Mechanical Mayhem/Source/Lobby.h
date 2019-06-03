@@ -64,6 +64,11 @@ namespace Levels
 		// Private Variables:
 		//------------------------------------------------------------------------------
 
+		GameObject* joinHint;
+		GameObject* joinHint2;
+
+		MenuButton* levelSelect;
+
 		std::vector<GameObject*> playerIcons;
 	};
 }

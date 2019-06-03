@@ -5,7 +5,7 @@ RisingGears
   {
     translation : { 0, 0 }
     rotation : 0
-    scale : { 10, 10 }
+    scale : { 10, 4.5 }
   }
   Sprite
   {
@@ -29,7 +29,7 @@ RisingGears
   Behaviors::SimpleAnimator
   {
     animationStart : 0
-    animationLength : 2
+    animationLength : 4
     animationSpeed : 0.2
     looping : 1
   }

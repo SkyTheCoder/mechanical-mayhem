@@ -59,7 +59,7 @@ namespace Behaviors
 		soundManager(nullptr), slideSound(nullptr),
 		playerID(0), switchCharges(0),
 		onGround(false), onLeftWall(false), onRightWall(false), animOnGround(0.0f), animOnLeftWall(0.0f), animOnRightWall(0.0f),
-		hasJumped(false), airTime(0.0f), leftTime(0.0f), rightTime(0.0f), movementLerpGround(1.0f), movementLerpAir(0.98f), jumpCancelFactor(0.7f),
+		hasJumped(false), airTime(0.0f), leftTime(0.0f), rightTime(0.0f), movementLerpGround(1.0f), movementLerpAir(0.98f), jumpCancelFactor(0.6f),
 		stepTimer(0.0f)
 	{
 	}

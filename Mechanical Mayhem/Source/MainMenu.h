@@ -32,7 +32,9 @@ namespace Levels
 		//------------------------------------------------------------------------------
 
 		// Creates an instance of MainMenu.
-		MainMenu();
+		// Params:
+		//   fastIntro = Whether to speed up the into (already played).
+		MainMenu(bool fastIntro = false);
 
 		// Load the resources associated with MainMenu.
 		void Load() override;
@@ -47,6 +49,30 @@ namespace Levels
 
 		// Unload the resources associated with MainMenu.
 		void Unload() override;
+
+	private:
+		//------------------------------------------------------------------------------
+		// Private Functions:
+		//------------------------------------------------------------------------------
+
+		// Spawns a new random sprite to run around the menu.
+		void SpawnSprite();
+
+		//------------------------------------------------------------------------------
+		// Private Variables:
+		//------------------------------------------------------------------------------
+
+		// Used for animations.
+		float timer;
+
+		float nextSpriteSpawn;
+
+		// Whether to speed up the into (already played).
+		bool fastIntro;
+
+		// Animated elements.
+		GameObject* backgroundOverlay;
+		GameObject* title;
 	};
 }
 

@@ -142,6 +142,7 @@ namespace Levels
 		Map map;
 
 		GameObject* backgroundImage;
+		GameObject* shadow;
 
 		Effects::ChromaticAberration* chromaticAberration;
 		Effects::CameraShake* cameraShake;
