@@ -104,10 +104,13 @@ namespace Levels
 		joinHint2->GetComponent<SpriteTextMono>()->SetText("Press CTRL or START to join the lobby");
 		objectManager.AddObject(*joinHint2);
 
+		Color colors[] = { HexColorRGB(0xF05555), HexColorRGB(0x5755F0), HexColorRGB(0x17AB28), HexColorRGB(0xDDB61F), HexColorRGB(0xE83FE4), HexColorRGB(0xE57207) };
+
 		for (int i = 0; i < NUM_PLAYERS; i++)
 		{
 			GameObject* text = new GameObject(*objectManager.GetArchetypeByName("Text"));
 			text->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, 1.0f - i * 0.5f));
+			text->GetComponent<Sprite>()->SetColor(colors[i]);
 			objectManager.AddObject(*text);
 			playerIcons.push_back(text);
 		}

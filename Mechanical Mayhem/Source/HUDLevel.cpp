@@ -146,6 +146,9 @@ namespace Levels
 				spriteText->SetText("Chad 3 won! Press <SPACE> or start to return to level select");
 				break;
 			}
+
+			Color colors[] = { HexColorRGB(0xF05555), HexColorRGB(0x5755F0), HexColorRGB(0x17AB28), HexColorRGB(0xDDB61F), HexColorRGB(0xE83FE4), HexColorRGB(0xE57207) };
+			spriteText->SetColor(colors[lastPlayerMovement->GetPlayerID() - 1]);
 		}
 
 		float switchCooldown = altObjectManager.GetObjectByName("GameController")->GetComponent<Behaviors::DimensionController>()->GetCoolDown();

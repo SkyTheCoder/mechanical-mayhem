@@ -132,7 +132,7 @@ namespace Behaviors
 			else
 			{
 				targetTranslations.push_back(targetTranslation + Vector2D(0.0f, -1.0f));
-				targetTranslations.push_back(targetTranslation + Vector2D(0.0f, 3.0f));
+				targetTranslations.push_back(targetTranslation + Vector2D(0.0f, 7.0f));
 			}
 
 			++it;
@@ -199,7 +199,7 @@ namespace Behaviors
 			else
 			{
 				targetTranslations.push_back(targetTranslation + Vector2D(0.0f, -1.0f));
-				targetTranslations.push_back(targetTranslation + Vector2D(0.0f, 3.0f));
+				targetTranslations.push_back(targetTranslation + Vector2D(0.0f, 7.0f));
 			}
 		}
 

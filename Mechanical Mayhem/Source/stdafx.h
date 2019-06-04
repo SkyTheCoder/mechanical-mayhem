@@ -43,6 +43,9 @@
 // Re-enable warnings
 #pragma warning(pop)
 
+#define HexColorRGB(hex) (Color((((hex) >> 16) & 0xFF) / 255.0f, (((hex) >> 8) & 0xFF) / 255.0f, ((hex) & 0xFF) / 255.0f))
+#define HexColorRGBA(hex) (Color((((hex) >> 24) & 0xFF) / 255.0f, (((hex) >> 16) & 0xFF) / 255.0f, (((hex) >> 8) & 0xFF) / 255.0f, ((hex) & 0xFF) / 255.0f))
+
 #define NUM_PLAYERS (6)
 
 // Collision group definitions

@@ -117,7 +117,7 @@ namespace Levels
 
 		descent->north = chase;
 		descent->east = merge;
-		descent->south = snake;
+		descent->south = cavern;
 		descent->west = merge;
 
 		snake->north = merge;

@@ -688,10 +688,6 @@ namespace Levels
 			}
 			}
 
-			// Create shadow sprite
-			shadow = new GameObject(*objectManager.GetArchetypeByName("Shadow"));
-			objectManager.AddObject(*shadow);
-
 			// Create rising gears and add to objectManager
 			// First rising gears are centered to keep shadow on screen.
 			GameObject* risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
@@ -734,6 +730,10 @@ namespace Levels
 			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
 			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(17.5f, gearHeight - 4.0f));
 			objectManager.AddObject(*risingGears);
+
+			// Create shadow sprite
+			shadow = new GameObject(*objectManager.GetArchetypeByName("Shadow"));
+			objectManager.AddObject(*shadow);
 
 			dimensionController.SetActiveDimension(redDimension);
 		}

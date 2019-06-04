@@ -181,10 +181,7 @@ namespace Levels
 				}
 			}
 
-			bool controllerPressing = false;
-			for (int i = 0; i < 4; i++)
-				controllerPressing = controllerPressing || extendedInput.CheckXBTriggered(XB_A, i);
-			if (controllerPressing || input.CheckTriggered(' ') || input.CheckTriggered(VK_RETURN))
+			if (extendedInput.CheckXBTriggered(XB_A, 0) || input.CheckTriggered(' ') || input.CheckTriggered(VK_RETURN))
 			{
 				currentButton->button->OnPress();
 			}
