@@ -70,7 +70,7 @@ namespace Levels
 		FindPlayers();
 
 		// Create Player HUDs
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < NUM_PLAYERS; i++)
 		{
 			if (players[i] != nullptr)
 			{
@@ -154,7 +154,7 @@ namespace Levels
 		cooldownText << std::fixed << std::setprecision(1) << ceil(switchCooldown * 10.0f) / 10.0f;
 		dimensionSwapCountdown->GetComponent<SpriteTextMono>()->SetText(cooldownText.str());
 
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < NUM_PLAYERS; i++)
 		{
 			if (HUDS[i] != nullptr)
 				HUDS[i]->Update(dt);
@@ -164,7 +164,7 @@ namespace Levels
 	// Removes any objects that will be recreated in Initialize.
 	void HUDLevel::Shutdown()
 	{
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < NUM_PLAYERS; i++)
 		{
 			if (HUDS[i] != nullptr)
 				HUDS[i]->Shutdown();
@@ -181,7 +181,7 @@ namespace Levels
 	// Finds the current player pointers.
 	void HUDLevel::FindPlayers()
 	{
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < NUM_PLAYERS; i++)
 			players[i] = nullptr;
 
 		// Set Player pointers

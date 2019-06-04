@@ -282,10 +282,10 @@ void ExtendedInput::Update(float dt)
 
 		// Don't transmit any minor rumbles.
 
-		if (lowFreqVibrationQueue[i] <= 0.05f)
+		if (lowFreqVibrationQueue[i] <= 0.2f)
 			lowFreqVibrationQueue[i] = 0.0f;
 
-		if (highFreqVibrationQueue[i] <= 0.05f)
+		if (highFreqVibrationQueue[i] <= 0.2f)
 			highFreqVibrationQueue[i] = 0.0f;
 
 		state.lowFreq = lowFreqVibrationQueue[i];

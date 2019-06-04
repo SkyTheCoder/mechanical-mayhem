@@ -74,8 +74,8 @@ namespace Levels
 		//------------------------------------------------------------------------------
 
 		// HUDs & Players
-		Behaviors::HUD* HUDS[4];
-		GameObject* players[4];
+		Behaviors::HUD* HUDS[NUM_PLAYERS];
+		GameObject* players[NUM_PLAYERS];
 
 		GameObject* dimensionSwapCountdown;
 		GameObject* victoryText;

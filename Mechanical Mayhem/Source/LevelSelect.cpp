@@ -96,7 +96,8 @@ namespace Levels
 		MenuButton* chase = AddMenuButton("Chase", Vector2D(1.75f, 1.5f), Levels::Map::Chase);
 		MenuButton* merge = AddMenuButton("Merge", Vector2D(-1.75f, 0.5f), Levels::Map::Merge);
 		MenuButton* descent = AddMenuButton("Descent", Vector2D(1.75f, 0.5f), Levels::Map::Descent);
-		MenuButton* snake = AddMenuButton("Snake", Vector2D(0.0f, -0.5f), Levels::Map::Snake);
+		MenuButton* snake = AddMenuButton("Snake", Vector2D(-1.75f, -0.5f), Levels::Map::Snake);
+		MenuButton* cavern = AddMenuButton("Cavern", Vector2D(1.75f, -0.5f), Levels::Map::Cavern);
 		MenuButton* lobby = AddMenuButton("Lobby", Vector2D(0.0f, -2.5f), Levels::Map::Lobby);
 
 		clockwork->north = lobby;
@@ -120,12 +121,19 @@ namespace Levels
 		descent->west = merge;
 
 		snake->north = merge;
-		snake->east = descent;
+		snake->east = cavern;
 		snake->south = lobby;
-		snake->west = merge;
+		snake->west = cavern;
+
+		cavern->north = descent;
+		cavern->east = snake;
+		cavern->south = lobby;
+		cavern->west = snake;
 
 		lobby->north = snake;
+		lobby->east = cavern;
 		lobby->south = clockwork;
+		lobby->west = snake;
 
 		SetDefaultButton(clockwork);
 	}

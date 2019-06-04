@@ -20,7 +20,7 @@ FlamethrowerPickup
   }
   Behaviors::AbilityPickup
   {
-    cooldown : 300
+    cooldown : 30
     abilityType : 2
   }
   Animation

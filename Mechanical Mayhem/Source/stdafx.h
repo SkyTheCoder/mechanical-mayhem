@@ -43,6 +43,8 @@
 // Re-enable warnings
 #pragma warning(pop)
 
+#define NUM_PLAYERS (6)
+
 // Collision group definitions
 
 #define CG_GENERIC 0ull

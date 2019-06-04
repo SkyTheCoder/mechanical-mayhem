@@ -119,9 +119,6 @@ namespace Levels
 			inputSchemes.push_back(InputScheme('W', 'A', 'D', 'S', VK_LCONTROL));
 			inputSchemes.push_back(InputScheme(VK_UP, VK_LEFT, VK_RIGHT, VK_DOWN, VK_RCONTROL));
 			inputSchemes.push_back(InputScheme(0));
-			inputSchemes.push_back(InputScheme(1));
-			inputSchemes.push_back(InputScheme(2));
-			inputSchemes.push_back(InputScheme(3));
 
 			for (auto it = inputSchemes.cbegin(); it != inputSchemes.cend(); ++it)
 			{

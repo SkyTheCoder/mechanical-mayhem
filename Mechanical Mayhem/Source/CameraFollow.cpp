@@ -124,7 +124,16 @@ namespace Behaviors
 			it->smoothedVelocity = Interpolate(it->smoothedVelocity, it->velocity, velocityMix);
 
 			Vector2D targetTranslation = it->transform->GetTranslation() + Vector2D(it->smoothedVelocity.x * velocityLookScalar.x, it->smoothedVelocity.y * velocityLookScalar.y);
-			targetTranslations.push_back(targetTranslation);
+
+			if (players.size() == 1)
+			{
+				targetTranslations.push_back(targetTranslation);
+			}
+			else
+			{
+				targetTranslations.push_back(targetTranslation + Vector2D(0.0f, -1.0f));
+				targetTranslations.push_back(targetTranslation + Vector2D(0.0f, 3.0f));
+			}
 
 			++it;
 		}
@@ -182,7 +191,16 @@ namespace Behaviors
 			}
 
 			Vector2D targetTranslation = it->transform->GetTranslation() + Vector2D(it->smoothedVelocity.x * velocityLookScalar.x, it->smoothedVelocity.y * velocityLookScalar.y);
-			targetTranslations.push_back(targetTranslation);
+
+			if (players.size() == 1)
+			{
+				targetTranslations.push_back(targetTranslation);
+			}
+			else
+			{
+				targetTranslations.push_back(targetTranslation + Vector2D(0.0f, -1.0f));
+				targetTranslations.push_back(targetTranslation + Vector2D(0.0f, 3.0f));
+			}
 		}
 
 		Vector2D targetTranslationSum(0.0f, 0.0f);
@@ -204,7 +222,7 @@ namespace Behaviors
 
 		Camera& camera = Graphics::GetInstance().GetDefaultCamera();
 
-		camera.SetTranslation(targetTranslationSum / static_cast<float>(max(1, players.size())));
+		camera.SetTranslation(targetTranslationSum / static_cast<float>(max(1, targetTranslations.size())));
 		camera.SetSize(max(9.0f, highestDistance + 8.0f));
 	}
 

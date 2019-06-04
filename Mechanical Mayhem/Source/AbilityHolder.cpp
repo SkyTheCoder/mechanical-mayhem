@@ -38,7 +38,7 @@ namespace Behaviors
 	//------------------------------------------------------------------------------
 
 	// Constructor
-	AbilityHolder::AbilityHolder() : Component("AbilityHolder"), playerMovement(nullptr), abilityType(Abilities::ABILITY_NONE), ability(nullptr), timer(0.0f), duration(30.0f)
+	AbilityHolder::AbilityHolder() : Component("AbilityHolder"), playerMovement(nullptr), abilityType(Abilities::ABILITY_NONE), ability(nullptr), timer(0.0f), duration(300.0f)
 	{
 		
 	}

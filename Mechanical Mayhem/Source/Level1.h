@@ -66,6 +66,7 @@ namespace Levels
 		Chase,
 		Merge,
 		Snake,
+		Cavern,
 
 		MAX_MAP
 	};

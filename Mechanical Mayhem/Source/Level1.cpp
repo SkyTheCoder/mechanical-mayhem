@@ -186,6 +186,9 @@ namespace Levels
 		case Map::Snake:
 			mapName = "Snake";
 			break;
+		case Map::Cavern:
+			mapName = "Cavern";
+			break;
 		}
 		
 		dataStaticMap = Tilemap::CreateTilemapFromFile("Assets/Levels/" + mapName + "Static.txt");
@@ -479,34 +482,34 @@ namespace Levels
 			}
 			case Map::Descent:
 			{
-				float staticSpikes[144] = {
-					3.0f, 10.0f, 40.0f, 10.0f, 2.0f, 11.0f, 41.0f, 11.0f, 1.0f, 12.0f, 42.0f, 12.0f, 0.0f, 16.0f, 1.0f, 16.0f, 2.0f, 16.0f, 3.0f, 16.0f, 4.0f, 16.0f, 39.0f, 16.0f, 40.0f, 16.0f, 41.0f, 16.0f, 42.0f, 16.0f, 43.0f, 16.0f,
-					0.0f, 17.0f, 1.0f, 17.0f, 2.0f, 17.0f, 41.0f, 17.0f, 42.0f, 17.0f, 43.0f, 17.0f, 0.0f, 18.0f, 1.0f, 18.0f, 42.0f, 18.0f, 43.0f, 18.0f, 0.0f, 19.0f, 43.0f, 19.0f, 0.0f, 25.0f, 43.0f, 25.0f, 0.0f, 26.0f, 43.0f, 26.0f,
-					0.0f, 27.0f, 43.0f, 27.0f, 0.0f, 28.0f, 43.0f, 28.0f, 0.0f, 29.0f, 43.0f, 29.0f, 0.0f, 30.0f, 43.0f, 30.0f, 0.0f, 31.0f, 43.0f, 31.0f, 0.0f, 32.0f, 43.0f, 32.0f, 0.0f, 33.0f, 43.0f, 33.0f, 0.0f, 34.0f, 43.0f, 34.0f,
-					0.0f, 35.0f, 43.0f, 35.0f, 0.0f, 36.0f, 43.0f, 36.0f, 0.0f, 37.0f, 43.0f, 37.0f, 0.0f, 38.0f, 43.0f, 38.0f, 0.0f, 39.0f, 43.0f, 39.0f, 0.0f, 40.0f, 43.0f, 40.0f, 0.0f, 41.0f, 43.0f, 41.0f, 0.0f, 42.0f, 43.0f, 42.0f,
-					0.0f, 43.0f, 43.0f, 43.0f, 0.0f, 44.0f, 43.0f, 44.0f, 0.0f, 45.0f, 43.0f, 45.0f, 0.0f, 46.0f, 43.0f, 46.0f
+				float staticSpikes[140] = {
+					3.0f, 10.0f, 40.0f, 10.0f, 2.0f, 11.0f, 41.0f, 11.0f, 1.0f, 12.0f, 42.0f, 12.0f, 0.0f, 16.0f, 1.0f, 16.0f, 2.0f, 16.0f, 3.0f, 16.0f, 40.0f, 16.0f, 41.0f, 16.0f, 42.0f, 16.0f, 43.0f, 16.0f, 0.0f, 17.0f, 1.0f, 17.0f,
+					2.0f, 17.0f, 41.0f, 17.0f, 42.0f, 17.0f, 43.0f, 17.0f, 0.0f, 18.0f, 1.0f, 18.0f, 42.0f, 18.0f, 43.0f, 18.0f, 0.0f, 19.0f, 43.0f, 19.0f, 0.0f, 25.0f, 43.0f, 25.0f, 0.0f, 26.0f, 43.0f, 26.0f, 0.0f, 27.0f, 43.0f, 27.0f,
+					0.0f, 28.0f, 43.0f, 28.0f, 0.0f, 29.0f, 43.0f, 29.0f, 0.0f, 30.0f, 43.0f, 30.0f, 0.0f, 31.0f, 43.0f, 31.0f, 0.0f, 32.0f, 43.0f, 32.0f, 0.0f, 33.0f, 43.0f, 33.0f, 0.0f, 34.0f, 43.0f, 34.0f, 0.0f, 35.0f, 43.0f, 35.0f,
+					0.0f, 36.0f, 43.0f, 36.0f, 0.0f, 37.0f, 43.0f, 37.0f, 0.0f, 38.0f, 43.0f, 38.0f, 0.0f, 39.0f, 43.0f, 39.0f, 0.0f, 40.0f, 43.0f, 40.0f, 0.0f, 41.0f, 43.0f, 41.0f, 0.0f, 42.0f, 43.0f, 42.0f, 0.0f, 43.0f, 43.0f, 43.0f,
+					0.0f, 44.0f, 43.0f, 44.0f, 0.0f, 45.0f, 43.0f, 45.0f, 0.0f, 46.0f, 43.0f, 46.0f
 				};
-				float redSpikes[150] = {
+				float redSpikes[144] = {
 					23.0f, 12.0f, 24.0f, 12.0f, 25.0f, 12.0f, 26.0f, 12.0f, 27.0f, 12.0f, 28.0f, 12.0f, 29.0f, 12.0f, 30.0f, 12.0f, 31.0f, 12.0f, 32.0f, 12.0f, 33.0f, 12.0f, 34.0f, 12.0f, 35.0f, 12.0f, 36.0f, 12.0f, 37.0f, 12.0f, 38.0f, 12.0f,
-					39.0f, 12.0f, 28.0f, 13.0f, 29.0f, 13.0f, 30.0f, 13.0f, 31.0f, 13.0f, 32.0f, 13.0f, 33.0f, 13.0f, 34.0f, 13.0f, 35.0f, 13.0f, 36.0f, 13.0f, 37.0f, 13.0f, 38.0f, 13.0f, 39.0f, 13.0f, 40.0f, 13.0f, 33.0f, 14.0f, 34.0f, 14.0f,
-					35.0f, 14.0f, 36.0f, 14.0f, 37.0f, 14.0f, 38.0f, 14.0f, 39.0f, 14.0f, 40.0f, 14.0f, 41.0f, 14.0f, 38.0f, 15.0f, 39.0f, 15.0f, 40.0f, 15.0f, 41.0f, 15.0f, 42.0f, 15.0f, 42.0f, 20.0f, 41.0f, 21.0f, 41.0f, 22.0f, 41.0f, 23.0f,
-					42.0f, 24.0f, 13.0f, 34.0f, 15.0f, 34.0f, 17.0f, 34.0f, 33.0f, 34.0f, 35.0f, 34.0f, 14.0f, 35.0f, 16.0f, 35.0f, 34.0f, 35.0f, 4.0f, 41.0f, 5.0f, 41.0f, 6.0f, 41.0f, 8.0f, 41.0f, 9.0f, 41.0f, 24.0f, 41.0f, 25.0f, 41.0f,
-					26.0f, 41.0f, 28.0f, 41.0f, 29.0f, 41.0f, 3.0f, 42.0f, 7.0f, 42.0f, 23.0f, 42.0f, 27.0f, 42.0f, 3.0f, 43.0f, 7.0f, 43.0f, 23.0f, 43.0f, 27.0f, 43.0f
+					39.0f, 12.0f, 29.0f, 13.0f, 30.0f, 13.0f, 31.0f, 13.0f, 32.0f, 13.0f, 33.0f, 13.0f, 34.0f, 13.0f, 35.0f, 13.0f, 36.0f, 13.0f, 37.0f, 13.0f, 38.0f, 13.0f, 39.0f, 13.0f, 40.0f, 13.0f, 34.0f, 14.0f, 35.0f, 14.0f, 36.0f, 14.0f,
+					37.0f, 14.0f, 38.0f, 14.0f, 39.0f, 14.0f, 40.0f, 14.0f, 41.0f, 14.0f, 39.0f, 15.0f, 40.0f, 15.0f, 41.0f, 15.0f, 42.0f, 15.0f, 42.0f, 20.0f, 41.0f, 21.0f, 41.0f, 22.0f, 41.0f, 23.0f, 42.0f, 24.0f, 13.0f, 34.0f, 15.0f, 34.0f,
+					17.0f, 34.0f, 33.0f, 34.0f, 35.0f, 34.0f, 14.0f, 35.0f, 16.0f, 35.0f, 34.0f, 35.0f, 4.0f, 41.0f, 5.0f, 41.0f, 6.0f, 41.0f, 8.0f, 41.0f, 9.0f, 41.0f, 24.0f, 41.0f, 25.0f, 41.0f, 26.0f, 41.0f, 28.0f, 41.0f, 29.0f, 41.0f,
+					3.0f, 42.0f, 7.0f, 42.0f, 23.0f, 42.0f, 27.0f, 42.0f, 3.0f, 43.0f, 7.0f, 43.0f, 23.0f, 43.0f, 27.0f, 43.0f
 				};
-				float blueSpikes[148] = {
+				float blueSpikes[142] = {
 					4.0f, 12.0f, 5.0f, 12.0f, 6.0f, 12.0f, 7.0f, 12.0f, 8.0f, 12.0f, 9.0f, 12.0f, 10.0f, 12.0f, 11.0f, 12.0f, 12.0f, 12.0f, 13.0f, 12.0f, 14.0f, 12.0f, 15.0f, 12.0f, 16.0f, 12.0f, 17.0f, 12.0f, 18.0f, 12.0f, 19.0f, 12.0f,
-					20.0f, 12.0f, 3.0f, 13.0f, 4.0f, 13.0f, 5.0f, 13.0f, 6.0f, 13.0f, 7.0f, 13.0f, 8.0f, 13.0f, 9.0f, 13.0f, 10.0f, 13.0f, 11.0f, 13.0f, 12.0f, 13.0f, 13.0f, 13.0f, 14.0f, 13.0f, 15.0f, 13.0f, 2.0f, 14.0f, 3.0f, 14.0f,
-					4.0f, 14.0f, 5.0f, 14.0f, 6.0f, 14.0f, 7.0f, 14.0f, 8.0f, 14.0f, 9.0f, 14.0f, 10.0f, 14.0f, 1.0f, 15.0f, 2.0f, 15.0f, 3.0f, 15.0f, 4.0f, 15.0f, 5.0f, 15.0f, 1.0f, 20.0f, 2.0f, 21.0f, 2.0f, 22.0f, 2.0f, 23.0f,
-					1.0f, 24.0f, 8.0f, 34.0f, 10.0f, 34.0f, 26.0f, 34.0f, 28.0f, 34.0f, 30.0f, 34.0f, 9.0f, 35.0f, 27.0f, 35.0f, 29.0f, 35.0f, 14.0f, 41.0f, 15.0f, 41.0f, 18.0f, 41.0f, 19.0f, 41.0f, 34.0f, 41.0f, 35.0f, 41.0f, 37.0f, 41.0f,
-					38.0f, 41.0f, 39.0f, 41.0f, 16.0f, 42.0f, 20.0f, 42.0f, 36.0f, 42.0f, 40.0f, 42.0f, 16.0f, 43.0f, 20.0f, 43.0f, 36.0f, 43.0f, 40.0f, 43.0f
+					20.0f, 12.0f, 3.0f, 13.0f, 4.0f, 13.0f, 5.0f, 13.0f, 6.0f, 13.0f, 7.0f, 13.0f, 8.0f, 13.0f, 9.0f, 13.0f, 10.0f, 13.0f, 11.0f, 13.0f, 12.0f, 13.0f, 13.0f, 13.0f, 14.0f, 13.0f, 2.0f, 14.0f, 3.0f, 14.0f, 4.0f, 14.0f,
+					5.0f, 14.0f, 6.0f, 14.0f, 7.0f, 14.0f, 8.0f, 14.0f, 9.0f, 14.0f, 1.0f, 15.0f, 2.0f, 15.0f, 3.0f, 15.0f, 4.0f, 15.0f, 1.0f, 20.0f, 2.0f, 21.0f, 2.0f, 22.0f, 2.0f, 23.0f, 1.0f, 24.0f, 8.0f, 34.0f, 10.0f, 34.0f,
+					26.0f, 34.0f, 28.0f, 34.0f, 30.0f, 34.0f, 9.0f, 35.0f, 27.0f, 35.0f, 29.0f, 35.0f, 14.0f, 41.0f, 15.0f, 41.0f, 18.0f, 41.0f, 19.0f, 41.0f, 34.0f, 41.0f, 35.0f, 41.0f, 37.0f, 41.0f, 38.0f, 41.0f, 39.0f, 41.0f, 16.0f, 42.0f,
+					20.0f, 42.0f, 36.0f, 42.0f, 40.0f, 42.0f, 16.0f, 43.0f, 20.0f, 43.0f, 36.0f, 43.0f, 40.0f, 43.0f
 				};
 				float abilities[16] = {
 					1.0f, 7.0f, 42.0f, 7.0f, 3.0f, 22.0f, 40.0f, 22.0f, 15.0f, 32.0f, 28.0f, 32.0f, 6.0f, 36.0f, 37.0f, 36.0f
 				};
 
-				AddStaticSpikes(staticSpikes, 72);
-				AddRedSpikes(redSpikes, 75, redDimension);
-				AddBlueSpikes(blueSpikes, 74, blueDimension);
+				AddStaticSpikes(staticSpikes, 70);
+				AddRedSpikes(redSpikes, 72, redDimension);
+				AddBlueSpikes(blueSpikes, 71, blueDimension);
 				AddAbilities(abilities, 8);
 
 				for (unsigned i = 0; i < players.size(); i++)
@@ -593,28 +596,29 @@ namespace Levels
 			}
 			case Map::Merge:
 			{
-				float staticSpikes[60] = {
-					1.0f, 8.0f, 2.0f, 8.0f, 21.0f, 8.0f, 22.0f, 8.0f, 11.0f, 12.0f, 12.0f, 12.0f, 10.0f, 29.0f, 11.0f, 29.0f, 12.0f, 29.0f, 13.0f, 29.0f, 10.0f, 39.0f, 13.0f, 39.0f, 1.0f, 46.0f, 2.0f, 46.0f, 3.0f, 46.0f, 4.0f, 46.0f,
-					5.0f, 46.0f, 6.0f, 46.0f, 7.0f, 46.0f, 8.0f, 46.0f, 9.0f, 46.0f, 14.0f, 46.0f, 15.0f, 46.0f, 16.0f, 46.0f, 17.0f, 46.0f, 18.0f, 46.0f, 19.0f, 46.0f, 20.0f, 46.0f, 21.0f, 46.0f, 22.0f, 46.0f
+				float staticSpikes[64] = {
+					1.0f, 7.0f, 2.0f, 7.0f, 21.0f, 7.0f, 22.0f, 7.0f, 11.0f, 12.0f, 12.0f, 12.0f, 11.0f, 13.0f, 12.0f, 13.0f, 10.0f, 29.0f, 11.0f, 29.0f, 12.0f, 29.0f, 13.0f, 29.0f, 10.0f, 39.0f, 13.0f, 39.0f, 1.0f, 46.0f, 2.0f, 46.0f,
+					3.0f, 46.0f, 4.0f, 46.0f, 5.0f, 46.0f, 6.0f, 46.0f, 7.0f, 46.0f, 8.0f, 46.0f, 9.0f, 46.0f, 14.0f, 46.0f, 15.0f, 46.0f, 16.0f, 46.0f, 17.0f, 46.0f, 18.0f, 46.0f, 19.0f, 46.0f, 20.0f, 46.0f, 21.0f, 46.0f, 22.0f, 46.0f
 				};
-				float redSpikes[16] = {
-					9.0f, 14.0f, 14.0f, 14.0f, 9.0f, 15.0f, 14.0f, 15.0f, 3.0f, 22.0f, 20.0f, 22.0f, 3.0f, 23.0f, 20.0f, 23.0f
+				float redSpikes[4] = {
+					6.0f, 9.0f, 17.0f, 9.0f
 				};
-				float blueSpikes[28] = {
-					6.0f, 3.0f, 17.0f, 3.0f, 10.0f, 5.0f, 13.0f, 5.0f, 8.0f, 23.0f, 9.0f, 23.0f, 10.0f, 23.0f, 13.0f, 23.0f, 14.0f, 23.0f, 15.0f, 23.0f, 1.0f, 26.0f, 2.0f, 26.0f, 21.0f, 26.0f, 22.0f, 26.0f
+				float blueSpikes[36] = {
+					7.0f, 4.0f, 16.0f, 4.0f, 9.0f, 14.0f, 14.0f, 14.0f, 9.0f, 15.0f, 14.0f, 15.0f, 9.0f, 16.0f, 14.0f, 16.0f, 8.0f, 21.0f, 9.0f, 21.0f, 10.0f, 21.0f, 13.0f, 21.0f, 14.0f, 21.0f, 15.0f, 21.0f, 1.0f, 26.0f, 2.0f, 26.0f,
+					21.0f, 26.0f, 22.0f, 26.0f
 				};
-				float abilities[12] = {
-					5.0f, 6.0f, 18.0f, 6.0f, 2.0f, 27.0f, 21.0f, 27.0f, 2.0f, 39.0f, 21.0f, 39.0f
+				float abilities[24] = {
+					2.0f, 2.0f, 21.0f, 2.0f, 5.0f, 6.0f, 18.0f, 6.0f, 7.0f, 15.0f, 16.0f, 15.0f, 1.0f, 23.0f, 22.0f, 23.0f, 2.0f, 27.0f, 21.0f, 27.0f, 2.0f, 39.0f, 21.0f, 39.0f
 				};
 
-				AddStaticSpikes(staticSpikes, 30);
-				AddRedSpikes(redSpikes, 8, redDimension);
-				AddBlueSpikes(blueSpikes, 14, blueDimension);
-				AddAbilities(abilities, 6);
+				AddStaticSpikes(staticSpikes, 32);
+				AddRedSpikes(redSpikes, 2, redDimension);
+				AddBlueSpikes(blueSpikes, 18, blueDimension);
+				AddAbilities(abilities, 12);
 
 				for (unsigned i = 0; i < players.size(); i++)
 				{
-					players[i]->GetComponent<Transform>()->SetTranslation(i % 2 == 0 ? Vector2D(8.0f, -41.0f) : Vector2D(15.0f, -41.0f));
+					players[i]->GetComponent<Transform>()->SetTranslation(i % 2 == 0 ? Vector2D(8.0f, -40.0f) : Vector2D(15.0f, -40.0f));
 				}
 
 				gearHeight = -50.0f;
@@ -648,7 +652,37 @@ namespace Levels
 					players[i]->GetComponent<Transform>()->SetTranslation(i % 2 == 0 ? Vector2D(9.0f, -44.0f) : Vector2D(9.0f, -44.0f));
 				}
 
-				gearHeight = -60.0f;
+				gearHeight = -65.0f;
+
+				break;
+			}
+			case Map::Cavern:
+			{
+				float staticSpikes[34] = {
+					11.0f, 12.0f, 12.0f, 12.0f, 11.0f, 13.0f, 12.0f, 13.0f, 2.0f, 23.0f, 3.0f, 23.0f, 12.0f, 46.0f, 13.0f, 46.0f, 14.0f, 46.0f, 15.0f, 46.0f, 16.0f, 46.0f, 17.0f, 46.0f, 18.0f, 46.0f, 19.0f, 46.0f, 20.0f, 46.0f, 21.0f, 46.0f,
+					22.0f, 46.0f
+				};
+				float redSpikes[22] = {
+					11.0f, 8.0f, 12.0f, 8.0f, 1.0f, 12.0f, 2.0f, 12.0f, 1.0f, 13.0f, 2.0f, 13.0f, 16.0f, 19.0f, 16.0f, 20.0f, 8.0f, 37.0f, 9.0f, 37.0f, 10.0f, 37.0f
+				};
+				float blueSpikes[10] = {
+					4.0f, 4.0f, 5.0f, 4.0f, 8.0f, 22.0f, 9.0f, 22.0f, 10.0f, 22.0f
+				};
+				float abilities[24] = {
+					2.0f, 2.0f, 21.0f, 2.0f, 21.0f, 6.0f, 16.0f, 15.0f, 3.0f, 16.0f, 17.0f, 20.0f, 22.0f, 23.0f, 3.0f, 25.0f, 16.0f, 27.0f, 12.0f, 35.0f, 22.0f, 39.0f, 10.0f, 43.0f
+				};
+
+				AddStaticSpikes(staticSpikes, 17);
+				AddRedSpikes(redSpikes, 11, redDimension);
+				AddBlueSpikes(blueSpikes, 5, blueDimension);
+				AddAbilities(abilities, 12);
+
+				for (unsigned i = 0; i < players.size(); i++)
+				{
+					players[i]->GetComponent<Transform>()->SetTranslation(i % 2 == 0 ? Vector2D(6.0f, -43.0f) : Vector2D(6.0f, -43.0f));
+				}
+
+				gearHeight = -65.0f;
 
 				break;
 			}
@@ -659,20 +693,52 @@ namespace Levels
 			objectManager.AddObject(*shadow);
 
 			// Create rising gears and add to objectManager
+			// First rising gears are centered to keep shadow on screen.
 			GameObject* risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(11.5f, gearHeight));
+			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(10.0f, gearHeight));
+			risingGears->GetComponent<Sprite>()->SetAlpha(0.0f);
 			objectManager.AddObject(*risingGears);
-			GameObject* risingGears2 = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-			risingGears2->GetComponent<Transform>()->SetTranslation(Vector2D(5.5f, gearHeight));
-			objectManager.AddObject(*risingGears2);
-			GameObject* risingGears3 = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-			risingGears3->GetComponent<Transform>()->SetTranslation(Vector2D(18.5f, gearHeight));
-			objectManager.AddObject(*risingGears3);
+
+			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
+			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, gearHeight));
+			objectManager.AddObject(*risingGears);
+
+			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
+			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(5.0f, gearHeight));
+			objectManager.AddObject(*risingGears);
+
+			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
+			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(10.0f, gearHeight));
+			objectManager.AddObject(*risingGears);
+
+			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
+			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(15.0f, gearHeight));
+			objectManager.AddObject(*risingGears);
+
+			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
+			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(20.0f, gearHeight));
+			objectManager.AddObject(*risingGears);
+
+			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
+			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(2.5f, gearHeight - 4.0f));
+			objectManager.AddObject(*risingGears);
+
+			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
+			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(7.5f, gearHeight - 4.0f));
+			objectManager.AddObject(*risingGears);
+
+			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
+			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(12.5f, gearHeight - 45.0f));
+			objectManager.AddObject(*risingGears);
+
+			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
+			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(17.5f, gearHeight - 4.0f));
+			objectManager.AddObject(*risingGears);
 
 			dimensionController.SetActiveDimension(redDimension);
 		}
 
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < NUM_PLAYERS; i++)
 		{
 			GameObject* playerIndicator = new GameObject(*objectManager.GetArchetypeByName("PlayerIndicators"));
 			playerIndicator->GetComponent<Sprite>()->SetAlpha(0.0f);
@@ -721,7 +787,7 @@ namespace Levels
 				(*it)->GetComponent<Behaviors::AbilityHolder>()->SetAbility(Abilities::ABILITY_PROXIMITYMINE);
 		}
 
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < NUM_PLAYERS; i++)
 		{
 			playerIndicators[i]->GetComponent<Sprite>()->SetAlpha(0.0f);
 		}
