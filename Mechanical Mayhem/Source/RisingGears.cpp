@@ -76,7 +76,6 @@ namespace Behaviors
 				start = true;
 			}
 
-			// std::cout << "RisingGears start" << std::endl;
 			GetOwner()->GetComponent<Transform>()->SetTranslation(GetOwner()->GetComponent<Transform>()->GetTranslation() + Vector2D(0.0f, moveSpeed * dt));
 		}
 		else
@@ -102,6 +101,18 @@ namespace Behaviors
 	{
 		parser.ReadVariable("moveSpeed", moveSpeed);
 		parser.ReadVariable("startOffset", startOffset);
+	}
+
+	// Sets the time before starting.
+	void RisingGears::SetStartOffset(float offset)
+	{
+		startOffset = offset;
+	}
+
+	// Gets the time before starting.
+	float RisingGears::GetStartOffset() const
+	{
+		return startOffset;
 	}
 }
 

@@ -61,6 +61,12 @@ namespace Behaviors
 		//   parser = The parser that is reading this object's data from a file.
 		void Deserialize(Parser& parser) override;
 
+		// Sets the time before starting.
+		void SetStartOffset(float offset);
+
+		// Gets the time before starting.
+		float GetStartOffset() const;
+
 	private:
 		//------------------------------------------------------------------------------
 		// Private Variables:

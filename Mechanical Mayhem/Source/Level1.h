@@ -144,7 +144,7 @@ namespace Levels
 
 		Map map;
 
-		GameObject* backgroundImage;
+		GameObject* backgroundLayers[3];
 		GameObject* shadow;
 
 		Effects::ChromaticAberration* chromaticAberration;
