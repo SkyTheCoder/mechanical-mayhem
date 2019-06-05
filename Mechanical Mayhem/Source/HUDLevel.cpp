@@ -53,7 +53,7 @@ namespace Levels
 		dimensionSwapCountdown(nullptr), victoryText(nullptr)
 	{
 		HUDCamera.SetTranslation(Vector2D());
-		HUDCamera.SetSize(12.0f);
+		HUDCamera.SetSize(13.0f);
 	}
 
 	// Load the resources associated with MainMenu.
@@ -136,16 +136,16 @@ namespace Levels
 				spriteText->SetText("Chad won! Press <SPACE> or start to return to level select");
 				break;
 			case 3:
-				spriteText->SetText("Jerry 2 won! Press <SPACE> or start to return to level select");
+				spriteText->SetText("Jared won! Press <SPACE> or start to return to level select");
 				break;
 			case 4:
-				spriteText->SetText("Chad 2 won! Press <SPACE> or start to return to level select");
+				spriteText->SetText("Charles won! Press <SPACE> or start to return to level select");
 				break;
 			case 5:
-				spriteText->SetText("Jerry 3 won! Press <SPACE> or start to return to level select");
+				spriteText->SetText("Jimbo won! Press <SPACE> or start to return to level select");
 				break;
 			case 6:
-				spriteText->SetText("Chad 3 won! Press <SPACE> or start to return to level select");
+				spriteText->SetText("Vlad won! Press <SPACE> or start to return to level select");
 				break;
 			}
 

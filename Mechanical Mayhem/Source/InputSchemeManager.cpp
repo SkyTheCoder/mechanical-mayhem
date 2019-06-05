@@ -93,16 +93,20 @@ std::string InputScheme::GetInputSourceName() const
 // Returns the name of the input scheme that players will understand.
 std::string InputScheme::GetName() const
 {
-	if (type == IT_KEYBOARD)
+	switch (playerID)
 	{
-		if (keyUp == 'W')
-			return "Keyboard 1";
-		else if (keyUp == VK_UP)
-			return "Keyboard 2";
-	}
-	else if (type == IT_CONTROLLER)
-	{
-		return "Controller " + std::to_string(controllerID + 1);
+	case 1:
+		return "Keyboard 1";
+	case 2:
+		return "Keyboard 2";
+	case 3:
+		return "Controller 1";
+	case 4:
+		return "Controller 2";
+	case 5:
+		return "Controller 3";
+	case 6:
+		return "Controller 4";
 	}
 
 	return "";

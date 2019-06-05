@@ -105,7 +105,7 @@ namespace Levels
 		joinHint2->GetComponent<SpriteTextMono>()->SetText("Press CTRL or START to join the lobby");
 		objectManager.AddObject(*joinHint2);
 
-		Color colors[] = { HexColorRGB(0xF05555), HexColorRGB(0x5755F0), HexColorRGB(0x17AB28), HexColorRGB(0xDDB61F), HexColorRGB(0xE83FE4), HexColorRGB(0xE57207) };
+		Color colors[] = { HexColorRGB(0xF05555), HexColorRGB(0x5755F0), HexColorRGB(0x17AB28), HexColorRGB(0xDDB61F), HexColorRGB(0xE83FE4), HexColorRGB(0xC01818) };
 
 		for (int i = 0; i < NUM_PLAYERS; i++)
 		{
@@ -181,12 +181,21 @@ namespace Levels
 			(*it)->GetComponent<Sprite>()->SetAlpha(0.0f);
 		}
 
+		const char* playerNames[] = {
+			"Jerry",
+			"Chad",
+			"Jared",
+			"Charles",
+			"Jimbo",
+			"Vlad"
+		};
+
 		const std::vector<InputScheme>& inputSchemes = inputSchemeManager.GetInputSchemes();
 		for (auto it = inputSchemes.cbegin(); it != inputSchemes.cend(); ++it)
 		{
 			SpriteTextMono* spriteText = playerIcons[static_cast<size_t>(it->playerID) - 1]->GetComponent<SpriteTextMono>();
 			spriteText->SetAlpha(1.0f);
-			spriteText->SetText("Player " + std::to_string(it->playerID) + ": " + it->GetName());
+			spriteText->SetText(std::string(playerNames[it->playerID - 1]) + ": " + it->GetName());
 		}
 		if (inputSchemes.size() < 2)
 		{
