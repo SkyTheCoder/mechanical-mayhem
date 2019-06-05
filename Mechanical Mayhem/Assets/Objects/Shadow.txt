@@ -5,7 +5,7 @@ Shadow
   {
     translation : { 0, 0 }
     rotation : 0
-    scale : { 96, 64 }
+    scale : { 128, 64 }
   }
   Sprite
   {

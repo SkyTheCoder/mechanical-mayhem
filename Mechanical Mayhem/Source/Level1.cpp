@@ -118,24 +118,24 @@ namespace Levels
 		resourceManager.GetMesh("PlayerIndicators", Vector2D(1.0f / columnsPlayerIndicators, 1.0f / rowsPlayerIndicators), Vector2D(0.5f, 0.5f));
 		resourceManager.GetMesh("DeathAnimation", Vector2D(1.0f / columnsDeathAnimation, 1.0f / rowsDeathAnimation), Vector2D(0.5f, 0.5f));
 
-		resourceManager.GetSpriteSource("AniA.png", columnsMonkey, rowsMonkey);
-		resourceManager.GetSpriteSource("AniJetpackA.png", columnsMonkey, rowsMonkey);
-		resourceManager.GetSpriteSource("AniFlameA.png", columnsMonkey, rowsMonkey);
-		resourceManager.GetSpriteSource("AniMineA.png", columnsMonkey, rowsMonkey);
-		resourceManager.GetSpriteSource("AniB.png", columnsCat, rowsCat);
-		resourceManager.GetSpriteSource("AniJetpackB.png", columnsCat, rowsCat);
-		resourceManager.GetSpriteSource("AniFlameB.png", columnsCat, rowsCat);
-		resourceManager.GetSpriteSource("AniMineB.png", columnsCat, rowsCat);
+		const char* spriteSuffixes[] = { "A", "B", "C", "D", "E", "F" };
+
+		for (int i = 0; i < NUM_PLAYERS; i++)
+		{
+			std::string spriteSuffix = spriteSuffixes[i];
+			resourceManager.GetSpriteSource("Ani" + spriteSuffix + ".png", columnsMonkey, rowsMonkey);
+			resourceManager.GetSpriteSource("AniJetpack" + spriteSuffix + ".png", columnsMonkey, rowsMonkey);
+			resourceManager.GetSpriteSource("AniFlame" + spriteSuffix + ".png", columnsMonkey, rowsMonkey);
+			resourceManager.GetSpriteSource("AniMine" + spriteSuffix + ".png", columnsMonkey, rowsMonkey);
+			resourceManager.GetSpriteSource("AniJetpackFallFire" + spriteSuffix + ".png", columnsJetpackFlame, rowsJetpackFlame);
+			resourceManager.GetSpriteSource("AniJetpackJumpFire" + spriteSuffix + ".png", columnsJetpackFlame, rowsJetpackFlame);
+			resourceManager.GetSpriteSource("AniDeath" + spriteSuffix + ".png", columnsDeathAnimation, rowsDeathAnimation);
+		}
+
 		resourceManager.GetSpriteSource("Spikes.png", columnsSpikes, rowsSpikes);
-		resourceManager.GetSpriteSource("Spikes.png", columnsSpikes, rowsSpikes);
-		resourceManager.GetSpriteSource("Spikes.png", columnsSpikes, rowsSpikes);
-		resourceManager.GetSpriteSource("AniMineExplode.png", columnsExplosion, rowsExplosion);
 		resourceManager.GetSpriteSource("AniMine.png", columnsMine, rowsMine);
 		resourceManager.GetSpriteSource("AniFlame.png", columnsFlame, rowsFlame);
-		resourceManager.GetSpriteSource("AniJetpackFallFireA.png", columnsJetpackFlame, rowsJetpackFlame);
-		resourceManager.GetSpriteSource("AniJetpackFallFireB.png", columnsJetpackFlame, rowsJetpackFlame);
-		resourceManager.GetSpriteSource("AniJetpackJumpFireA.png", columnsJetpackFlame, rowsJetpackFlame);
-		resourceManager.GetSpriteSource("AniJetpackJumpFireB.png", columnsJetpackFlame, rowsJetpackFlame);
+		resourceManager.GetSpriteSource("AniMineExplode.png", columnsExplosion, rowsExplosion);
 		resourceManager.GetSpriteSource("AniJetpackPickup.png", columnsJetpackPickup, rowsJetpackPickup);
 		resourceManager.GetSpriteSource("AniFlamethrowerPickup.png", columnsFlamethrowerPickup, rowsFlamethrowerPickup);
 		resourceManager.GetSpriteSource("AniMinePickup.png", columnsMinePickup, rowsMinePickup);
@@ -144,8 +144,6 @@ namespace Levels
 		resourceManager.GetSpriteSource("Tilemap.png", columnsMap, rowsMap);
 		resourceManager.GetSpriteSource("RisingGears.png", columnsRisingGears, rowsRisingGears);
 		resourceManager.GetSpriteSource("PlayerIndicators.png", columnsPlayerIndicators, rowsPlayerIndicators);
-		resourceManager.GetSpriteSource("AniDeathA.png", columnsDeathAnimation, rowsDeathAnimation);
-		resourceManager.GetSpriteSource("AniDeathB.png", columnsDeathAnimation, rowsDeathAnimation);
 
 		resourceManager.GetMesh("FontAtlas", 12, 8);
 		resourceManager.GetSpriteSource("Code New Roman@2x.png", 12, 8);
@@ -264,6 +262,7 @@ namespace Levels
 
 		// Create the players and add them to the object manager.
 		std::vector<GameObject*> players;
+		const char* spriteSuffix[] = { "A", "B", "C", "D", "E", "F" };
 		for (int i = 0; i < static_cast<int>(inputSchemeManager.GetInputSchemes().size()); i++)
 		{
 			GameObject* player = new GameObject(*objectManager.GetArchetypeByName("Player"));
@@ -274,7 +273,7 @@ namespace Levels
 			playerMovement->SetPlayerID(i + 1);
 			playerMovement->SetInputScheme(inputSchemeManager.GetPlayerScheme(i + 1));
 			objectManager.AddObject(*player);
-			player->GetComponent<Behaviors::MonkeyAnimation>()->GetSpriteSources(i % 2 == 0 ? "A" : "B");
+			player->GetComponent<Behaviors::MonkeyAnimation>()->GetSpriteSources(spriteSuffix[i]);
 			static_cast<Behaviors::CameraFollow*>(gameController->GetComponent("CameraFollow"))->AddPlayer(player);
 			players.push_back(player);
 		}
@@ -695,41 +694,16 @@ namespace Levels
 			risingGears->GetComponent<Sprite>()->SetAlpha(0.0f);
 			objectManager.AddObject(*risingGears);
 
-			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, gearHeight));
-			objectManager.AddObject(*risingGears);
+			for (int i = -25; i <= 70; i += 5)
+			{
+				risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
+				risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(static_cast<float>(i), gearHeight));
+				objectManager.AddObject(*risingGears);
 
-			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(5.0f, gearHeight));
-			objectManager.AddObject(*risingGears);
-
-			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(10.0f, gearHeight));
-			objectManager.AddObject(*risingGears);
-
-			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(15.0f, gearHeight));
-			objectManager.AddObject(*risingGears);
-
-			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(20.0f, gearHeight));
-			objectManager.AddObject(*risingGears);
-
-			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(2.5f, gearHeight - 4.0f));
-			objectManager.AddObject(*risingGears);
-
-			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(7.5f, gearHeight - 4.0f));
-			objectManager.AddObject(*risingGears);
-
-			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(12.5f, gearHeight - 45.0f));
-			objectManager.AddObject(*risingGears);
-
-			risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
-			risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(17.5f, gearHeight - 4.0f));
-			objectManager.AddObject(*risingGears);
+				risingGears = new GameObject(*objectManager.GetArchetypeByName("RisingGears"));
+				risingGears->GetComponent<Transform>()->SetTranslation(Vector2D(static_cast<float>(i) + 2.5f, gearHeight - 4.0f));
+				objectManager.AddObject(*risingGears);
+			}
 
 			// Create shadow sprite
 			shadow = new GameObject(*objectManager.GetArchetypeByName("Shadow"));

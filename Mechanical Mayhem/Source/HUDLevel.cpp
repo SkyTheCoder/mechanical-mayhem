@@ -53,7 +53,7 @@ namespace Levels
 		dimensionSwapCountdown(nullptr), victoryText(nullptr)
 	{
 		HUDCamera.SetTranslation(Vector2D());
-		HUDCamera.SetSize(10.0f);
+		HUDCamera.SetSize(12.0f);
 	}
 
 	// Load the resources associated with MainMenu.
@@ -91,13 +91,15 @@ namespace Levels
 		GameObjectFactory& objectFactory = GameObjectFactory::GetInstance();
 
 		// DimensionShiftGear Indicator
+		BoundingRectangle screenDimensions = HUDCamera.GetScreenWorldDimensions();
+
 		dimensionShiftGear = objectFactory.CreateObject("DimensionShiftGear", resourceManager.GetMesh("DimensionShiftGear"), resourceManager.GetSpriteSource("AniDimensionShiftGear.png"));
-		dimensionShiftGear->GetComponent<Transform>()->SetTranslation(Vector2D(0.07f, 3.52f));
+		dimensionShiftGear->GetComponent<Transform>()->SetTranslation(Vector2D(0.07f, screenDimensions.top - 1.48f));
 		dimensionShiftGear->GetComponent<Behaviors::DimensionShiftGearAnimation>()->SetFrames(1, 9, 8);
 		objectManager.AddObject(*dimensionShiftGear);
 
 		dimensionSwapCountdown = objectFactory.CreateObject("Text", resourceManager.GetMesh("FontAtlas"), resourceManager.GetSpriteSource("Code New Roman@2x.png"));
-		dimensionSwapCountdown->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, 3.5f));
+		dimensionSwapCountdown->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, screenDimensions.top - 1.5f));
 		dimensionSwapCountdown->GetComponent<Transform>()->SetScale(Vector2D(0.75f, 0.75f));
 		objectManager.AddObject(*dimensionSwapCountdown);
 

@@ -76,16 +76,19 @@ namespace Levels
 		resourceManager.GetSpriteSource("AniMainMenu.png", 2, 2);
 		resourceManager.GetSpriteSource("Button.png");
 		resourceManager.GetSpriteSource("ArtMechanicalMayhemTitleScreen.png");
-		resourceManager.GetSpriteSource("AniA.png", 3, 10);
-		resourceManager.GetSpriteSource("AniB.png", 3, 10);
-		resourceManager.GetSpriteSource("AniJetpackA.png", 3, 10);
-		resourceManager.GetSpriteSource("AniJetpackB.png", 3, 10);
-		resourceManager.GetSpriteSource("AniFlameA.png", 3, 10);
-		resourceManager.GetSpriteSource("AniFlameB.png", 3, 10);
-		resourceManager.GetSpriteSource("AniMineA.png", 3, 10);
-		resourceManager.GetSpriteSource("AniMineB.png", 3, 10);
-		resourceManager.GetSpriteSource("AniJetpackFallFireActiveA.png", 2, 2);
-		resourceManager.GetSpriteSource("AniJetpackFallFireActiveB.png", 2, 2);
+
+		const char* spriteSuffixes[] = { "A", "B", "C", "D", "E", "F" };
+
+		for (int i = 0; i < NUM_PLAYERS; i++)
+		{
+			std::string spriteSuffix = spriteSuffixes[i];
+			resourceManager.GetSpriteSource("Ani" + spriteSuffix + ".png", 3, 10);
+			resourceManager.GetSpriteSource("AniJetpack" + spriteSuffix + ".png", 3, 10);
+			resourceManager.GetSpriteSource("AniFlame" + spriteSuffix + ".png", 3, 10);
+			resourceManager.GetSpriteSource("AniMine" + spriteSuffix + ".png", 3, 10);
+			resourceManager.GetSpriteSource("AniJetpackFallFireActive" + spriteSuffix + ".png", 2, 2);
+		}
+
 		resourceManager.GetMesh("FontAtlas", 12, 8);
 		resourceManager.GetSpriteSource("Code New Roman@2x.png", 12, 8);
 
@@ -261,9 +264,16 @@ namespace Levels
 			}
 
 			// Handle sprite randomization ourselves since the jetpack sprite isn't in the normal spritesheet.
-			if (RandomRange(0, 1) == 1)
 			{
-				sprite->GetComponent<Sprite>()->SetSpriteSource(resourceManager.GetSpriteSource("AniJetpackFallFireActiveB.png"));
+				const char* spriteNames[] = {
+					"AniJetpackFallFireActiveA.png",
+					"AniJetpackFallFireActiveB.png",
+					"AniJetpackFallFireActiveC.png",
+					"AniJetpackFallFireActiveD.png",
+					"AniJetpackFallFireActiveE.png",
+					"AniJetpackFallFireActiveF.png"
+				};
+				sprite->GetComponent<Sprite>()->SetSpriteSource(resourceManager.GetSpriteSource(spriteNames[RandomRange(0, 5)]));
 			}
 
 			randomizeSprite = false;
@@ -277,15 +287,31 @@ namespace Levels
 			const char* spriteNames[] = {
 				"AniA.png",
 				"AniB.png",
+				"AniC.png",
+				"AniD.png",
+				"AniE.png",
+				"AniF.png",
 				"AniJetpackA.png",
 				"AniJetpackB.png",
+				"AniJetpackC.png",
+				"AniJetpackD.png",
+				"AniJetpackE.png",
+				"AniJetpackF.png",
 				"AniFlameA.png",
 				"AniFlameB.png",
+				"AniFlameC.png",
+				"AniFlameD.png",
+				"AniFlameE.png",
+				"AniFlameF.png",
 				"AniMineA.png",
-				"AniMineB.png"
+				"AniMineB.png",
+				"AniMineC.png",
+				"AniMineD.png",
+				"AniMineE.png",
+				"AniMineF.png"
 			};
 
-			sprite->GetComponent<Sprite>()->SetSpriteSource(resourceManager.GetSpriteSource(spriteNames[RandomRange(0, 7)]));
+			sprite->GetComponent<Sprite>()->SetSpriteSource(resourceManager.GetSpriteSource(spriteNames[RandomRange(0, 23)]));
 		}
 
 		Vector2D velocity = sprite->GetComponent<Physics>()->GetVelocity();
