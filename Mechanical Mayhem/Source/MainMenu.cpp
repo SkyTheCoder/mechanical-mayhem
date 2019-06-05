@@ -112,23 +112,26 @@ namespace Levels
 
 		objectManager.AddObject(*new GameObject(*objectManager.GetArchetypeByName("FullScreenBackground")));
 
-		MenuButton* controls = AddMenuButton("Controls", Vector2D(-1.75f, -2.5f), Levels::Map::ControlScreen);
-		MenuButton* credits = AddMenuButton("Credits", Vector2D(1.75f, -2.5f), Levels::Map::Credits);
-		MenuButton* lobby = AddMenuButton("Lobby", Vector2D(0.0f, -1.5f), Levels::Map::Lobby);
-		MenuButton* exit = AddMenuButton("Exit", Vector2D(0.0f, -3.5f), Levels::Map::Exit);
+		MenuButton* controls = AddMenuButton("Controls", Vector2D(-1.75f, -2.5f), Map::ControlScreen);
+		MenuButton* credits = AddMenuButton("Credits", Vector2D(1.75f, -2.5f), Map::Credits);
+		MenuButton* lobby = AddMenuButton("Lobby", Vector2D(0.0f, -1.5f), Map::Lobby);
+		MenuButton* exit = AddMenuButton("Exit", Vector2D(0.0f, -3.5f), Map::Exit);
 
 		controls->north = lobby;
 		controls->east = credits;
 		controls->south = exit;
 		controls->west = credits;
+
 		credits->north = lobby;
 		credits->east = controls;
 		credits->south = exit;
 		credits->west = controls;
+
 		lobby->north = exit;
 		lobby->east = credits;
 		lobby->south = controls;
 		lobby->west = controls;
+
 		exit->north = controls;
 		exit->east = credits;
 		exit->south = lobby;

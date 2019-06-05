@@ -82,7 +82,7 @@ namespace Levels
 		objectManager.AddObject(*new GameObject(*objectManager.GetArchetypeByName("FullScreenBackground")));
 		objectManager.AddObject(*new GameObject(*objectManager.GetArchetypeByName("FullScreenImage")));
 
-		MenuButton* mainMenu = AddMenuButton("Main Menu", Vector2D(0.0f, -2.5f), Levels::Map::MainMenu);
+		MenuButton* mainMenu = AddMenuButton("Main Menu", Vector2D(0.0f, -2.5f), Map::MainMenu);
 
 		SetDefaultButton(mainMenu);
 	}

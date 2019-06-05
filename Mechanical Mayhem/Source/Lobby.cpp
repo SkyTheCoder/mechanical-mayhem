@@ -84,11 +84,12 @@ namespace Levels
 		title->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, 2.5f));
 		objectManager.AddObject(*title);
 
-		MenuButton* mainMenu = AddMenuButton("Main Menu", Vector2D(-1.75f, -2.5f), Levels::Map::MainMenu);
-		levelSelect = AddMenuButton("Level Select", Vector2D(1.75f, -2.5f), Levels::Map::LevelSelect);
+		MenuButton* mainMenu = AddMenuButton("Main Menu", Vector2D(-1.75f, -2.5f), Map::MainMenu);
+		levelSelect = AddMenuButton("Level Select", Vector2D(1.75f, -2.5f), Map::LevelSelect);
 
 		mainMenu->east = levelSelect;
 		mainMenu->west = levelSelect;
+
 		levelSelect->east = mainMenu;
 		levelSelect->west = mainMenu;
 
@@ -109,7 +110,7 @@ namespace Levels
 		for (int i = 0; i < NUM_PLAYERS; i++)
 		{
 			GameObject* text = new GameObject(*objectManager.GetArchetypeByName("Text"));
-			text->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, 1.0f - i * 0.5f));
+			text->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, 1.5f - i * 0.5f));
 			text->GetComponent<Sprite>()->SetColor(colors[i]);
 			objectManager.AddObject(*text);
 			playerIcons.push_back(text);
@@ -196,7 +197,7 @@ namespace Levels
 		else
 		{
 			joinHint->GetComponent<Sprite>()->SetAlpha(0.0f);
-			joinHint2->GetComponent<Sprite>()->SetAlpha(0.0f);
+			//joinHint2->GetComponent<Sprite>()->SetAlpha(0.0f);
 			levelSelect->button->SetMap(Levels::Map::LevelSelect);
 		}
 	}

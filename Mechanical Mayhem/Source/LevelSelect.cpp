@@ -27,6 +27,7 @@
 #include <Texture.h>
 #include <SpriteSource.h>
 #include <Mesh.h>
+#include <Random.h>
 
 // Components
 #include <SpriteTextMono.h>
@@ -82,30 +83,36 @@ namespace Levels
 		// Create and add descriptive text
 		GameObject* text = new GameObject(*objectManager.GetArchetypeByName("Text"));
 		text->GetComponent<SpriteTextMono>()->SetText("Select Your Level");
-		text->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, 2.5f));
+		text->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, 3.5f));
 		objectManager.AddObject(*text);
 
-		/*AddMenuButton("Tutorial", Vector2D(-1.75f, 1.5f), Levels::Map::Tutorial);
-		AddMenuButton("Arena 3", Vector2D(1.75f, 1.5f), Levels::Map::Arena3);
-		AddMenuButton("MediumBoy", Vector2D(-1.75f, 0.5f), Levels::Map::MediumBoy);
-		AddMenuButton("Channels", Vector2D(1.75, 0.5f), Levels::Map::Channels);
-		AddMenuButton("Separation", Vector2D(-1.75f, -0.5f), Levels::Map::Separation);
-		AddMenuButton("Descent", Vector2D(1.75f, -0.5f), Levels::Map::Descent);*/
+		/*AddMenuButton("Tutorial", Vector2D(-1.75f, 1.5f), Map::Tutorial);
+		AddMenuButton("Arena 3", Vector2D(1.75f, 1.5f), Map::Arena3);
+		AddMenuButton("MediumBoy", Vector2D(-1.75f, 0.5f), Map::MediumBoy);
+		AddMenuButton("Channels", Vector2D(1.75, 0.5f), Map::Channels);
+		AddMenuButton("Separation", Vector2D(-1.75f, -0.5f), Map::Separation);
+		AddMenuButton("Descent", Vector2D(1.75f, -0.5f), Map::Descent);*/
 
-		MenuButton* clockwork = AddMenuButton("Clockwork", Vector2D(-1.75f, 1.5f), Levels::Map::Clockwork);
-		MenuButton* chase = AddMenuButton("Chase", Vector2D(1.75f, 1.5f), Levels::Map::Chase);
-		MenuButton* merge = AddMenuButton("Merge", Vector2D(-1.75f, 0.5f), Levels::Map::Merge);
-		MenuButton* descent = AddMenuButton("Descent", Vector2D(1.75f, 0.5f), Levels::Map::Descent);
-		MenuButton* snake = AddMenuButton("Snake", Vector2D(-1.75f, -0.5f), Levels::Map::Snake);
-		MenuButton* cavern = AddMenuButton("Cavern", Vector2D(1.75f, -0.5f), Levels::Map::Cavern);
-		MenuButton* lobby = AddMenuButton("Lobby", Vector2D(0.0f, -2.5f), Levels::Map::Lobby);
+		MenuButton* random = AddMenuButton("Random", Vector2D(0.0f, 2.5f), static_cast<Map>(RandomRange(static_cast<int>(Map::Descent), static_cast<int>(Map::MAX_MAP) - 1)));
+		MenuButton* clockwork = AddMenuButton("Clockwork", Vector2D(-1.75f, 1.5f), Map::Clockwork);
+		MenuButton* chase = AddMenuButton("Chase", Vector2D(1.75f, 1.5f), Map::Chase);
+		MenuButton* merge = AddMenuButton("Merge", Vector2D(-1.75f, 0.5f), Map::Merge);
+		MenuButton* descent = AddMenuButton("Descent", Vector2D(1.75f, 0.5f), Map::Descent);
+		MenuButton* snake = AddMenuButton("Snake", Vector2D(-1.75f, -0.5f), Map::Snake);
+		MenuButton* cavern = AddMenuButton("Cavern", Vector2D(1.75f, -0.5f), Map::Cavern);
+		MenuButton* lobby = AddMenuButton("Lobby", Vector2D(0.0f, -2.5f), Map::Lobby);
 
-		clockwork->north = lobby;
+		random->north = lobby;
+		random->east = chase;
+		random->south = clockwork;
+		random->west = clockwork;
+
+		clockwork->north = random;
 		clockwork->east = chase;
 		clockwork->south = merge;
 		clockwork->west = chase;
 
-		chase->north = lobby;
+		chase->north = random;
 		chase->east = clockwork;
 		chase->south = descent;
 		chase->west = clockwork;
@@ -132,10 +139,10 @@ namespace Levels
 
 		lobby->north = snake;
 		lobby->east = cavern;
-		lobby->south = clockwork;
+		lobby->south = random;
 		lobby->west = snake;
 
-		SetDefaultButton(clockwork);
+		SetDefaultButton(random);
 	}
 
 	// Update LevelSelect.
