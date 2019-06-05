@@ -33,6 +33,7 @@
 #include <SpriteSource.h>
 #include <Interpolation.h>
 #include <Random.h>
+#include <System.h>
 
 // Components
 #include <Transform.h>
@@ -101,6 +102,8 @@ namespace Levels
 		objectManager.AddArchetype(*objectFactory.CreateObject("MainMenuFallingSprite", resourceManager.GetMesh("Player"), resourceManager.GetSpriteSource("AniA.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("MainMenuWallSlideSprite", resourceManager.GetMesh("Player"), resourceManager.GetSpriteSource("AniA.png")));
 		objectManager.AddArchetype(*objectFactory.CreateObject("MainMenuJetpackSprite", resourceManager.GetMesh("PlayerJetpack"), resourceManager.GetSpriteSource("AniJetpackFallFireActiveA.png")));
+
+		System::GetInstance().SetWindowTitle("Mechanical Mayhem");
 	}
 
 	// Initialize the memory associated with MainMenu.

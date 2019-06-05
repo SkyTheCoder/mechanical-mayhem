@@ -93,7 +93,7 @@ namespace Levels
 		columnsJetpackPickup(2), rowsJetpackPickup(2),
 		columnsFlamethrowerPickup(2), rowsFlamethrowerPickup(2),
 		dataStaticMap(nullptr), dataRedMap(nullptr), dataBlueMap(nullptr),
-		columnsMap(2), rowsMap(2)
+		columnsMap(2), rowsMap(6)
 	{
 	}
 
