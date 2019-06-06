@@ -69,6 +69,7 @@ bool InputScheme::operator==(const InputScheme& rhs) const
 }
 
 // Returns a printable version of the input source automatically assigned by the input scheme manager.
+// In this function, keyboard and controller names are just whichever joined first.
 std::string InputScheme::GetInputSourceName() const
 {
 	switch (source)
@@ -91,22 +92,21 @@ std::string InputScheme::GetInputSourceName() const
 }
 
 // Returns the name of the input scheme that players will understand.
+// In this function, keyboard 1 = WASD, keyboard 2 = arrow keys,
+// and controller X = whichever controller displays it is player X
+// (automatically assigned by Windows, usually lowest to highest based on which was plugged in first)
 std::string InputScheme::GetName() const
 {
-	switch (playerID)
+	if (type == IT_KEYBOARD)
 	{
-	case 1:
-		return "Keyboard 1";
-	case 2:
-		return "Keyboard 2";
-	case 3:
-		return "Controller 1";
-	case 4:
-		return "Controller 2";
-	case 5:
-		return "Controller 3";
-	case 6:
-		return "Controller 4";
+		if (keyUp == 'W')
+			return "Keyboard 1";
+		else if (keyUp == VK_UP)
+			return "Keyboard 2";
+	}
+	else if (type == IT_CONTROLLER)
+	{
+		return "Controller " + std::to_string(controllerID + 1);
 	}
 
 	return "";
@@ -212,6 +212,7 @@ InputSource InputSchemeManager::AddScheme(InputScheme& scheme)
 			++count;
 	}
 	
+	// Assign input sources and do bounds checking.
 	switch (scheme.type)
 	{
 	case IT_KEYBOARD:

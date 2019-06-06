@@ -75,9 +75,13 @@ public:
 	bool operator==(const InputScheme& rhs) const;
 
 	// Returns a printable version of the input source automatically assigned by the input scheme manager.
+	// In this function, keyboard and controller names are just whichever joined first.
 	std::string GetInputSourceName() const;
 
 	// Returns the name of the input scheme that players will understand.
+	// In this function, keyboard 1 = WASD, keyboard 2 = arrow keys,
+	// and controller X = whichever controller displays it is player X
+	// (automatically assigned by windows, usually lowest to highest based on which was plugged in first)
 	std::string GetName() const;
 
 	// The type of input used for this input scheme.

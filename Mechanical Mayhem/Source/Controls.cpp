@@ -25,6 +25,8 @@
 #include <SpriteSource.h>
 #include <Mesh.h>
 #include <GameObjectFactory.h>
+#include <Graphics.h>
+#include <Camera.h>
 
 // Components
 #include <SpriteTextMono.h>
@@ -78,10 +80,18 @@ namespace Levels
 
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
 
-		objectManager.AddObject(*new GameObject(*objectManager.GetArchetypeByName("FullScreenBackground")));
+		FixCamera();
+		BoundingRectangle screenDimensions = Graphics::GetInstance().GetDefaultCamera().GetScreenWorldDimensions();
+		float aspectRatio = screenDimensions.extents.x / screenDimensions.extents.y;
+		GameObject* fullScreenBackground = new GameObject(*objectManager.GetArchetypeByName("FullScreenBackground"));
+		if (aspectRatio < 16.0f / 9.0f)
+			fullScreenBackground->GetComponent<Transform>()->SetScale(Vector2D(16.0f / 9.0f * screenDimensions.extents.y * 2.0f, screenDimensions.extents.y * 2.0f));
+		else
+			fullScreenBackground->GetComponent<Transform>()->SetScale(Vector2D(screenDimensions.extents.x * 2.0f, screenDimensions.extents.x * 2.0f / (16.0f / 9.0f)));
+		objectManager.AddObject(*fullScreenBackground);
 		objectManager.AddObject(*new GameObject(*objectManager.GetArchetypeByName("FullScreenImage")));
 
-		MenuButton* mainMenu = AddMenuButton("Main Menu", Vector2D(0.0f, -2.5f), Map::MainMenu);
+		MenuButton* mainMenu = AddMenuButton("Main Menu", Vector2D(0.0f, -3.5f), Map::MainMenu);
 
 		SetDefaultButton(mainMenu);
 	}

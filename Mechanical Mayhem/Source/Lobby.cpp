@@ -27,6 +27,8 @@
 #include <Input.h>
 #include <ExtendedInput.h>
 #include "InputSchemeManager.h"
+#include <Graphics.h>
+#include <Camera.h>
 
 // Components
 #include <Transform.h>
@@ -76,7 +78,15 @@ namespace Levels
 
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
 
-		objectManager.AddObject(*new GameObject(*objectManager.GetArchetypeByName("FullScreenBackground")));
+		FixCamera();
+		BoundingRectangle screenDimensions = Graphics::GetInstance().GetDefaultCamera().GetScreenWorldDimensions();
+		float aspectRatio = screenDimensions.extents.x / screenDimensions.extents.y;
+		GameObject* fullScreenBackground = new GameObject(*objectManager.GetArchetypeByName("FullScreenBackground"));
+		if (aspectRatio < 16.0f / 9.0f)
+			fullScreenBackground->GetComponent<Transform>()->SetScale(Vector2D(16.0f / 9.0f * screenDimensions.extents.y * 2.0f, screenDimensions.extents.y * 2.0f));
+		else
+			fullScreenBackground->GetComponent<Transform>()->SetScale(Vector2D(screenDimensions.extents.x * 2.0f, screenDimensions.extents.x * 2.0f / (16.0f / 9.0f)));
+		objectManager.AddObject(*fullScreenBackground);
 
 		// Create and add descriptive text
 		GameObject* title = new GameObject(*objectManager.GetArchetypeByName("Text"));
@@ -105,6 +115,7 @@ namespace Levels
 		joinHint2->GetComponent<SpriteTextMono>()->SetText("Press CTRL or START to join the lobby");
 		objectManager.AddObject(*joinHint2);
 
+		// Create and color the sprite text used to display players in the lobby.
 		Color colors[] = { HexColorRGB(0xF05555), HexColorRGB(0x5755F0), HexColorRGB(0x17AB28), HexColorRGB(0xDDB61F), HexColorRGB(0xE83FE4), HexColorRGB(0xC01818) };
 
 		for (int i = 0; i < NUM_PLAYERS; i++)
@@ -130,6 +141,8 @@ namespace Levels
 
 		Input& input = Input::GetInstance();
 		ExtendedInput& extendedInput = ExtendedInput::GetInstance();
+
+		// Handle players joining/leaving via CTRL & START.
 
 		if (input.CheckTriggered(VK_LCONTROL))
 		{
@@ -176,6 +189,8 @@ namespace Levels
 			}
 		}
 
+		// Display players in the lobby.
+
 		for (auto it = playerIcons.begin(); it != playerIcons.end(); ++it)
 		{
 			(*it)->GetComponent<Sprite>()->SetAlpha(0.0f);
@@ -206,7 +221,6 @@ namespace Levels
 		else
 		{
 			joinHint->GetComponent<Sprite>()->SetAlpha(0.0f);
-			//joinHint2->GetComponent<Sprite>()->SetAlpha(0.0f);
 			levelSelect->button->SetMap(Levels::Map::LevelSelect);
 		}
 	}

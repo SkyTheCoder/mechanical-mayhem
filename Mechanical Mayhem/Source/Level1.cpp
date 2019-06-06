@@ -767,6 +767,7 @@ namespace Levels
 		Vector2D cameraPos = camera.GetTranslation();
 		float cameraSize = camera.GetSize();
 
+		// Parallax background effect.
 		backgroundLayers[0]->GetComponent<Transform>()->SetTranslation(cameraPos);
 		backgroundLayers[0]->GetComponent<Transform>()->SetScale(cameraSize * 2.0f);
 		backgroundLayers[1]->GetComponent<Transform>()->SetTranslation(Interpolate(Vector2D(cameraPos.x, bottomRight.y + 10.0f), Vector2D(center.x, bottomRight.y + 10.0f), 0.75f));
@@ -778,6 +779,7 @@ namespace Levels
 		players.reserve(2);
 		objectManager.GetAllObjectsByName("Player", players);
 
+		// Cheat codes.
 		if (input.CheckTriggered('I'))
 		{
 			for (auto it = players.begin(); it != players.end(); ++it)
@@ -805,6 +807,7 @@ namespace Levels
 
 		ExtendedInput& extendedInput = ExtendedInput::GetInstance();
 
+		// Find the lowest distance any player has to the gears to make their controller rumble and increase the chromatic aberration effect.
 		float lowestGearsDistance = FLT_MAX;
 		for (auto it = players.begin(); it != players.end(); ++it)
 		{

@@ -34,6 +34,8 @@
 #include <Interpolation.h>
 #include <Random.h>
 #include <System.h>
+#include <Graphics.h>
+#include <Camera.h>
 
 // Components
 #include <Transform.h>
@@ -78,6 +80,7 @@ namespace Levels
 		resourceManager.GetSpriteSource("Button.png");
 		resourceManager.GetSpriteSource("ArtMechanicalMayhemTitleScreen.png");
 
+		// Load all player animations, to run around the screen.
 		const char* spriteSuffixes[] = { "A", "B", "C", "D", "E", "F" };
 
 		for (int i = 0; i < NUM_PLAYERS; i++)
@@ -113,7 +116,15 @@ namespace Levels
 
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
 
-		objectManager.AddObject(*new GameObject(*objectManager.GetArchetypeByName("FullScreenBackground")));
+		FixCamera();
+		BoundingRectangle screenDimensions = Graphics::GetInstance().GetDefaultCamera().GetScreenWorldDimensions();
+		float aspectRatio = screenDimensions.extents.x / screenDimensions.extents.y;
+		GameObject* fullScreenBackground = new GameObject(*objectManager.GetArchetypeByName("FullScreenBackground"));
+		if (aspectRatio < 16.0f / 9.0f)
+			fullScreenBackground->GetComponent<Transform>()->SetScale(Vector2D(16.0f / 9.0f * screenDimensions.extents.y * 2.0f, screenDimensions.extents.y * 2.0f));
+		else
+			fullScreenBackground->GetComponent<Transform>()->SetScale(Vector2D(screenDimensions.extents.x * 2.0f, screenDimensions.extents.x * 2.0f / (16.0f / 9.0f)));
+		objectManager.AddObject(*fullScreenBackground);
 
 		MenuButton* controls = AddMenuButton("Controls", Vector2D(-1.75f, -2.5f), Map::ControlScreen);
 		MenuButton* credits = AddMenuButton("Credits", Vector2D(1.75f, -2.5f), Map::Credits);
@@ -148,6 +159,10 @@ namespace Levels
 			soundManager->PlaySound("SoundMenuM.wav");
 
 		backgroundOverlay = new GameObject(*objectManager.GetArchetypeByName("FullScreenBackground"));
+		if (aspectRatio < 16.0f / 9.0f)
+			backgroundOverlay->GetComponent<Transform>()->SetScale(Vector2D(16.0f / 9.0f * screenDimensions.extents.y * 2.0f, screenDimensions.extents.y * 2.0f));
+		else
+			backgroundOverlay->GetComponent<Transform>()->SetScale(Vector2D(screenDimensions.extents.x * 2.0f, screenDimensions.extents.x * 2.0f / (16.0f / 9.0f)));
 		objectManager.AddObject(*backgroundOverlay);
 		title = new GameObject(*objectManager.GetArchetypeByName("FullScreenImage"));
 		objectManager.AddObject(*title);
@@ -224,42 +239,45 @@ namespace Levels
 		bool flipVelY = false;
 		bool randomizeSprite = true;
 
+		BoundingRectangle screenDimensions = Graphics::GetInstance().GetDefaultCamera().GetScreenWorldDimensions();
+
 		switch (type)
 		{
+		// More cases to spawn the walking sprite, to even it out since there are so many on the sides of the screens.
 		case 0:
 		case 1:
 		case 2:
 			sprite = new GameObject(*objectManager.GetArchetypeByName("MainMenuWalkingSprite"));
 			
-			position = spawnChoice ? Vector2D(9.0f, -3.5f) : Vector2D(-9.0f, -3.5f);
+			position = spawnChoice ? Vector2D(screenDimensions.right + 1.0f, -3.5f) : Vector2D(screenDimensions.left - 1.0f, -3.5f);
 			flipVelX = spawnChoice;
 
 			break;
 		case 3:
 			sprite = new GameObject(*objectManager.GetArchetypeByName("MainMenuJumpingSprite"));
 
-			position = spawnChoice ? Vector2D(7.0f - offset, -6.5f) : Vector2D(-7.0f + offset, -6.5f);
+			position = spawnChoice ? Vector2D(screenDimensions.right - 1.0f - offset, -6.5f) : Vector2D(screenDimensions.left + 1.0f + offset, -6.5f);
 			flipVelX = spawnChoice;
 
 			break;
 		case 4:
 			sprite = new GameObject(*objectManager.GetArchetypeByName("MainMenuFallingSprite"));
 
-			position = spawnChoice ? Vector2D(7.0f - offset, 5.5f) : Vector2D(-7.0f + offset, 5.5f);
+			position = spawnChoice ? Vector2D(screenDimensions.right - 1.0f - offset, 5.5f) : Vector2D(screenDimensions.left + 1.0f + offset, 5.5f);
 			flipVelX = spawnChoice;
 
 			break;
 		case 5:
 			sprite = new GameObject(*objectManager.GetArchetypeByName("MainMenuWallSlideSprite"));
 
-			position = spawnChoice ? Vector2D(7.5f, 5.5f) : Vector2D(-7.5f, 5.5f);
+			position = spawnChoice ? Vector2D(screenDimensions.right - 0.5f, 5.5f) : Vector2D(screenDimensions.left + 0.5f, 5.5f);
 			flipVelX = spawnChoice;
 
 			break;
 		case 6:
 			sprite = new GameObject(*objectManager.GetArchetypeByName("MainMenuJetpackSprite"));
 
-			position = spawnChoice ? Vector2D(7.0f - offset, -5.5f) : Vector2D(-7.0f + offset, -5.5f);
+			position = spawnChoice ? Vector2D(screenDimensions.right - 1.0f - offset, -5.5f) : Vector2D(screenDimensions.left + 1.0f + offset, -5.5f);
 			flipVelX = spawnChoice;
 
 			// Randomly flip the vertical direction of the jetpack sprite.

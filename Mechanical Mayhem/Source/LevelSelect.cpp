@@ -28,6 +28,8 @@
 #include <SpriteSource.h>
 #include <Mesh.h>
 #include <Random.h>
+#include <Graphics.h>
+#include <Camera.h>
 
 // Components
 #include <SpriteTextMono.h>
@@ -78,20 +80,21 @@ namespace Levels
 
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
 
-		objectManager.AddObject(*new GameObject(*objectManager.GetArchetypeByName("FullScreenBackground")));
+		FixCamera();
+		BoundingRectangle screenDimensions = Graphics::GetInstance().GetDefaultCamera().GetScreenWorldDimensions();
+		float aspectRatio = screenDimensions.extents.x / screenDimensions.extents.y;
+		GameObject* fullScreenBackground = new GameObject(*objectManager.GetArchetypeByName("FullScreenBackground"));
+		if (aspectRatio < 16.0f / 9.0f)
+			fullScreenBackground->GetComponent<Transform>()->SetScale(Vector2D(16.0f / 9.0f * screenDimensions.extents.y * 2.0f, screenDimensions.extents.y * 2.0f));
+		else
+			fullScreenBackground->GetComponent<Transform>()->SetScale(Vector2D(screenDimensions.extents.x * 2.0f, screenDimensions.extents.x * 2.0f / (16.0f / 9.0f)));
+		objectManager.AddObject(*fullScreenBackground);
 
 		// Create and add descriptive text
 		GameObject* text = new GameObject(*objectManager.GetArchetypeByName("Text"));
 		text->GetComponent<SpriteTextMono>()->SetText("Select Your Level");
 		text->GetComponent<Transform>()->SetTranslation(Vector2D(0.0f, 3.5f));
 		objectManager.AddObject(*text);
-
-		/*AddMenuButton("Tutorial", Vector2D(-1.75f, 1.5f), Map::Tutorial);
-		AddMenuButton("Arena 3", Vector2D(1.75f, 1.5f), Map::Arena3);
-		AddMenuButton("MediumBoy", Vector2D(-1.75f, 0.5f), Map::MediumBoy);
-		AddMenuButton("Channels", Vector2D(1.75, 0.5f), Map::Channels);
-		AddMenuButton("Separation", Vector2D(-1.75f, -0.5f), Map::Separation);
-		AddMenuButton("Descent", Vector2D(1.75f, -0.5f), Map::Descent);*/
 
 		MenuButton* random = AddMenuButton("Random", Vector2D(0.0f, 2.5f), static_cast<Map>(RandomRange(static_cast<int>(Map::Descent), static_cast<int>(Map::MAX_MAP) - 1)));
 		MenuButton* clockwork = AddMenuButton("Clockwork", Vector2D(-1.75f, 1.5f), Map::Clockwork);
