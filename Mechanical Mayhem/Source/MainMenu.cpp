@@ -177,7 +177,9 @@ namespace Levels
 
 		Menu::Update(dt);
 
-		timer += dt;
+		// dt will be very large the first frame from loading all the player assets.
+		if (dt < 0.2f)
+			timer += dt;
 
 		float pauseTime = fastIntro ? 0.0f : 1.0f;
 		float transitionTime = fastIntro ? 0.5f : 1.0f;
